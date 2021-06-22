@@ -1,0 +1,38 @@
+.header, .content, .footer {
+    background-color: white !important;
+    width: 100%;
+}
+
+.title {
+    text-align: center;
+    color: #1890ff !important;
+}
+
+.footer {
+    margin-top: 3%;
+    position: relative;
+    height: 10%;
+    text-align: center;
+    font-size: 12px;
+    color: #bfbfbf;
+}
+
+.header {
+    margin-top: 5%;
+    margin-bottom: 3%;
+}
+
+.button {
+    margin: 5% auto auto;
+    width: 80px;
+}
+
+.layout {
+    background-color: white !important;
+}
+
+.alert {
+    margin-top: 20px;
+    text-align: center;
+    color: #fa541c;
+}

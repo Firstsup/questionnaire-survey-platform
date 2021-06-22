@@ -1,25 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {Component} from 'react'
+import {BrowserRouter, Route} from "react-router-dom";
+import FillQuestionnaire from "./pages/FillQuestionnaire/jsx/FillQuestionnaire";
+import './App.css'
+import QuestionnaireSubmitComplete from "./pages/FillQuestionnaire/jsx/QuestionnaireSubmitComplete";
+import TempTestDetail from "./pages/ViewQuestionnaireDetail/jsx/TempTestDetail";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+    render() {
+        return (
+            <BrowserRouter>
+                <Route path={'/fillquestionnaire'} component={FillQuestionnaire}/>
+                <Route path={'/fillquestionnairesubmitcomplete'} component={QuestionnaireSubmitComplete}/>
+                <Route path={'/temptestdetail'} component={TempTestDetail}/>
+            </BrowserRouter>
+        )
+    }
 }
 
 export default App;
