@@ -9,7 +9,7 @@ const {Title} = Typography;
 const questionnaire = {
     title: "test",
     qid: "123",
-    state: "actve",
+    state: "active",
     questions: [
         {
             subject: "question1",
