@@ -19,11 +19,9 @@ const data = [
   {qid:27,key:27,title:"test1",status:1,time:"2020-1.0",checked:false}
 ];
 
-console.log("data",new Date())
 //   const expandable = { expandedRowRender: record => <p>{record.description}</p> };
 //   const title = () => 'Here is title';
 const showHeader = true;
-//   const footer = () => 'Here is footer';
 const pagination = { position: 'bottom' };
 const rowId = -1;
 //分页
@@ -50,7 +48,6 @@ export default class PageList extends Component{
       data: data,
       rowId: rowId,
       selectedRowKeys: [],
-      // columns: columns
     };
     //table的每一列
 
@@ -71,15 +68,12 @@ export default class PageList extends Component{
     
     //设置每一行的Id
     setRowId = (rowId) => {
-      // console.log("now id",rowId)
       this.setState({rowId:rowId})
     }
 
     //选中多选框
     onSelectChange = selectedRowKeys => {
-      console.log('selectedRowKeys changed: ', selectedRowKeys);
       this.setState({ selectedRowKeys });
-      // console.log("log",this.state)
     };
 
     //批量删除
@@ -177,10 +171,6 @@ export default class PageList extends Component{
                       <Search placeholder="请输入问卷名称搜索" onSearch={onSearch} enterButton/>
                   </div>
               </div>
-              {/* <span style={{ marginLeft: 8 }}>
-                {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
-              </span> */}
-              {/* <button onClick={()=>this.multiDelete([1])}>批量删除</button> */}
               <Button id="deleteButton" onClick={()=>this.multiDelete(this.state.selectedRowKeys)} type="primary" icon={<DeleteOutlined style={{ fontSize:'16px'}} />} >批量删除</Button>
               <Table
               {...this.state}
