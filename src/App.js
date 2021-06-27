@@ -6,17 +6,21 @@ import QuestionnaireSubmitComplete from "./pages/FillQuestionnaire/jsx/Questionn
 import TempTestDetail from "./pages/ViewQuestionnaireDetail/jsx/TempTestDetail";
 import ShowAllQuestionnaire from "./pages/ManageQuestionnaire/jsx/ShowAllQuestionnaire"
 import DataAnalysis from "./pages/DataAnalysis/jsx/DataAnalysis";
+import {ConfigProvider} from "antd";
+import cn from 'antd/es/locale/zh_CN'
 
 class App extends Component {
     render() {
         return (
-            <BrowserRouter>
-                <Route path={'/fillquestionnaire'} component={FillQuestionnaire}/>
-                <Route path={'/fillquestionnairesubmitcomplete'} component={QuestionnaireSubmitComplete}/>
-                <Route path={'/temptestdetail'} component={TempTestDetail}/>
-                <Route path={'/dataanalysis'} component={DataAnalysis}/>
-                <Route path={'/'} exact component={ShowAllQuestionnaire}/>
-            </BrowserRouter>
+            <ConfigProvider locale={cn}>
+                <BrowserRouter>
+                    <Route path={'/fillquestionnaire'} component={FillQuestionnaire}/>
+                    <Route path={'/fillquestionnairesubmitcomplete'} component={QuestionnaireSubmitComplete}/>
+                    <Route path={'/temptestdetail'} component={TempTestDetail}/>
+                    <Route path={'/dataanalysis'} component={DataAnalysis}/>
+                    <Route path={'/'} exact component={ShowAllQuestionnaire}/>
+                </BrowserRouter>
+            </ConfigProvider>
         )
     }
 }
