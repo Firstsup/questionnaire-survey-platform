@@ -3,16 +3,18 @@ import {Progress} from "@antv/g2plot";
 import {Table} from "antd";
 import $ from 'jquery'
 
-class RadioTable extends Component {
+class RadioMultipleTable extends Component {
     renderProgress = (questionID, optionID, count, sumCount) => {
-        const progress = new Progress('container' + questionID + optionID, {
-            height: 10,
-            width: 50,
-            autoFit: false,
-            percent: count / sumCount,
-            color: ['#5B8FF9', '#E8EDF3'],
-        });
-        progress.render();
+        if ($('#container' + questionID + optionID).is(":empty")) {
+            const progress = new Progress('container' + questionID + optionID, {
+                height: 25,
+                width: 200,
+                autoFit: false,
+                percent: count / sumCount,
+                color: ['#5B8FF9', '#E8EDF3']
+            });
+            progress.render();
+        }
     }
 
     render() {
@@ -23,17 +25,22 @@ class RadioTable extends Component {
         const proportions = this.props.proportions;
         const columns = [
             {
-                title: "选项",
+                title: <span style={{fontWeight: "bold"}}>选项</span>,
                 dataIndex: "option",
-                sorter: {compare: (a, b) => a.option > b.option}
+                align: "center",
+                width: "40%",
+                sorter: {compare: (a, b) => a.option.localeCompare(b.option)}
             },
             {
-                title: "小计",
+                title: <span style={{fontWeight: "bold"}}>小计</span>,
                 dataIndex: "count",
+                align: "center",
+                width: "10%",
                 sorter: {compare: (a, b) => a.count - b.count}
             },
             {
-                title: "比例",
+                title: <span style={{fontWeight: "bold"}}>比例</span>,
+                width: "50%",
                 dataIndex: "proportion"
             }
         ]
@@ -44,8 +51,8 @@ class RadioTable extends Component {
                     key: optionID,
                     option: option,
                     count: counts[optionID],
-                    proportion: <><span
-                        id={'container' + questionID + optionID}/><span>{proportions[optionID]}</span></>
+                    proportion: <><span className={"little_bar"}
+                        id={'container' + questionID + optionID}/><span className={"analysis_proportion"}>{proportions[optionID]}</span></>
                 }
             )
         })
@@ -62,9 +69,9 @@ class RadioTable extends Component {
                    dataSource={data}
                    bordered
                    pagination={false}
-                   footer={() => "本题有效填写人次： " + sumCount}/>
+                   footer={() => <span style={{fontWeight: "bold"}}>本题有效填写人次：&nbsp;{sumCount}</span>}/>
         )
     }
 }
 
-export default RadioTable
+export default RadioMultipleTable

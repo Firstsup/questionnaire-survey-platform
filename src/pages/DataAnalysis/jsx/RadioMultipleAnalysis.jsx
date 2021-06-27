@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
-import RadioTable from "./RadioTable";
+import RadioMultipleTable from "./RadioMultipleTable";
 import Title from "antd/es/typography/Title";
-import {Button} from "antd";
+import {Button, Divider} from "antd";
 import {BarChartOutlined, PieChartOutlined} from "@ant-design/icons";
 import * as echarts from 'echarts';
 import $ from 'jquery'
 import '../css/Analysis.css'
 
-class RadioAnalysis extends Component {
+class RadioMultipleAnalysis extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -17,14 +17,27 @@ class RadioAnalysis extends Component {
     }
 
     getCount = (answerSheet, option, question, questionID) => {
-        let count = 0;
-        answerSheet.forEach((answers) => {
-            if (question.options[answers[questionID].answer - 1] === option) {
-                return count++;
-            }
+        if (question.type === "radio") {
+            let count = 0;
+            answerSheet.forEach((answers) => {
+                if (question.options[answers[questionID].answer - 1] === option) {
+                    return count++;
+                }
+                return count;
+            })
             return count;
-        })
-        return count;
+        } else {
+            let count = 0;
+            answerSheet.forEach((answers) => {
+                for (let i = 0; i < (answers[questionID].answer == null ? 0 : answers[questionID].answer.length); i++) {
+                    if (question.options[answers[questionID].answer[i] - 1] === option) {
+                        return count++;
+                    }
+                }
+                return count;
+            })
+            return count;
+        }
     }
 
     getSumCount = () => {
@@ -37,28 +50,16 @@ class RadioAnalysis extends Component {
         return c;
     }
 
-    getProportion = (count) => {
+    getProportion = (count, sumCount) => {
         return (
-            this.toPercent(count / this.props.question.options.length)
+            this.toPercent(count / sumCount)
         )
     }
 
     toPercent = (point) => {
-        let str = Number(point * 100).toFixed(2);
-        str = this.removeTail0(str)
-        if (str === "") {
-            str += 0
-        }
+        let str = parseFloat(Number(point * 100).toFixed(2));
         str += "%";
         return str;
-    }
-
-    removeTail0 = (str) => {
-        if (!(str.charAt(str.length - 1) === ('0')) && !(str.charAt(str.length - 1) === ('.'))) {
-            return str;
-        } else {
-            return this.removeTail0(str.slice(0, str.length - 1));
-        }
     }
 
     handlePieChartClick = () => {
@@ -78,12 +79,12 @@ class RadioAnalysis extends Component {
         const question = this.props.questionnaire.questions[this.props.questionID]
         const answerSheet = this.props.answerSheet;
         const questionnaire = this.props.questionnaire;
-        const sumCount = this.getSumCount();
+        const sumCount = this.getSumCount(question);
         const counts = question.options.map((option) => {
             return (this.getCount(answerSheet, option, question, questionID))
         })
-        const proportions = question.options.map((option) => {
-            return (this.getProportion(this.getCount(answerSheet, option, question, questionID)))
+        const proportions = question.options.map((option, optionID) => {
+            return (this.getProportion(counts[optionID], sumCount))
         })
 
         if (this.state.pieChartVisible === true) {
@@ -93,7 +94,6 @@ class RadioAnalysis extends Component {
                     pieChart = echarts.init(document.getElementById('pieChartContainer' + questionID));
                 }
                 const pieChartOption = {
-                    title: {text: question.subject, left: "center"},
                     tooltip: {trigger: "item"},
                     legend: {
                         orient: 'vertical',
@@ -162,14 +162,7 @@ class RadioAnalysis extends Component {
                         {
                             type: 'bar',
                             barWidth: '60%',
-                            data: question.options.map((option, optionID) => {
-                                return (
-                                    {
-                                        name: option,
-                                        value: counts[optionID],
-                                    }
-                                )
-                            })
+                            data: counts.map((count) => count)
                         }
                     ]
                 };
@@ -182,25 +175,28 @@ class RadioAnalysis extends Component {
         return (
             <>
                 <Title
-                    level={5}>{questionID + 1}.{question.subject}&nbsp;&nbsp;[单选题]&nbsp;{question.isNecessary === true ?
-                    <span>[必填]</span> : <span>[非必填]</span>}</Title>
-                <RadioTable key={questionID} question={question} answerSheet={answerSheet} sumCount={sumCount}
-                            counts={counts} proportions={proportions} questionID={questionID}
-                            questionnaire={questionnaire}/>
-                {this.state.pieChartVisible ?
-                    <Button onClick={this.handlePieChartClick}><PieChartOutlined/>隐藏饼状图</Button> :
-                    <Button type={"primary"} onClick={this.handlePieChartClick}><PieChartOutlined/>显示饼状图</Button>}
-                {this.state.barChartVisible ?
-                    <Button onClick={this.handleBarChartClick}><BarChartOutlined/>隐藏柱状图</Button> :
-                    <Button type={"primary"} onClick={this.handleBarChartClick}><BarChartOutlined/>显示柱状图</Button>}
+                    level={5}>{questionID + 1}.&nbsp;{question.subject}&nbsp;&nbsp;{question.type === "radio" ?
+                    <span className={"analysis_question_type"}>[单选题]</span> :
+                    <span className={"analysis_question_type"}>[多选题]</span>}&nbsp;&nbsp;{question.isNecessary === true ?
+                    <span className={"analysis_question_isNecessary"}>[必填]</span> : <span className={"analysis_question_isNecessary"}>[非必填]</span>}</Title>
+                <RadioMultipleTable className={"analysis_table"} key={questionID} question={question} answerSheet={answerSheet} sumCount={sumCount}
+                                    counts={counts} proportions={proportions} questionID={questionID}
+                                    questionnaire={questionnaire}/>
+                <span className={"analysis_chart_buttons"}>{this.state.pieChartVisible ?
+                    <Button className={"pieChartButton"} onClick={this.handlePieChartClick}><PieChartOutlined/>隐藏饼状图</Button> :
+                    <Button className={"pieChartButton"} type={"primary"} onClick={this.handlePieChartClick}><PieChartOutlined/>显示饼状图</Button>}
+                    {this.state.barChartVisible ?
+                        <Button className={"barChartButton"} onClick={this.handleBarChartClick}><BarChartOutlined/>隐藏柱状图</Button> :
+                        <Button className={"barChartButton"} type={"primary"} onClick={this.handleBarChartClick}><BarChartOutlined/>显示柱状图</Button>}</span>
                 {this.state.pieChartVisible ? <div id={"pieChartContainer" + questionID} className={"pieChart"}
                                                    style={{display: this.state.pieChartVisible}}/> : null}
                 {this.state.barChartVisible ? <div id={"barChartContainer" + questionID} className={"barChart"}
                                                    style={{display: this.state.barChartVisible}}/> : null}
+                <Divider/>
             </>
         )
     }
 
 }
 
-export default RadioAnalysis
+export default RadioMultipleAnalysis
