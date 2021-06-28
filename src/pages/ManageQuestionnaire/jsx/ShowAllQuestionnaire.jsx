@@ -23,7 +23,7 @@ const data = [
 //   const title = () => 'Here is title';
 const showHeader = true;
 const pagination = { position: 'bottom' };
-const rowId = -1;
+// const rowId = -1;
 //分页
 // function showTotal(total) {
 // return `Total ${total} items`;
@@ -46,18 +46,18 @@ export default class PageList extends Component{
       top: 'none',
       bottom: 'bottomRight',
       data: data,
-      rowId: rowId,
+      rowId: -1,
       selectedRowKeys: [],
+      // user: user,
     };
     //table的每一列
+
 
     
     //单个删除问卷
     handleDelete = () => {
       if(window.confirm('确定删除吗？')){
         const { data,rowId } = this.state
-        console.log("data",data)
-        console.log("row",rowId)
         const newData = data.filter((dataObj)=>{
           return dataObj.qid !== rowId
         })
@@ -76,13 +76,25 @@ export default class PageList extends Component{
       this.setState({ selectedRowKeys });
     };
 
+    testOnClick = () => {
+      const user = "xyl";
+      fetch('/api/manage',{
+        method: 'post',
+        body: JSON.stringify(user),
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+    }).then(res => res.json())
+        .then(res=>{
+        console.log(res);
+    });
+    }
+
     //批量删除
     multiDelete = (selectedRowKeys) => {
-      console.log("multiDelete", selectedRowKeys)
-      console.log("key",this.state.data)
       if(window.confirm('确定删除吗？')){
         const { data } = this.state
-        console.log("dataObj.key", data);
         const newData = data.filter((dataObj)=>{
           return !selectedRowKeys.includes(dataObj.key)
         })
@@ -172,6 +184,7 @@ export default class PageList extends Component{
                   </div>
               </div>
               <Button id="deleteButton" onClick={()=>this.multiDelete(this.state.selectedRowKeys)} type="primary" icon={<DeleteOutlined style={{ fontSize:'16px'}} />} >批量删除</Button>
+              <button onClick={()=> this.testOnClick()} >test  123   </button>
               <Table
               {...this.state}
               pagination={{ position: [this.state.top, this.state.bottom] }}
@@ -181,6 +194,7 @@ export default class PageList extends Component{
               onRow = {(record) => {
                 return {
                   onMouseEnter: () => {
+                    // console.log("record",record)
                     this.setRowId(record.qid)
                     }
                   }

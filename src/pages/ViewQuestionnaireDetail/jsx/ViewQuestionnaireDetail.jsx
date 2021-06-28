@@ -30,7 +30,7 @@ class ViewQuestionnaireDetail extends Component {
                     </Descriptions.Item>
                 </Descriptions>
                 <Descriptions bordered>
-                    <Descriptions.Item label="问卷题目" span={2}>
+                    <Descriptions.Item label="问卷题目" >
                         {questionnaire.questions.map((question, questionID) => {
                             return (
                                 <div key={questionID}>
