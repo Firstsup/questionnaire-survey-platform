@@ -4,7 +4,7 @@ import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { UserOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import {BrowserRouter, Route} from "react-router-dom";
-import Login from '../../Login/jsx/Login';
+import Login1 from '../../Login/jsx/Login1';
 
 
 class Register extends React.Component {
@@ -12,7 +12,8 @@ class Register extends React.Component {
       super(props);
       this.state = {userName: '',
                     userPassword:'',
-                    userPasswordAgain:''
+                    userPasswordAgain:'',
+                    phoneNumber:''
     };
   
       this.handleChange = this.handleChange.bind(this);
@@ -20,11 +21,26 @@ class Register extends React.Component {
     }
   
     handleChange(event) {
-      this.setState({value: event.target.userName});
+      const target = event.target;
+      const name = target.name;
+      const value =target.value;
+     /* if(target.name=="userPasswordAgain"){
+  
+        if(value==this.state.userPassword){
+          this.setState({ userPasswordAgain: value });
+        
+      }
+        else 
+        alert('密码不一致！请检查密码');
+      }
+      */
+      this.setState({
+        [name]: value
+      });
     }
   
     handleSubmit(event) {
-      alert(  this.userName.value + '，恭喜您注册成功!');
+      alert(  this.state.userName + '，恭喜您注册成功!');
       event.preventDefault();
     }
   
@@ -38,15 +54,18 @@ class Register extends React.Component {
         <form onSubmit={this.handleSubmit}>
 
          <Space direction="vertical">
-          <Input type="text" placeholder="请输入账号" prefix={<UserOutlined /> } value={this.state.userName} onChange={this.handleChange}/>   
-    <Input.Password placeholder="请输入密码" value={this.state.userPassword} onChange={this.handleChange}/>
-    <Input.Password
+        
+         <Input name="userName" type="text" placeholder="请输入账号" prefix={<UserOutlined /> } value={this.state.userName} onChange={this.handleChange}/>   
+    <Input name="userPassword" placeholder="请输入密码" value={this.state.userPassword} onChange={this.handleChange}/>
+    <Input name="userPasswordAgain" 
       placeholder="请再次确认密码" value={this.state.userPasswordAgain} onChange={this.handleChange}
       iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
     />
-    <button type="submit">注册</button>
+    <input  name="phoneNumber" placeholder="设置四位数字作为找回密码的凭证" value={this.state.phoneNumber} onChange={this.handleChange}/>
 
-<Route path="/src/pages/Login/jsx/Login" component={Login} />
+    <button variant="contained" color="primary" type="submit">注册</button>
+
+<Route path="/src/pages/Login/jsx/Login1" component={Login1} />
  
   </Space>
          

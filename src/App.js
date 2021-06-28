@@ -6,7 +6,7 @@ import QuestionnaireSubmitComplete from "./pages/FillQuestionnaire/jsx/Questionn
 import TempTestDetail from "./pages/ViewQuestionnaireDetail/jsx/TempTestDetail";
 import HomePage from './pages/testHomePage/jsx/testHomePage';
 import Register from './pages/Register/jsx/Register';
-import Login from './pages/Login/jsx/Login';
+import Login1 from './pages/Login/jsx/Login1';
 import { Switch } from 'react-router-dom';
 function App() {
     return (
@@ -15,7 +15,7 @@ function App() {
             <Switch>
                 <Route path="/" component={HomePage} exact />
                 <Route path="/src/pages/Register/jsx/Register" component={Register} />
-                <Route path="/src/pages/Login/jsx/Login" component={Login} />
+                <Route path="/src/pages/Login/jsx/Login1" component ={Login1}  />
                 <Route component={Error} />
             </Switch>
         </main>
