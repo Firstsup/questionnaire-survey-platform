@@ -11,7 +11,13 @@ import { BrowserRouter } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import Button from '@material-ui/core/Button';
 
+/*登录页面：
+与后端交互：判断用户名 userName，密码 userPassword是否一致
+                                  对应的接口：
 
+                                todo:点击忘记密码按钮，跳转到忘记密码页面，输入正确的用户名和密码凭证，屏幕输出该用户密码or可以输入新密码来替换旧密码(待讨论)。
+                                         用户小图标出现在奇怪的地方。
+                                  */    
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -89,8 +95,9 @@ render(){
             <AccountCircle />
           </Grid>
           <form onSubmit={this.handleSubmit}>
-            <TextField id="userNameLogin" label="请输入用户名" value={this.state.userName} onChange={this.handleChange}></TextField>
-            <TextField id="userPasswordLogin" label="请输入密码" value={this.state.userPassword} onChange={this.handleChange}></TextField>
+          <Grid container direction="column"  justify="center" alignItems="center">
+            <TextField id="userNameLogin" label="请输入用户名"  onChange={this.handleChange}></TextField>
+            <TextField id="userPasswordLogin" label="请输入密码"  onChange={this.handleChange}></TextField>
             <Button
               type="submit"
               fullWidth
@@ -100,6 +107,13 @@ render(){
             >
               登录
             </Button>
+            <Button href="http://localhost:3000/src/pages/Register/jsx/Register" color="primary">
+               注册新账号
+            </Button>
+            <Button href="" color="primary">
+               忘记密码
+            </Button>
+            </Grid>
           </form>
         </Grid>
       </div>
