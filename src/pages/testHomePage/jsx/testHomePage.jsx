@@ -16,7 +16,8 @@ class HomePage extends React.Component{
     <Link to="/src/pages/CreatNewQuestionnaire/jsx/SideBar">SideBar </Link>
     <Link to="/src/pages/CreatNewQuestionnaire/jsx/CreatPage">CreatPage </Link>
   </div>
-       ) }
+      
+ ) }
 }
 
 export default HomePage;

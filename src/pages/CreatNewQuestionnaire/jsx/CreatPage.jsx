@@ -15,7 +15,7 @@ class CreatPage extends  React.Component {
                         ]
       };
     
-        this.handleChange = this.handleChange.bind(this);
+        //this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
       }
 
@@ -30,8 +30,9 @@ class CreatPage extends  React.Component {
           <div> 
             
            <form onSubmit={this.handleSubmit}>
-             <span>hi</span>
-              <SideBar></SideBar>
+             
+             <SideBar ></SideBar>
+              
             <button type="submit">保存问卷</button>
              </form> 
              

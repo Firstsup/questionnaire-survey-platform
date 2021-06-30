@@ -17,8 +17,9 @@ class SideBar extends React.Component {
 
   handleClick = (name) => {
     switch (name) {
-      case 'addRadio':
-        return addRadio;
+      case "addRadio":
+        //return addRadio;
+       alert('调用添加单选题class');
       case 'addCheckbox':
         return 'icon-duoxuan-icon';
       case 'addText':
@@ -41,7 +42,7 @@ return(
     <Row>
     <Space direction="vertical">
        
-        <Button type="primary" name="addRadio" onClick={this.handleClick} ><i><PlusCircleTwoTone /></i>
+        <Button type="primary" name="addRadio" onClick= {this.handleClick} ><i><PlusCircleTwoTone /></i>
           添加单选题</Button>
           <Button type="primary" name="addCheckbox" onClick={this.handleClick}><i><PlusSquareTwoTone /></i>
           添加多选题</Button>
