@@ -5,6 +5,18 @@ import '../css/ViewQuestionnaireDetail.css'
 const {Title} = Typography;
 
 class ViewQuestionnaireDetail extends Component {
+    state =  { modalVisible: false }
+    handleOk = () => {
+        alert("share")
+          //调用分享问卷链接
+          // message.success("问卷链接已拷贝至粘贴板").then(() => null);
+    }
+
+    handleCancel = () => {
+        this.setState({modalVisible: false})
+        alert(13234)
+    }
+    
     render() {
         const questionnaire = this.props.questionnaire
         return (
@@ -30,7 +42,7 @@ class ViewQuestionnaireDetail extends Component {
                     </Descriptions.Item>
                 </Descriptions>
                 <Descriptions bordered>
-                    <Descriptions.Item label="问卷题目" >
+                    <Descriptions.Item label="问卷题目" span={2}>
                         {questionnaire.questions.map((question, questionID) => {
                             return (
                                 <div key={questionID}>
