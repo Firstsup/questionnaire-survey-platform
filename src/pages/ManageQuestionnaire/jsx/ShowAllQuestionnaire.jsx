@@ -10,14 +10,14 @@ import ViewQuestionnaireDetail from "../../ViewQuestionnaireDetail/jsx/ViewQuest
 const { Search } = Input;
 const onSearch = value => console.log(value);
   
-const data = [
-  {qid:22,key:22,title:"test1",status:0,time:"2020-1.0"},
-  {qid:23,key:23,title:"test1",status:0,time:"2020-1.0"},
-  {qid:24,key:24,title:"test1",status:0,time:"2020-1.0"},
-  {qid:25,key:25,title:"test1",status:1,time:"2020-1.0"},
-  {qid:26,key:26,title:"test1",status:1,time:"2020-1.0"},
-  {qid:27,key:27,title:"test1",status:1,time:"2020-1.0"}
-];
+// const data = [
+//   {qid:22,key:22,title:"test1",status:0,time:"2020-1.0"},
+//   {qid:23,key:23,title:"test1",status:0,time:"2020-1.0"},
+//   {qid:24,key:24,title:"test1",status:0,time:"2020-1.0"},
+//   {qid:25,key:25,title:"test1",status:1,time:"2020-1.0"},
+//   {qid:26,key:26,title:"test1",status:1,time:"2020-1.0"},
+//   {qid:27,key:27,title:"test1",status:1,time:"2020-1.0"}
+// ];
 
 const questionnaire = {
   title: "test",
@@ -91,7 +91,7 @@ export default class PageList extends Component{
       tableLayout: undefined,
       top: 'none',
       bottom: 'bottomRight',
-      data: data,
+      data: [],
       rowId: -1,
       selectedRowKeys: [],
       questionnaire: questionnaire,
@@ -99,6 +99,23 @@ export default class PageList extends Component{
       // user: user,
     };
     //table的每一列
+
+    //发送请求
+    componentDidMount(){
+      fetch('/api/manage?user=xyl',{
+        method: 'get',
+        headers: {
+            'Accept': 'application/json',
+        },
+      }).then(res=>res.json())
+        .then(res=>{
+          var newData = []
+          res.data.data.map(((item, index)=> {
+            newData.push(Object.assign({},item,{key:item.qid,status:item.status === 0 ? "未发布" : (item.status === 1 ? "发布中" : "已结束")}))
+          }))
+        this.setState({data:newData})
+      });
+    }
 
     //单个删除问卷
     handleDelete = () => {
@@ -116,7 +133,7 @@ export default class PageList extends Component{
             },
         }).then(res => res.json())
             .then(res =>{
-            if(res.code == 1){
+            if(res.code === 1){
               const newData = data.filter((dataObj)=>{
                 return dataObj.qid !== rowId
               })
@@ -139,23 +156,6 @@ export default class PageList extends Component{
       this.setState({ selectedRowKeys });
     };
 
-    //发送请求
-    testOnClick = () => {
-      fetch('/api/manage?user=xyl',{
-        method: 'get',
-        headers: {
-            'Accept': 'application/json',
-        },
-      }).then(res=>res.json())
-        .then(res=>{
-          var newData = []
-          res.data.data.map(((item, index)=> {
-            newData.push(Object.assign({},item,{key:item.qid}))
-          }))
-        this.setState({data:newData})
-      });
-    }
-
     //批量删除
     multiDelete = (selectedRowKeys) => {
       if(window.confirm('确定删除吗？')){
@@ -172,7 +172,7 @@ export default class PageList extends Component{
             },
         }).then(res => res.json())
           .then(res =>{
-            if(res.code == 1){
+            if(res.code === 1){
               const newData = data.filter((dataObj)=>{
                 return !selectedRowKeys.includes(dataObj.key)
               })
@@ -226,7 +226,7 @@ export default class PageList extends Component{
           sorter: (a, b) => a.age - b.age,
           title: '创建时间',
           dataIndex: 'time',
-          width: "41%"
+          width: "35%"
         },
         {
           title: '操作问卷',
@@ -274,7 +274,6 @@ export default class PageList extends Component{
                   </div>
               </div>
               <Button id="deleteButton" onClick={()=>this.multiDelete(this.state.selectedRowKeys)} type="primary" icon={<DeleteOutlined style={{ fontSize:'16px'}} />} >批量删除</Button>
-              <button onClick={()=> this.testOnClick()} >test  123   </button>
               
               <Table
               {...this.state}
