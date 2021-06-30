@@ -1,9 +1,9 @@
 // import { deflate } from 'pako'
 import React,{Component} from 'react'
 import '../css/ShowAllQuestionnaire.css'
-import { Table, Space, Button ,Input, Pagination } from 'antd';
+import { Table, Space, Button ,Input } from 'antd';
 import { PlusOutlined,DeleteOutlined } from '@ant-design/icons';
-import {nanoid} from 'nanoid';
+// import {nanoid} from 'nanoid';
 import imgPath from '../../../assets/head.png'
 
 //搜索框的
@@ -11,12 +11,12 @@ const { Search } = Input;
 const onSearch = value => console.log(value);
   
 const data = [
-  {qid:22,key:22,title:"test1",status:0,time:"2020-1.0",checked:false},
-  {qid:23,key:23,title:"test1",status:0,time:"2020-1.0",checked:false},
-  {qid:24,key:24,title:"test1",status:0,time:"2020-1.0",checked:false},
-  {qid:25,key:25,title:"test1",status:1,time:"2020-1.0",checked:false},
-  {qid:26,key:26,title:"test1",status:1,time:"2020-1.0",checked:false},
-  {qid:27,key:27,title:"test1",status:1,time:"2020-1.0",checked:false}
+  {qid:22,key:22,title:"test1",status:0,time:"2020-1.0"},
+  {qid:23,key:23,title:"test1",status:0,time:"2020-1.0"},
+  {qid:24,key:24,title:"test1",status:0,time:"2020-1.0"},
+  {qid:25,key:25,title:"test1",status:1,time:"2020-1.0"},
+  {qid:26,key:26,title:"test1",status:1,time:"2020-1.0"},
+  {qid:27,key:27,title:"test1",status:1,time:"2020-1.0"}
 ];
 
 //   const expandable = { expandedRowRender: record => <p>{record.description}</p> };
@@ -52,17 +52,33 @@ export default class PageList extends Component{
     };
     //table的每一列
 
-
-    
     //单个删除问卷
     handleDelete = () => {
       if(window.confirm('确定删除吗？')){
         const { data,rowId } = this.state
-        const newData = data.filter((dataObj)=>{
-          return dataObj.qid !== rowId
-        })
-        //更新状态
-        this.setState({data:newData})
+        const Params = {
+          "deleteList": rowId
+        };
+        fetch('/api/manage/delete',{
+            method: 'post',
+            body: JSON.stringify(Params),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        }).then(res => res.json())
+            .then(res =>{
+            if(res.code == 1){
+              const newData = data.filter((dataObj)=>{
+                return dataObj.qid !== rowId
+              })
+              this.setState({data:newData})
+              console.log("newData",newData);
+            }
+            else{
+              alert("数据库故障，未删除成功！")
+            }
+        });      
       }
     }
     
@@ -76,31 +92,56 @@ export default class PageList extends Component{
       this.setState({ selectedRowKeys });
     };
 
+    //发送请求
     testOnClick = () => {
-      const user = "xyl";
-      fetch('/api/manage',{
-        method: 'post',
-        body: JSON.stringify(user),
+      fetch('/api/manage?user=xyl',{
+        method: 'get',
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',
         },
-    }).then(res => res.json())
-        .then(res=>{
-        console.log(res);
-    });
+        }).then(res=>res.json())
+            .then(res=>{
+              var newData = []
+              res.data.data.map(((item, index)=> {
+                newData.push(Object.assign({},item,{key:item.qid}))
+              }))
+            console.log("newData",newData);
+            this.setState({data:newData})
+          });
     }
 
     //批量删除
     multiDelete = (selectedRowKeys) => {
       if(window.confirm('确定删除吗？')){
         const { data } = this.state
+        console.log("selectedRowKeys",selectedRowKeys)
+
+        const Params = {
+          "deleteList":[102,103]
+        };
+        fetch('/api/manage/delete',{
+            method: 'post',
+            body: JSON.stringify(Params),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        }).then(res => res.json())
+            .then(res =>{
+            console.log(res.code);
+        });
+
+
         const newData = data.filter((dataObj)=>{
           return !selectedRowKeys.includes(dataObj.key)
         })
         //更新状态
         this.setState({data:newData})
       }
+    }
+
+    changePassword = () => {
+      alert(123)
     }
 
     //创建新问卷
@@ -115,7 +156,7 @@ export default class PageList extends Component{
         selectedRowKeys,
         onChange: this.onSelectChange,
       };
-      const hasSelected = selectedRowKeys.length > 0;
+      // const hasSelected = selectedRowKeys.length > 0;
       const columns = [
         {
           title: '问卷名称',
@@ -173,7 +214,7 @@ export default class PageList extends Component{
         <div>
           <div>
                 <header id="header">
-                    <div id="userName"><img src={imgPath} alt="头像"/>xiejing</div>
+                    <div id="userName" onClick={this.changePassword}><img src={imgPath} alt="头像"/>xiejing</div>
                 </header>
           </div>
           <div id="list">
@@ -194,7 +235,7 @@ export default class PageList extends Component{
               onRow = {(record) => {
                 return {
                   onMouseEnter: () => {
-                    // console.log("record",record)
+                    console.log("record",record)
                     this.setRowId(record.qid)
                     }
                   }

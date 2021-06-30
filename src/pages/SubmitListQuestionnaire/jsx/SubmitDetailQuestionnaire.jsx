@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Modal, Descriptions, Badge, Typography} from "antd";
+import {Modal, Descriptions, Typography} from "antd";
 import '../css/SubmitDetailQuestionnaire.css'
 
 const {Title} = Typography;

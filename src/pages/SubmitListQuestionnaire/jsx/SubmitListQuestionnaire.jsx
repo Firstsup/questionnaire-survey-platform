@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Table, Space } from 'antd';
-import reqwest from 'reqwest';
+// import reqwest from 'reqwest';
 import { DeleteOutlined,EyeOutlined  } from '@ant-design/icons';
 import SubmitDetailQuestionnaire from './SubmitDetailQuestionnaire'
 
@@ -59,11 +59,11 @@ const questionnaire = {
     ]
 }
 
-const getRandomuserParams = params => ({
-    results: params.pagination.pageSize,
-    page: params.pagination.current,
-    ...params,
-});
+// const getRandomuserParams = params => ({
+//     results: params.pagination.pageSize,
+//     page: params.pagination.current,
+//     ...params,
+// });
 
 export default class SubmitListQuestionnaire extends Component {
     constructor(props) {
