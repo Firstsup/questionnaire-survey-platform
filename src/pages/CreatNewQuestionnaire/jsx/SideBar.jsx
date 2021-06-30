@@ -1,40 +1,33 @@
 import React, {Component} from 'react';
 import { Row, Col,Button,Space } from 'antd';
 import { PlusCircleTwoTone,PlusSquareTwoTone, EditTwoTone} from '@ant-design/icons';
-
-/*
-const subjects = [{
-    name: '单选题',
-    type: 'radio',
-    icon: '',
-  }, 
-   {
-    name: '多选题',
-    type: 'checkbox',
-    icon: '',
-  }, 
-   {
-    name: '单行文本题',
-    type: 'text',
-    icon: '',
-  } ]
-  */
+import addRadio from './addRadio';
 
 
 
-
-
-  /*
-  constructor(props) {
-        super(props);
-        this.state = {
-      };
-    
-        this.handleChange = this.handleChange.bind(this);
-     
-      }
-      */
 class SideBar extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {isToggleOn: true};
+
+    // 为了在回调中使用 `this`，这个绑定是必不可少的
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick = (name) => {
+    switch (name) {
+      case 'addRadio':
+        return addRadio;
+      case 'addCheckbox':
+        return 'icon-duoxuan-icon';
+      case 'addText':
+        return 'icon-duohangicon';
+  
+    }
+  }
+
+  
 
 render(){
 return(
@@ -48,11 +41,11 @@ return(
     <Row>
     <Space direction="vertical">
        
-        <Button type="primary"><i><PlusCircleTwoTone /></i>
+        <Button type="primary" name="addRadio" onClick={this.handleClick} ><i><PlusCircleTwoTone /></i>
           添加单选题</Button>
-          <Button type="primary"><i><PlusSquareTwoTone /></i>
+          <Button type="primary" name="addCheckbox" onClick={this.handleClick}><i><PlusSquareTwoTone /></i>
           添加多选题</Button>
-          <Button type="primary"><i><EditTwoTone /> </i>
+          <Button type="primary" name="addText" onClick={this.handleClick}><i><EditTwoTone /> </i>
           添加单行文本题</Button>
         
         
