@@ -1,0 +1,57 @@
+.analysis_question_type {
+    font-size: 14px;
+    color: #bfbfbf;
+}
+
+.analysis_question_isNecessary {
+    font-size: 14px;
+    color: #ffbb96;
+}
+
+.pieChart {
+    border-style: solid;
+    border-color: #87e8de;
+    margin: 70px auto;
+    width: 600px;
+    height: 600px;
+    padding: 30px 30px;
+}
+
+.barChart {
+    border-style: solid;
+    border-color: #87e8de;
+    margin: 70px auto;
+    width: 600px;
+    height: 600px;
+    padding: 30px 30px;
+}
+
+.ant-table-tbody > tr > td {
+    padding: 10px;
+}
+
+.analysis_chart_buttons {
+    float: right;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.barChartButton {
+    margin-left: 30px;
+    margin-right: 0;
+}
+
+.little_bar {
+    display: inline-block;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.text_button {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.text_search {
+    margin-bottom: 20px;
+}

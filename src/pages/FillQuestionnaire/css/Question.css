@@ -3,7 +3,7 @@
     margin-bottom: 30px;
 }
 
-.isNecessary {
+.question_isNecessary {
     float: right;
     color: #fa541c;
 }
@@ -13,22 +13,22 @@
     margin-left: 5px;
 }
 
-.left {
+.question_left {
     float: left;
     width: 20%;
     min-height: 1px;
 }
 
-.radio_group {
+.question_radio_group {
     display: block;
 }
 
-.textarea {
+.question_textarea {
     margin-left: 20%;
     margin-right: 20%;
 }
 
-.show_warring {
+.question_show_warring {
     color: #fa541c;
     font-size: 12px;
 }

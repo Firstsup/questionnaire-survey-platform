@@ -70,13 +70,13 @@ class FillQuestionnaire extends Component {
 
     getTitle = () => {
         return (
-            <Title className={"title"}>{questionnaire.title}</Title>
+            <Title className={"fill_question_title"}>{questionnaire.title}</Title>
         )
     }
 
     getFooter = () => {
         return (
-            <div className={"footer"}>
+            <div className={"question_footer"}>
                 <Divider/>
                 <p>电子科大--字节跳动技术训练营&nbsp;&nbsp;前端二组</p>
             </div>
@@ -146,15 +146,15 @@ class FillQuestionnaire extends Component {
             )
         } else {
             return (
-                <Layout className={"layout"}>
-                    <Header className={"header"}>{this.getTitle()}</Header>
-                    <Content className={"content"}><Questions questions={questionnaire.questions}
+                <Layout className={"question_layout"}>
+                    <Header className={"question_header"}>{this.getTitle()}</Header>
+                    <Content className={"question_content"}><Questions questions={questionnaire.questions}
                                                               warringVisible={this.state.warringVisible}
                                                               changeAnswer={this.changeAnswer}/></Content>
-                    <Button type={"primary"} className={"button"} onClick={this.submit}>提交</Button>
+                    <Button type={"primary"} className={"question_button"} onClick={this.submit}>提交</Button>
                     {this.state.warringVisible.every(item => item === false) ? null : (
-                        <p className={"alert"}>您还有{this.count()}题未填写</p>)}
-                    <Footer className={"footer"}>{this.getFooter()}</Footer>
+                        <p className={"question_alert"}>您还有{this.count()}题未填写</p>)}
+                    <Footer className={"question_footer"}>{this.getFooter()}</Footer>
                     <Modal
                         title="提交确认"
                         visible={this.state.submitConfirmVisible}

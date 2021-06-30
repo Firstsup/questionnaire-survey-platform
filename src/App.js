@@ -16,7 +16,7 @@ class App extends Component {
                 <Route path="/src/pages/Register/jsx/Register" component={Register} />
                 <Route path="/src/pages/Login/jsx/Login1" component ={Login1}  />
                 <Route component={Error} /> */}
-
+                
                 <Route path={'/fillquestionnaire'} component={FillQuestionnaire}/>
                 <Route path={'/fillquestionnairesubmitcomplete'} component={QuestionnaireSubmitComplete}/>
                 <Route path={'/temptestdetail'} component={TempTestDetail}/>
