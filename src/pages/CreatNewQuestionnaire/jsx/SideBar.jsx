@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import { Row, Col } from 'antd';
-import { PlusCircleTwoTone } from '@ant-design/icons';
+import { Row, Col,Button,Space } from 'antd';
+import { PlusCircleTwoTone,PlusSquareTwoTone, EditTwoTone} from '@ant-design/icons';
 
 /*
 const subjects = [{
@@ -39,20 +39,26 @@ class SideBar extends React.Component {
 render(){
 return(
     <div>
-    <Row>
-      <Col flex={2}>添加题目
-      </Col>
+    <div >
+      添加题目
+      
 
-    </Row>
+    </div>
 
     <Row>
-      <col flex={2}>
-        <div>
+    <Space direction="vertical">
+       
         <Button type="primary"><i><PlusCircleTwoTone /></i>
           添加单选题</Button>
-          
-        </div>
-      </col>
+          <Button type="primary"><i><PlusSquareTwoTone /></i>
+          添加多选题</Button>
+          <Button type="primary"><i><EditTwoTone /> </i>
+          添加单行文本题</Button>
+        
+        
+     </Space>
+
+    
     </Row>
     </div>
 
@@ -61,3 +67,4 @@ return(
 }
 
 }
+export default SideBar
