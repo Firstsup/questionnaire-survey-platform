@@ -10,6 +10,7 @@ import Login1 from './pages/Login/jsx/Login1';
 import { Switch } from 'react-router-dom';
 import SideBar from './pages/CreatNewQuestionnaire/jsx/SideBar';
 import CreatPage from './pages/CreatNewQuestionnaire/jsx/CreatPage';
+import addRadio from './pages/CreatNewQuestionnaire/jsx/addRadio';
 function App() {
     return (
         <main>
@@ -20,7 +21,7 @@ function App() {
                 <Route path="/src/pages/Login/jsx/Login1" component ={Login1}  />
                 <Route path="/src/pages/CreatNewQuestionnaire/jsx/SideBar" component ={SideBar}></Route>
                 <Route path="/src/pages/CreatNewQuestionnaire/jsx/CreatPage"component ={CreatPage}></Route>
-               
+                <Route path="/src/pages/CreatNewQuestionnaire/jsx/addRadio"component ={addRadio}></Route>
             </Switch>
         </main>
     )

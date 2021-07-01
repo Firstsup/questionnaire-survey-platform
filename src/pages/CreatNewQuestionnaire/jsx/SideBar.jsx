@@ -15,15 +15,21 @@ class SideBar extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick = (name) => {
+
+  handleClick = (event) => {
+    const target = event.target;
+      const name = target.name;
     switch (name) {
       case "addRadio":
-        //return addRadio;
-       alert('调用添加单选题class');
-      case 'addCheckbox':
-        return 'icon-duoxuan-icon';
-      case 'addText':
-        return 'icon-duohangicon';
+        return addRadio;
+       //alert('调用添加单选题class');
+       break;
+      case "addCheckbox":
+        alert('调用添加多选题class');
+        break;
+      case "addText":
+        alert('调用添加文本题class');
+        break;
   
     }
   }
@@ -42,12 +48,12 @@ return(
     <Row>
     <Space direction="vertical">
        
-        <Button type="primary" name="addRadio" onClick= {this.handleClick} ><i><PlusCircleTwoTone /></i>
-          添加单选题</Button>
-          <Button type="primary" name="addCheckbox" onClick={this.handleClick}><i><PlusSquareTwoTone /></i>
-          添加多选题</Button>
-          <Button type="primary" name="addText" onClick={this.handleClick}><i><EditTwoTone /> </i>
-          添加单行文本题</Button>
+        <button type="primary" name="addRadio" onClick= { this.handleClick} ><i><PlusCircleTwoTone /></i>
+          添加单选题</button>
+          <button type="primary" name="addCheckbox" onClick={this.handleClick}><i><PlusSquareTwoTone /></i>
+          添加多选题</button>
+          <button type="primary" name="addText" onClick={this.handleClick}><i><EditTwoTone /> </i>
+          添加单行文本题</button>
         
         
      </Space>

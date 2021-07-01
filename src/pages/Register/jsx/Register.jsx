@@ -45,6 +45,9 @@ class Register extends React.Component {
     }
   
     handleSubmit(event) {
+      const target = event.target;
+      const name = target.name;
+      const value =target.value;
       if(this.state.userName.length!=0){
       if((this.state.userPassword.length!=0)&&(this.state.userPassword==this.state.userPasswordAgain)&&(this.state.phoneNumber.length==4))
       {

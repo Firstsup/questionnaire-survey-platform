@@ -19,6 +19,18 @@ class CreatPage extends  React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
       }
 
+      handleDelete(event){//删除应该是子组件发出请求，父组件CreatPage的askList数组中删掉这一个元素 难点：拖拽元素改变顺序，数组索引怎么办
+        const target = event.target;
+        const name = target.name;
+        const value =target.value;
+        var index=event.target.getAttribute("data-index");
+        var askList=this.state.askList;
+        askList.splice(index,1,"");
+            this.setState({askList:askList})
+           
+      }
+
+
       handleSubmit(event){
 /* 提交时遍历题目列表，如果每一项都不为空才能提交给后端*/
 
@@ -32,6 +44,9 @@ class CreatPage extends  React.Component {
            <form onSubmit={this.handleSubmit}>
              
              <SideBar ></SideBar>
+             <div>
+
+             </div>
               
             <button type="submit">保存问卷</button>
              </form> 
