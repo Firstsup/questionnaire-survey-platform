@@ -10,7 +10,7 @@ class ViewQuestionnaireDetail extends Component {
         return (
             <Modal
                 visible={this.props.modalVisible}
-                onOk={this.props.handleOk}
+                onOk={this.props.handleDelete}
                 onCancel={this.props.handleCancel}
                 okText={"删除记录"}
                 cancelText={"返回"}

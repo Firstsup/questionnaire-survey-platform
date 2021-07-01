@@ -87,16 +87,10 @@ export default class SubmitListQuestionnaire extends Component {
         this.setState({modalVisible: true})
     }
 
-    // handleOk = () => {
-    //     //调用分享问卷链接
-    //     message.success("问卷链接已拷贝至粘贴板").then(() => null);
-    // }
-
     handleCancel = () => {
         this.setState({modalVisible: false})
     }
     
-    //
     handleDelete = () => {
         if(window.confirm('确定删除吗？')){
             const { data,tableRowId } = this.state
@@ -110,7 +104,7 @@ export default class SubmitListQuestionnaire extends Component {
                 }
             )
             this.setState({data:newData})
-            console.log("data111",data)
+            this.setState({modalVisible: false})
         }
     }
 
@@ -194,10 +188,9 @@ export default class SubmitListQuestionnaire extends Component {
                     questionnaire={this.state.questionnaire}
                     questionnnaireIndex = {questionnnaireIndex}
                     modalVisible={this.state.modalVisible}
-                    handleOk={this.handleOk}
+                    handleDelete = {this.handleDelete}
                     handleCancel={this.handleCancel}/>
-            <button onClick={()=> this.handleOnClick()}>test</button>
-            <Table
+            <Table style={{width:'80%'}}
             columns={columns}
             // rowKey={record => record.login.uuid}
             dataSource={data}
@@ -214,7 +207,6 @@ export default class SubmitListQuestionnaire extends Component {
                 }
               }
             />
-
             </>
         )
     }

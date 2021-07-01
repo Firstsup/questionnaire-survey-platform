@@ -55,7 +55,7 @@ const submitTime = [new Date("2020-1-1"), new Date("2020-2-2"), new Date("2020-3
 
 class DataAnalysis extends Component {
     handleViewClick = () => {
-        this.props.history.push('/')
+        this.props.history.push('/submitlistquestionnaire')
     }
 
     handleBackClick = () => {

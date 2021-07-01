@@ -1,8 +1,8 @@
 // import { deflate } from 'pako'
 import React,{Component} from 'react'
 import '../css/ShowAllQuestionnaire.css'
-import { Table, Space, Button ,Input } from 'antd';
-import { PlusOutlined,DeleteOutlined } from '@ant-design/icons';
+import { Table, Space, Button ,Input, Menu, Dropdown, message } from 'antd';
+import { PlusOutlined,DeleteOutlined,DownOutlined } from '@ant-design/icons';
 // import {nanoid} from 'nanoid';
 import imgPath from '../../../assets/head.png'
 import ViewQuestionnaireDetail from "../../ViewQuestionnaireDetail/jsx/ViewQuestionnaireDetail";
@@ -100,6 +100,15 @@ export default class PageList extends Component{
     };
     //table的每一列
 
+    ItemonClick = ({ key }) => {
+      if(`${key}` === '1'){
+        alert("change password")
+      }
+      if(`${key}` === '2'){
+        this.props.history.push('/')
+      }
+    };
+
     //发送请求
     componentDidMount(){
       fetch('/api/manage?user=xyl',{
@@ -179,14 +188,10 @@ export default class PageList extends Component{
               this.setState({data:newData})
             }
             else{
-              alert("数据库故障，未删除成功！")
+              alert("未选中问卷，删除不成功，请确认已选中问卷！")
             }
           }); 
       }
-    }
-
-    changePassword = () => {
-      alert(123)
     }
 
     //创建新问卷
@@ -198,6 +203,22 @@ export default class PageList extends Component{
       this.setState({modalVisible: true})
     }
 
+    handleOk = () => {
+      //调用分享问卷链接
+      alert("调用分享问卷链接");
+      this.setState({modalVisible: false})
+      // message.success("问卷链接已拷贝至粘贴板").then(() => null);
+    }
+
+    handleCancel = () => {
+        this.setState({modalVisible: false})
+    }
+
+    //查看结果
+    handleResult = () => {
+      this.props.history.push('/dataanalysis')
+    }
+
     render(){
       const { selectedRowKeys,rowId,size,xScroll, yScroll,data, ...state } = this.state;
       const scroll = {};
@@ -205,6 +226,12 @@ export default class PageList extends Component{
         selectedRowKeys,
         onChange: this.onSelectChange,
       };
+      const menu = (
+        <Menu onClick={this.ItemonClick}>
+          <Menu.Item key="1">更改密码</Menu.Item>
+          <Menu.Item key="2">退出登录</Menu.Item>
+        </Menu>
+      )
       // const hasSelected = selectedRowKeys.length > 0;
       const columns = [
         {
@@ -239,9 +266,7 @@ export default class PageList extends Component{
               <a href='http://localhost:3000/'>分享</a>
               <a href='http://localhost:3000/'>编辑问卷</a>
               <span onClick={()=> this.handleOnClick()}>查看问卷</span> 
-              <a href='http://localhost:3000/' className="ant-dropdown-link">
-                查看结果 
-              </a>
+              <span onClick={()=> this.handleResult()}>查看结果</span>
             </Space>
           ),
         },
@@ -262,18 +287,25 @@ export default class PageList extends Component{
       return(
         <div>
           <div>
-                <header id="header">
-                    <div id="userName" onClick={this.changePassword}><img src={imgPath} alt="头像"/>xiejing</div>
-                </header>
+            <header id="header">
+              <div id="userName">
+                <Dropdown overlay={menu} >
+                  <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                  <img src={imgPath} alt="头像"/>xiejing<DownOutlined style={{ fontSize:'14px',padding:'4px'}}/>
+                  </a>
+                </Dropdown>
+              </div>
+            </header>
           </div>
           <div id="list">
               <div id='newQuestion'>
-                  <Button id="addButton" onClick={this.createNew} type="primary" shape="round" icon={<PlusOutlined style={{ fontSize:'16px'}} />} >新建问卷</Button>
+                  <Button id="deleteButton" onClick={()=>this.multiDelete(this.state.selectedRowKeys)} type="primary" icon={<DeleteOutlined style={{ fontSize:'16px'}} />} >批量删除</Button>
+                  <Button id="addButton" onClick={this.createNew} type="primary" style={{ margin:'0 16px'}} icon={<PlusOutlined style={{ fontSize:'16px'}} />} >新建问卷</Button>
                   <div id="searchButton">
                       <Search placeholder="请输入问卷名称搜索" onSearch={onSearch} enterButton/>
                   </div>
               </div>
-              <Button id="deleteButton" onClick={()=>this.multiDelete(this.state.selectedRowKeys)} type="primary" icon={<DeleteOutlined style={{ fontSize:'16px'}} />} >批量删除</Button>
+              {/* shape="round" */}
               
               <Table
               {...this.state}

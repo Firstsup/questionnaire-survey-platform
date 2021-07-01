@@ -36,8 +36,8 @@
   width: 100px;
   display: flex;
 }
-#addButton {
-  fontSize: 15px;
+#addButton{
+  /* fontSize: 15px; */
   width: "137px";
   height: "37px";
   border-radius: "6px";
@@ -49,9 +49,9 @@
   display: inline-block;
   /* width: "600"; */
 }
-/* .customSelect :global .ant-input-group-wrapper ant-input-search ant-input-search-with-button {
-  width: 350px;
-  background-color: red ;
-} */
 
+#changePassword{
+  width: 100px;
+  background: red;
+}
 
