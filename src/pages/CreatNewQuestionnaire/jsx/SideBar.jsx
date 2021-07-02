@@ -7,9 +7,9 @@ import addRadio from './addRadio';
 
 class SideBar extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {isToggleOn: true};
+  constructor(p) {
+    super(p);
+    this.state = {};
 
     // 为了在回调中使用 `this`，这个绑定是必不可少的
     this.handleClick = this.handleClick.bind(this);
@@ -21,9 +21,10 @@ class SideBar extends React.Component {
       const name = target.name;
     switch (name) {
       case "addRadio":
-        return addRadio;
-       //alert('调用添加单选题class');
-       break;
+        //  alert('hi'); 
+         return <addRadio></addRadio>;
+        break;
+      
       case "addCheckbox":
         alert('调用添加多选题class');
         break;
@@ -48,7 +49,7 @@ return(
     <Row>
     <Space direction="vertical">
        
-        <button type="primary" name="addRadio" onClick= { this.handleClick} ><i><PlusCircleTwoTone /></i>
+        <button type="primary" name="addRadio" onClick={this.handleClick} ><i><PlusCircleTwoTone /></i>
           添加单选题</button>
           <button type="primary" name="addCheckbox" onClick={this.handleClick}><i><PlusSquareTwoTone /></i>
           添加多选题</button>

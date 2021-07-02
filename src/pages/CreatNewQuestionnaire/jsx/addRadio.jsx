@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
-import DeleteTwoTone from '@material-ui/icons/DeleteTwoTone';
-import { Radio, Input, Space  } from 'antd';
+import {DeleteTwoTone,PlusOutlined}from '@ant-design/icons';
+import { Radio, Input, Space, Button  } from 'antd';
+import CreatPage from './CreatPage';
+import RenderInCreatPage from './add';
 
 
 class addRadio extends Component{
@@ -33,18 +35,23 @@ handleChange(event) {
     });
   }
 
+addChoice(event){
 
 
-/*  //所有生命周期函数待梳理
+}
+
+
+/*
+  
 componentDidMount(){   
     
     
     popupInfo={
-    rootDom:,//接收弹层组件的DOM节点，如document.body
+    rootDom:CreatPage.form,//接收弹层组件的DOM节点，如document.body
     
-    left:,//相对位置
+    left:left,//相对位置
     
-    top://位置信息
+    top:top//位置信息
     
     }
 }
@@ -74,6 +81,7 @@ ReactDom.render(this.props.children, this.popup);
 
 render(){
 return (
+  <RenderInCreatPage>
 <div>
     <div>
         <div >
@@ -97,19 +105,19 @@ return (
         </div>
 
         <div>
-            <Radio.Group onChange={this.handleChange} name="choiceList">
+            <Radio.Group onChange={this.handleChange} name="choiceList"  >
             <Space direction="vertical">
             <Radio value={1} ><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Radio>
             <Radio value={2}><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Radio>
-            <Radio value={3}>
-            { <Input placeholder="添加选项" style={{ width: 100, marginLeft: 10 }} />  }
-          </Radio>
+            <Button type="dashed" onClick= {this.addChoice}><PlusOutlined />添加选项</Button>
+            
         </Space>
       </Radio.Group>
         </div>
 
     </div>
 </div>
+</RenderInCreatPage>
 
 )
 
