@@ -6,16 +6,16 @@ import CreatPage from './CreatPage';
 import RenderInCreatPage from './add';
 
 
-class addRadio extends Component{
+class addRadio extends  React.Component{
 constructor(props){
 super(props);
 this.state={
     aid:'',
     ask:'',
-    type:0,
+    type:1,//1单选 2多选 3文本
     isNecessary:Boolean,
     choiceList: [//每个选项内容
-
+            "","",
 
     ]
 
@@ -36,7 +36,7 @@ handleChange(event) {
   }
 
 addChoice(event){
-
+//根据当前数组的长度判断新建的Radio组件的value,将组件插入新建选项button的前方
 
 }
 
@@ -81,7 +81,7 @@ ReactDom.render(this.props.children, this.popup);
 
 render(){
 return (
-  <RenderInCreatPage>
+ // <RenderInCreatPage>
 <div>
     <div>
         <div >
@@ -117,7 +117,7 @@ return (
 
     </div>
 </div>
-</RenderInCreatPage>
+// </RenderInCreatPage>
 
 )
 

@@ -22,7 +22,7 @@ class SideBar extends React.Component {
     switch (name) {
       case "addRadio":
         //  alert('hi'); 
-         return <addRadio></addRadio>;
+       // Radio();
         break;
       
       case "addCheckbox":
@@ -36,6 +36,7 @@ class SideBar extends React.Component {
   }
 
   
+
 
 render(){
 return(

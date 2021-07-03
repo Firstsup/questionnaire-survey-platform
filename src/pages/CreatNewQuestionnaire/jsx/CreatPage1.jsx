@@ -6,95 +6,11 @@ import {DeleteTwoTone,PlusOutlined}from '@ant-design/icons';
 
 
 
-class SideBar extends React.Component {
-
-  constructor(p) {
-    super(p);
-    this.state = {};
-
-    // 为了在回调中使用 `this`，这个绑定是必不可少的
-    this.handleClick = this.handleClick.bind(this);
-  }
 
 
-  handleClick = (event) => {
-    const target = event.target;
-      const name = target.name;
-    switch (name) {
-      case "addRadio":
-       // alert('hi'); 
-       addRadio();
-        break;
-      
-      case "addCheckbox":
-        addCheckbox();
-        break;
-      case "addText":
-        alert('调用添加文本题函数');
-        break;
-  
-    }
-  }
 
-  
-  
-
-  
-
-  render(){
-  return(
-    <div>
-    <div >
-      添加题目
-      
-
-    </div>
-
-    <Row>
-    <Space direction="vertical">
-       
-        <button type="primary" name="addRadio" onClick={this.handleClick} ><i><PlusCircleTwoTone /></i>
-          添加单选题</button>
-          <button type="primary" name="addCheckbox" onClick={this.handleClick}><i><PlusSquareTwoTone /></i>
-          添加多选题</button>
-          <button type="primary" name="addText" onClick={this.handleClick}><i><EditTwoTone /> </i>
-          添加单行文本题</button>
-        
-        
-     </Space>
-
-    
-    </Row>
-    </div>
-
-  
-);
-}
-
-}
-
-function addRadio(params) {
-  var content = React.createElement("div", null,<RadioContent/> ); // 第三个参数可以分开也可以写成一个数组
-
-
-  
-  ReactDOM.render(
-    content,
-      document.getElementById("formcontent")
-  );
-
-}
-
-function addCheckbox(params) {
-  var content = React.createElement('div', null,<CheckboxContent/> ); // 第三个参数可以分开也可以写成一个数组
-  ReactDOM.render(
-      content,
-    document.getElementById("formcontent")
-  );
-
-}
  
-class RadioContent extends  React.Component{
+class addRadio extends  React.Component{
   constructor(props){
   super(props);
   this.state={
@@ -214,7 +130,7 @@ class RadioContent extends  React.Component{
   }
   
  
-  class CheckboxContent extends Component{
+  class addCheckbox extends Component{
     constructor(props){
         super(props);
         this.state={
@@ -298,7 +214,7 @@ class RadioContent extends  React.Component{
 
  }
 
-class CreatPage extends  React.Component {
+class CreatPage1 extends  React.Component {
    constructor(props) {
         super(props);
         this.state = {userName: '蓝百灵',
@@ -306,12 +222,10 @@ class CreatPage extends  React.Component {
                       questionnaireTitle:'',
                       //questionnaireCount:0,
                       questionnaireSign:0,
-                      askList:[
-                            
-                        ]
+                        asknum:0,
       };
-    
-        //this.handleChange = this.handleChange.bind(this);
+       
+       // this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
       }
 
@@ -328,25 +242,84 @@ class CreatPage extends  React.Component {
 
 
       handleSubmit(event){
-/* 提交时遍历题目列表，如果每一项都不为空才能提交给后端*/
+          alert("正在提交");/* 提交时遍历题目列表，如果每一项都不为空才能提交给后端*/
 
       }
-      
+      onAddChild = () => {
+        this.setState({
+          asknum: this.state.asknum + 1
+        });
+      }
 
       render(){
+        const askList=[ ];
+        for (var i = 0; i < this.state.asknum; i += 1) {
+            askList.push(<ChildComponent key={i} />);
+          };
         return(
-          <div> 
-            <SideBar ></SideBar>
-           <form  onSubmit={this.handleSubmit}>
-             <div id="formcontent">
-
-             </div>
-              
-            <button type="submit">保存问卷</button>
-             </form> 
-             
-          </div>
+            <ParentComponent addChild={this.onAddChild}>
+            {askList}
+          </ParentComponent>
         )
       }
 }
-export default CreatPage
+
+const ParentComponent = props => (
+    <div>
+    <div>
+    <div >
+      添加题目
+      
+
+    </div>
+
+    <Row>
+    <Space direction="vertical">
+       
+        <button type="primary" name="addRadio" onClick={props.addChild} ><i><PlusCircleTwoTone /></i>
+          添加单选题</button>
+          <button type="primary" name="addCheckbox" onClick={props.addChild}><i><PlusSquareTwoTone /></i>
+          添加多选题</button>
+          <button type="primary" name="addText" onClick={props.addChild}><i><EditTwoTone /> </i>
+          添加单行文本题</button>
+        
+        
+     </Space>
+
+    
+    </Row>
+    </div>
+    <form  //onSubmit={this.handleSubmit}
+    >
+    <div id="formcontent">
+    {props.askList}
+    </div>
+     
+   <button type="submit">保存问卷</button>
+    </form> 
+    </div>
+  );
+
+  const ChildComponent = (event) => {
+
+    "I am child "
+    /*const target = event.target;
+    const name = target.name;
+  switch (name) {
+    case "addRadio":
+    <div>
+    {"添加了单选题"}
+    </div>  
+    //<addRadio/>;
+      break;
+    
+    case "addCheckbox":
+      addCheckbox();
+      break;
+    case "addText":
+      alert('调用添加文本题函数');
+      break;
+
+  }*/
+  };
+export default CreatPage1

@@ -19,7 +19,7 @@ class RenderInCreatPage extends Component{
         ReactDOM.unmountComponentAtNode(this.popup);
         CreatPage.form.removeChild(this.popup);
        }
-       _renderLayer(){//将弹层渲染到CreatPage下的form标签
+       _renderLayer(){//将弹层渲染到CreatPage组件下的form标签
         ReactDOM.render(this.props.children, this.popup);
        }
 
