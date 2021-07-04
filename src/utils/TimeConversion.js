@@ -1,5 +1,4 @@
 const timeConversion = (timestamp) => {
-    console.log(timestamp)
     const date = new Date(timestamp)
     const Y = date.getFullYear() + '-';
     const M = date.getMonth() + 1 + '-';
@@ -7,6 +6,5 @@ const timeConversion = (timestamp) => {
     const h = date.getHours() < 10 ? '0' + date.getHours() : date.getHours() + ':';
     const m = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes() + ':';
     const s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
-    console.log(Y + M + D + h + m + s)
     return Y + M + D + h + m + s;
 }
