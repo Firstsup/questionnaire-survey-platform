@@ -10,8 +10,10 @@ import Login1 from './pages/Login/jsx/Login1';
 import { Switch } from 'react-router-dom';
 import SideBar from './pages/CreatNewQuestionnaire/jsx/SideBar';
 import CreatPage1 from './pages/CreatNewQuestionnaire/jsx/CreatPage1';
+import CreatPage from './pages/CreatNewQuestionnaire/jsx/CreatPage';
 import addRadio from './pages/CreatNewQuestionnaire/jsx/addRadio';
 import addCheckbox from './pages/CreatNewQuestionnaire/jsx/addCheckbox';
+import ResetPassword from './pages/Login/jsx/ResetPassword';
 function App() {
     return (
         <main>
@@ -21,9 +23,11 @@ function App() {
                 <Route path="/src/pages/Register/jsx/Register" component={Register} />
                 <Route path="/src/pages/Login/jsx/Login1" component ={Login1}  />
                 <Route path="/src/pages/CreatNewQuestionnaire/jsx/SideBar" component ={SideBar}></Route>
+                <Route path="/src/pages/CreatNewQuestionnaire/jsx/CreatPage"component ={CreatPage}></Route>
                 <Route path="/src/pages/CreatNewQuestionnaire/jsx/CreatPage1"component ={CreatPage1}></Route>
                 <Route path="/src/pages/CreatNewQuestionnaire/jsx/addRadio"component ={addRadio}></Route>
                 <Route path="/src/pages/CreatNewQuestionnaire/jsx/addCheckbox"component ={addCheckbox}></Route>
+                <Route path="/src/pages/Login/jsx/ResetPasswprd" component={ResetPassword}></Route>
             </Switch>
         </main>
     )

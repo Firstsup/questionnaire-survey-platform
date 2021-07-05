@@ -64,7 +64,7 @@ class Register extends React.Component {
       event.preventDefault();}
     else if(this.state.phoneNumber.length!=4){
 
-      alert ("密码凭证必须为4为！");
+      alert ("密码凭证必须为4位！");
       event.preventDefault();
     }
     }
@@ -95,12 +95,14 @@ class Register extends React.Component {
       placeholder="请再次确认密码"  onChange={this.handleChange}
       iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
     />
-    <input  name="phoneNumber" type="number" placeholder="设置四位数字作为找回密码的凭证" onChange={this.handleChange} iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}/>
+    <Input  name="phoneNumber" type="number" placeholder="设置四位数字作为找回密码的凭证" onChange={this.handleChange} iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}/>
 
-    <button  color="primary" type="submit">注册</button>
+    <Button  type="primary" onClick={this.handleSubmitnp}>注册</Button>
 
-<Route path="/src/pages/Login/jsx/Login1" component={Login1} />
-<Link to="/src/pages/Login/jsx/Login1">登录已有帐号 </Link>
+
+     <Button href="http://localhost:3000/src/pages/Login/jsx/Login1" type="link">
+               登录已有账号
+            </Button>
  
   </Space>
          

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Component } from 'react';
+import {Link} from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -9,8 +10,9 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { BrowserRouter } from 'react-router-dom';
-import ReactDOM from 'react-dom';
+import {ReactDOM,Route }from 'react-dom';
 import Button from '@material-ui/core/Button';
+import ResetPassword from './ResetPassword';
 
 /*登录页面：
 与后端交互：判断用户名 userName，密码 userPassword是否一致
@@ -44,10 +46,9 @@ const useStyles = makeStyles((theme) => ({
  class Login1 extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {userName: '',
-                  userPassword:'',
-                  userPasswordAgain:'',
-                  phoneNumber:''
+    this.state = {userNameLogin: '',
+                  userPasswordLogin:'',
+               
   };
 
     this.handleChange = this.handleChange.bind(this);
@@ -58,31 +59,18 @@ const useStyles = makeStyles((theme) => ({
     const target = event.target;
     const name = target.name;
     const value =target.value;
-   /* if(target.name=="userPasswordAgain"){
 
-      if(value==this.state.userPassword){
-        this.setState({ userPasswordAgain: value });
-      
-    }
-      else 
-      alert('密码不一致！请检查密码');
-    }
-    */
     this.setState({
       [name]: value
     });
   }
 
   handleSubmit(event) {
-    alert(  this.state.userName + '，恭喜您注册成功!');
+    if(this.state.userNameLogin=='李梅'&&this.state.userPasswordLogin=='1234')
+    alert(  this.state.userName + '，登录成功!');
+    else alert("登录失败，请检查用户名和密码");
     event.preventDefault();
   }
-
-
-
-  
-    
-
 
 
 
@@ -93,7 +81,7 @@ render(){
       <div>
         <Grid container spacing={1} alignItems="flex-end">
           <Grid item>
-            <AccountCircle />
+          
           </Grid>
           <form onSubmit={this.handleSubmit}>
           <Grid container direction="column"  justify="center" alignItems="center">
@@ -108,12 +96,10 @@ render(){
             >
               登录
             </Button>
-            <Button href="http://localhost:3000/src/pages/Register/jsx/Register" color="primary">
+            <Button href="http://localhost:3000/src/pages/Register/jsx/Register" type="primary">
                注册新账号
             </Button>
-            <Button href="" color="primary">
-               忘记密码
-            </Button>
+            <Link to="/src/pages/Login/jsx/ResetPassword">忘记密码 </Link>
             </Grid>
           </form>
         </Grid>

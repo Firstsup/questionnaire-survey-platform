@@ -302,7 +302,7 @@ const ParentComponent = props => (
 
   const ChildComponent = (event) => {
 
-    "I am child "
+   
     /*const target = event.target;
     const name = target.name;
   switch (name) {

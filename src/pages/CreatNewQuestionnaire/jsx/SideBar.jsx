@@ -50,12 +50,12 @@ return(
     <Row>
     <Space direction="vertical">
        
-        <button type="primary" name="addRadio" onClick={this.handleClick} ><i><PlusCircleTwoTone /></i>
-          添加单选题</button>
-          <button type="primary" name="addCheckbox" onClick={this.handleClick}><i><PlusSquareTwoTone /></i>
-          添加多选题</button>
-          <button type="primary" name="addText" onClick={this.handleClick}><i><EditTwoTone /> </i>
-          添加单行文本题</button>
+        <Button type="primary" name="addRadio" onClick={this.handleClick} ><i><PlusCircleTwoTone /></i>
+          添加单选题</Button>
+          <Button type="primary" name="addCheckbox" onClick={this.handleClick}><i><PlusSquareTwoTone /></i>
+          添加多选题</Button>
+          <Button type="primary" name="addText" onClick={this.handleClick}><i><EditTwoTone /> </i>
+          添加单行文本题</Button>
         
         
      </Space>

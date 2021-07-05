@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { Row, Col,Button,Space, Radio, Input,Checkbox} from 'antd';
 import { PlusCircleTwoTone,PlusSquareTwoTone, EditTwoTone} from '@ant-design/icons';
 import {DeleteTwoTone,PlusOutlined}from '@ant-design/icons';
+import { Components } from 'antd/lib/date-picker/generatePicker';
 
 
 
@@ -12,34 +13,17 @@ class SideBar extends React.Component {
     super(p);
     this.state = {};
 
-    // 为了在回调中使用 `this`，这个绑定是必不可少的
     this.handleClick = this.handleClick.bind(this);
   }
-
 
   handleClick = (event) => {
     const target = event.target;
       const name = target.name;
-    switch (name) {
-      case "addRadio":
-       // alert('hi'); 
-       addRadio();
-        break;
-      
-      case "addCheckbox":
-        addCheckbox();
-        break;
-      case "addText":
-        alert('调用添加文本题函数');
-        break;
-  
+    if(name==="addRio"){
+      return (<addRadio />)//失败
     }
   }
 
-  
-  
-
-  
 
   render(){
   return(
@@ -73,20 +57,23 @@ class SideBar extends React.Component {
 
 }
 
-function addRadio(params) {
-  var content = React.createElement("div", null,<RadioContent/> ); // 第三个参数可以分开也可以写成一个数组
+class addRadio extends React.Component {
+   
+   // 第三个参数可以分开也可以写成一个数组
 
 
   
-  ReactDOM.render(
+  render()
+  {const content = React.createElement("div", null,<RadioContent/> );
+    return(
     content,
       document.getElementById("formcontent")
   );
-
+  }
 }
 
 function addCheckbox(params) {
-  var content = React.createElement('div', null,<CheckboxContent/> ); // 第三个参数可以分开也可以写成一个数组
+  var content = React.createElement('div', null,<CheckboxContent/> );
   ReactDOM.render(
       content,
     document.getElementById("formcontent")
@@ -212,7 +199,7 @@ class RadioContent extends  React.Component{
   }
   
   }
-  
+  addRadio.whyDidYouRender = true
  
   class CheckboxContent extends Component{
     constructor(props){
@@ -349,4 +336,5 @@ class CreatPage extends  React.Component {
         )
       }
 }
+
 export default CreatPage
