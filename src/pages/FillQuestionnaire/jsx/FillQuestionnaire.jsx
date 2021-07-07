@@ -94,7 +94,7 @@ class FillQuestionnaire extends Component {
                     return ({
                         ans_aid: answerID + 1,
                         ans: this.state.questionnaire.questions[answerID].type === "text" ? (answer.answer === null ? "" : answer.answer) : "",
-                        choice: this.state.questionnaire.questions[answerID].type === "text" ? [] : (this.state.questionnaire.questions[answerID].type === "radio" ? String.fromCharCode(answer.answer + 64) : answer.answer.map((ans) => String.fromCharCode(ans + 64)))
+                        choice: this.state.questionnaire.questions[answerID].type === "text" ? [] : (this.state.questionnaire.questions[answerID].type === "radio" ? (answer.answer === null ? "" : String.fromCharCode(answer.answer + 64)) : (answer.answer === null ? [""] : answer.answer.map((ans) => String.fromCharCode(ans + 64))))
                     })
                 })
             }
