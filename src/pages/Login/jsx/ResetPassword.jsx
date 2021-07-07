@@ -39,28 +39,35 @@ class ResetPassword extends Component {
       const name = target.name;
       const value =target.value;
       if(this.state.userName.length!=0){
-        if ((this.state.userPassword.length!=0)&&(this.state.userPassword==this.state.userPasswordAgain)&&(this.state.phoneNumber.length==4)) {
-          alert("正在 核对");//向后端提交
-          event.preventDefault();
-        } else {
-          if(this.state.userPassword.length==0){
-            alert("请输入密码！");
-            event.preventDefault();
-          } else {
-            if (this.state.userPassword!=this.state.userPasswordAgain){
-              alert("密码不一致！");
-              event.preventDefault();}
-            else if(this.state.phoneNumber.length!=4){
-              alert ("密码凭证必须为4位！");
-              event.preventDefault();
-            }
-          }
-        }
+      if((this.state.userPassword.length!=0)&&(this.state.userPassword==this.state.userPasswordAgain)&&(this.state.phoneNumber.length==4))
+      { //此时向后端提交。核对用户名和凭证。 
+        alert(  this.state.userName + '，您的密码正在修改');
+         event.preventDefault();
       }
+    else 
+    {
+      if(this.state.userPassword.length==0){
+      alert("请输入密码！");
+      event.preventDefault();}
+      else {if (this.state.userPassword!=this.state.userPasswordAgain){
+      alert("密码不一致！");
+      event.preventDefault();}
+    else if(this.state.phoneNumber.length!=4){
+
+      alert ("密码凭证必须为4位！");
+      event.preventDefault();
+    }
+    }
+      
+      
+    }
+
+}
     else alert("请输入用户名！");
 
       event.preventDefault();
     }
+  
   
 
     render() {
