@@ -10,36 +10,54 @@ class AddCheckbox extends Component{
           ask:'',
           type:2,
           isNecessary:Boolean,
+          choicenum:2,
           choiceList: [//每个选项内容
-            <Checkbox value={1}><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Checkbox>,
+            <Checkbox disabled={true} ><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Checkbox>,
                        
                        
-             <Checkbox value={2}><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Checkbox>,
+             <Checkbox disabled={true} ><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Checkbox>,
                          
-                         
-             <Checkbox value={3}><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Checkbox>
       
-          ]
+          ],
+          choicecontent:[]
       
       
       }
-      
+      this.addChoice = this.addChoice.bind(this);
       this.handleChange = this.handleChange.bind(this);
       }
 
 
       handleChange(event) {
-          const target = event.target;
-          const name = target.name;
-          const value =target.value;
-        
-          this.setState({
-            [name]: value
-          });
+        const target = event.target;
+        const name = target.name;
+        const value =target.value;
+        const key = target.key;
+        if(name=="choicecontent"){
+            if(typeof this.state.choicecontent[key]=='​undefined')
+            {
+                this.setState(prevState => ({
+                    choicecontent: [...prevState.choicecontent,value]
+                  }));
+            }
+            else{
+            this.setState({
+                [name[key]]: value
+              });}
+        }
+        else{
+        this.setState({
+          [name]: value
+        });}
         }
         addChoice(event){
           //将组件插入新建选项button的前方
-          
+          this.setState(prevState => ({
+            choiceList: [...prevState.choiceList, <Checkbox disabled={true} ><Input name="choicecontent" key={this.state.choicenum} placeholder="请输入选项内容" onChange={this.handleChange}></Input></Checkbox>]
+          }));
+          this.setState({
+            choicenum: this.state.choicenum + 1
+          });
           }
           render(){
             return (
@@ -55,7 +73,7 @@ class AddCheckbox extends Component{
                     </div>
             
                     <div>
-                        <button onClick={this.handleDelete} /*删除该题目*/> <DeleteTwoTone  /></button>   
+                        <Button onClick={this.handleDelete} /*删除该题目*/> <DeleteTwoTone  /></Button>   
                     </div>
             
                     <div>

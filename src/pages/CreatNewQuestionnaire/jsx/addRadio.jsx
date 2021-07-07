@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
-import {DeleteTwoTone,PlusOutlined}from '@ant-design/icons';
+import {DeleteOutlined,PlusOutlined}from '@ant-design/icons';
 import { Radio, Input, Space, Button  } from 'antd';
 import CreatPage from './CreatPage';
 
@@ -79,9 +79,9 @@ class AddRadio extends  React.Component{
              <Input name="ask" placeholder="请输入该单选题的问题" onChange={this.handleChange}></Input>
             </div>
     
-            <div>
-                <button onClick={this.handleDelete} /*删除该题目*/> <DeleteTwoTone  /></button>   
-            </div>
+           <div>
+                <Button type="primary" onClick={this.handleDelete}  icon={<DeleteOutlined />}></Button>   
+           </div>
     
             <div>
                 <span>该题为：</span>
