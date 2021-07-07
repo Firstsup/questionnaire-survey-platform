@@ -178,16 +178,21 @@ class RadioMultipleAnalysis extends Component {
                     level={5}>{questionID + 1}.&nbsp;{question.subject}&nbsp;&nbsp;{question.type === "radio" ?
                     <span className={"analysis_question_type"}>[单选题]</span> :
                     <span className={"analysis_question_type"}>[多选题]</span>}&nbsp;&nbsp;{question.isNecessary === true ?
-                    <span className={"analysis_question_isNecessary"}>[必填]</span> : <span className={"analysis_question_isNecessary"}>[非必填]</span>}</Title>
-                <RadioMultipleTable className={"analysis_table"} key={questionID} question={question} answerSheet={answerSheet} sumCount={sumCount}
+                    <span className={"analysis_question_isNecessary"}>[必填]</span> :
+                    <span className={"analysis_question_isNecessary"}>[非必填]</span>}</Title>
+                <RadioMultipleTable className={"analysis_table"} key={questionID} question={question}
+                                    answerSheet={answerSheet} sumCount={sumCount}
                                     counts={counts} proportions={proportions} questionID={questionID}
                                     questionnaire={questionnaire}/>
                 <span className={"analysis_chart_buttons"}>{this.state.pieChartVisible ?
-                    <Button className={"pieChartButton"} onClick={this.handlePieChartClick}><PieChartOutlined/>隐藏饼状图</Button> :
-                    <Button className={"pieChartButton"} type={"primary"} onClick={this.handlePieChartClick}><PieChartOutlined/>显示饼状图</Button>}
+                    <Button className={"pieChartButton"}
+                            onClick={this.handlePieChartClick}><PieChartOutlined/>隐藏饼状图</Button> :
+                    <Button className={"pieChartButton"} type={"primary"}
+                            onClick={this.handlePieChartClick}><PieChartOutlined/>显示饼状图</Button>}
                     {this.state.barChartVisible ?
                         <Button className={"barChartButton"} onClick={this.handleBarChartClick}><BarChartOutlined/>隐藏柱状图</Button> :
-                        <Button className={"barChartButton"} type={"primary"} onClick={this.handleBarChartClick}><BarChartOutlined/>显示柱状图</Button>}</span>
+                        <Button className={"barChartButton"} type={"primary"}
+                                onClick={this.handleBarChartClick}><BarChartOutlined/>显示柱状图</Button>}</span>
                 {this.state.pieChartVisible ? <div id={"pieChartContainer" + questionID} className={"pieChart"}
                                                    style={{display: this.state.pieChartVisible}}/> : null}
                 {this.state.barChartVisible ? <div id={"barChartContainer" + questionID} className={"barChart"}
