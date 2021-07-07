@@ -97,7 +97,7 @@ class Register extends React.Component {
     />
     <Input  name="phoneNumber" type="number" placeholder="设置四位数字作为找回密码的凭证" onChange={this.handleChange} iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}/>
 
-    <Button  type="primary" onClick={this.handleSubmitnp}>注册</Button>
+    <Button  type="primary" onClick={this.handleSubmit}>注册</Button>
 
 
      <Button href="http://localhost:3000/src/pages/Login/jsx/Login1" type="link">

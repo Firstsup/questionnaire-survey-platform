@@ -27,7 +27,7 @@ function App() {
                 <Route path="/src/pages/CreatNewQuestionnaire/jsx/CreatPage1"component ={CreatPage1}></Route>
                 <Route path="/src/pages/CreatNewQuestionnaire/jsx/addRadio"component ={addRadio}></Route>
                 <Route path="/src/pages/CreatNewQuestionnaire/jsx/addCheckbox"component ={addCheckbox}></Route>
-                <Route path="/src/pages/Login/jsx/ResetPasswprd" component={ResetPassword}></Route>
+                <Route path="/src/pages/Login/jsx/ResetPassword" component={ResetPassword}></Route>
             </Switch>
         </main>
     )

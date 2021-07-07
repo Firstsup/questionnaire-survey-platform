@@ -39,31 +39,24 @@ class ResetPassword extends Component {
       const name = target.name;
       const value =target.value;
       if(this.state.userName.length!=0){
-      if((this.state.userPassword.length!=0)&&(this.state.userPassword==this.state.userPasswordAgain)&&(this.state.phoneNumber.length==4))
-      
-        {
-       alert("正在 核对");//向后端提交
-         event.preventDefault();}
-      
-    else 
-    {
-      if(this.state.userPassword.length==0){
-      alert("请输入密码！");
-      event.preventDefault();}
-      else {if (this.state.userPassword!=this.state.userPasswordAgain){
-      alert("密码不一致！");
-      event.preventDefault();}
-    else if(this.state.phoneNumber.length!=4){
-
-      alert ("密码凭证必须为4位！");
-      event.preventDefault();
-    }
-    }
-      
-      
-    }
-
-}
+        if ((this.state.userPassword.length!=0)&&(this.state.userPassword==this.state.userPasswordAgain)&&(this.state.phoneNumber.length==4)) {
+          alert("正在 核对");//向后端提交
+          event.preventDefault();
+        } else {
+          if(this.state.userPassword.length==0){
+            alert("请输入密码！");
+            event.preventDefault();
+          } else {
+            if (this.state.userPassword!=this.state.userPasswordAgain){
+              alert("密码不一致！");
+              event.preventDefault();}
+            else if(this.state.phoneNumber.length!=4){
+              alert ("密码凭证必须为4位！");
+              event.preventDefault();
+            }
+          }
+        }
+      }
     else alert("请输入用户名！");
 
       event.preventDefault();
@@ -74,7 +67,10 @@ class ResetPassword extends Component {
        
 
       return (
-        <div>
+     
+    
+     
+       <div>
   
         <form >
 
@@ -82,13 +78,13 @@ class ResetPassword extends Component {
         
          <Input name="userName" type="text" placeholder="请输入账号" prefix={<UserOutlined /> }  onChange={this.handleChange}/> 
          <Input name="phoneNumber"  placeholder="请输入密码凭证" onChange={this.handleChange} />
-    <Input name="userPassword" type="string" placeholder="请输入新密码"  onChange={this.handleChange} iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}/>
+    <Input name="userPassword" type="string" placeholder="请输入新密码"  onChange={this.handleChange} />
     <Input name="userPasswordAgain" type="string"
       placeholder="请再次确认新密码"  onChange={this.handleChange}
-      iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} />
+      />
     
 
-    <Button  type="primary" onClick={this.handleSubmitnp}>注册</Button>
+    <Button  type="primary" onClick={this.handleSubmit}>修改密码</Button>
 
     
 
