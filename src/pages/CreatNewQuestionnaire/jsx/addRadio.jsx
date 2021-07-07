@@ -14,30 +14,54 @@ class AddRadio extends  React.Component{
         ask:'',
         type:1,//1单选 2多选 3文本
         isNecessary:Boolean,
-        choiceList: [//每个选项内容
-                "","",
+        choicenum:2,
+        choiceList: [<Radio disabled={true}  ><Input name="choicecontent" key={0} placeholder="请输入选项内容" onChange={this.handleChange}></Input></Radio>,
+        <Radio disabled={true} ><Input name="choicecontent" key={1} placeholder="请输入选项内容" onChange={this.handleChange}></Input></Radio>
+                
     
         ]
+    ,
+        choicecontent:[]
     
     
     }
-    
+    this.addChoice = this.addChoice.bind(this);
     this.handleChange = this.handleChange.bind(this);
+ 
     }
+
+
     
-    handleChange(event) {
+    handleChange=  (event) => {
         const target = event.target;
         const name = target.name;
         const value =target.value;
-      
+        const key = target.key;
+        if(name=="choicecontent"){
+            if(typeof this.state.choicecontent[key]=='​undefined')
+            {
+                this.setState(prevState => ({
+                    choicecontent: [...prevState.choicecontent,value]
+                  }));
+            }
+            else{
+            this.setState({
+                [name[key]]: value
+              });}
+        }
+        else{
         this.setState({
           [name]: value
-        });
+        });}
       }
     
-    addChoice(event){
-    //根据当前数组的长度判断新建的Radio组件的value,将组件插入新建选项button的前方
-    
+    addChoice(){
+        this.setState(prevState => ({
+            choiceList: [...prevState.choiceList, <Radio disabled={true} ><Input name="choicecontent" key={this.state.choicenum} placeholder="请输入选项内容" onChange={this.handleChange}></Input></Radio>]
+          }));
+          this.setState({
+            choicenum: this.state.choicenum + 1
+          });
     }
     
   
@@ -68,12 +92,13 @@ class AddRadio extends  React.Component{
             </div>
     
             <div>
-                <Radio.Group onChange={this.handleChange} name="choiceList"  >
-                <Space direction="vertical">
-                <Radio value={1} ><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Radio>
-                <Radio value={2}><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Radio>
-                <Button type="dashed" onClick= {this.addChoice}><PlusOutlined />添加选项</Button>
+                <Radio.Group   >
+                <Space direction="vertical" >
                 
+                    {this.state.choiceList}
+                    
+                <Button type="dashed" onClick= {this.addChoice}><PlusOutlined />添加选项</Button>
+         
             </Space>
           </Radio.Group>
             </div>

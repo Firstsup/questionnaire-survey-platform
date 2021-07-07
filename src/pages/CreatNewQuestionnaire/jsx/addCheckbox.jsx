@@ -11,7 +11,13 @@ class AddCheckbox extends Component{
           type:2,
           isNecessary:Boolean,
           choiceList: [//每个选项内容
-            "","","","",
+            <Checkbox value={1}><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Checkbox>,
+                       
+                       
+             <Checkbox value={2}><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Checkbox>,
+                         
+                         
+             <Checkbox value={3}><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Checkbox>
       
           ]
       
@@ -63,14 +69,8 @@ class AddCheckbox extends Component{
                     <div>
                      <Checkbox.Group  onChange={this.handleChange} name="choiceList" >
                         <Space direction="vertical">
-                            <Checkbox value="A"><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Checkbox>
-                       
-                       
-                            <Checkbox value="B"><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Checkbox>
-                         
-                         
-                            <Checkbox value="C"><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Checkbox>
-                         
+                            
+                            {this.state.choiceList}
                             <Button type="dashed" onClick= {this.addChoice}><PlusOutlined />添加选项</Button>
                         </Space>
                       </Checkbox.Group>

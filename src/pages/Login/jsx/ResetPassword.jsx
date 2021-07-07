@@ -11,7 +11,7 @@ import {BrowserRouter, Route,Link} from "react-router-dom";
 
                                 
                                     */    
-class ResetPassword extends React.Component {
+class ResetPassword extends Component {
     constructor(props) {
       super(props);
       this.state = {userName: '',
@@ -28,16 +28,7 @@ class ResetPassword extends React.Component {
       const target = event.target;
       const name = target.name;
       const value =target.value;
-     /* if(target.name=="userPasswordAgain"){
-  
-        if(value==this.state.userPassword){
-          this.setState({ userPasswordAgain: value });
-        
-      }
-        else 
-        alert('密码不一致！请检查密码');
-      }
-      最后决定在点击submit的时候检查*/
+
       this.setState({
         [name]: value
       });
@@ -49,11 +40,11 @@ class ResetPassword extends React.Component {
       const value =target.value;
       if(this.state.userName.length!=0){
       if((this.state.userPassword.length!=0)&&(this.state.userPassword==this.state.userPasswordAgain)&&(this.state.phoneNumber.length==4))
-      {
+      
         {
-       //向后端提交
+       alert("正在 核对");//向后端提交
          event.preventDefault();}
-      }
+      
     else 
     {
       if(this.state.userPassword.length==0){
@@ -83,19 +74,18 @@ class ResetPassword extends React.Component {
        
 
       return (
- 
+        <div>
   
-        <form onSubmit={this.handleSubmit}>
+        <form >
 
          <Space direction="vertical">
         
          <Input name="userName" type="text" placeholder="请输入账号" prefix={<UserOutlined /> }  onChange={this.handleChange}/> 
-         <InputNumber name="phoneNumber" min={4} max={4} placeholder="请输入密码凭证" onChange={this.handleChange} />
+         <Input name="phoneNumber"  placeholder="请输入密码凭证" onChange={this.handleChange} />
     <Input name="userPassword" type="string" placeholder="请输入新密码"  onChange={this.handleChange} iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}/>
     <Input name="userPasswordAgain" type="string"
       placeholder="请再次确认新密码"  onChange={this.handleChange}
-      iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-    />
+      iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)} />
     
 
     <Button  type="primary" onClick={this.handleSubmitnp}>注册</Button>
@@ -109,6 +99,7 @@ class ResetPassword extends React.Component {
          
          
         </form> 
+        </div>
          
       )
  

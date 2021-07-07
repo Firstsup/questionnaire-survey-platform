@@ -59,7 +59,7 @@ class CreatPage1 extends  React.Component {
         const name = target.name;
         if (name=="addRadio"){
           this.setState(prevState => ({
-            askList: [...prevState.askList, <AddRadio/>]
+            askList: [...prevState.askList, <AddRadio key={this.state.asknum}/>]
           }));
           this.setState({
             asknum: this.state.asknum + 1
@@ -67,7 +67,7 @@ class CreatPage1 extends  React.Component {
         }
         else if (name=="addCheckbox"){
           this.setState(prevState => ({
-            askList: [...prevState.askList, <AddCheckbox/>]
+            askList: [...prevState.askList, <AddCheckbox key={this.state.asknum}/>]
           }));
           this.setState({
             asknum: this.state.asknum + 1
@@ -75,7 +75,7 @@ class CreatPage1 extends  React.Component {
         }
         else  if (name=="addText"){
           this.setState(prevState => ({
-            askList: [...prevState.askList, <AddText/>]
+            askList: [...prevState.askList, <AddText key={this.state.asknum}/>]
           }));
           this.setState({
             asknum: this.state.asknum + 1
@@ -109,11 +109,7 @@ class CreatPage1 extends  React.Component {
        */
         
       }
-      componentDidUpdate(prevProps) {
-        // 典型用法（不要忘记比较 props）：
-     
-      
-      }
+ 
       
       render(){
         for (var i = 0; i < this.state.asknum; i += 1){
