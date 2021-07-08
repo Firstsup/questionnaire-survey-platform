@@ -9,7 +9,6 @@ class RadioQuestion extends Component {
         super(props);
         this.state = {
             choice: 0,
-            warringVisible: this.props.warringVisible
         }
     }
 
@@ -31,7 +30,7 @@ class RadioQuestion extends Component {
                     }
                 </div>
                 <Title className={"question_title"}
-                       level={4}>{questionID + 1}.&nbsp;{question.subject}&nbsp;<span className={"question_span"}>[单选题]</span>&nbsp;&nbsp;{this.state.warringVisible[questionID] ? (
+                       level={4}>{questionID + 1}.&nbsp;{question.subject}&nbsp;<span className={"question_span"}>[单选题]</span>&nbsp;&nbsp;{this.props.warringVisible[questionID] ? (
                     <span className={"question_show_warring"}>请填写本题</span>) : null}</Title>
                 <div className={"question_left"}/>
                 <Radio.Group className={"question_radio_group"}>

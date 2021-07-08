@@ -10,7 +10,6 @@ class MultipleQuestion extends Component {
         super(props);
         this.state = {
             choice: [],
-            warringVisible: this.props.warringVisible
         }
     }
 
@@ -32,7 +31,7 @@ class MultipleQuestion extends Component {
                     }
                 </div>
                 <Title className={"question_title"}
-                       level={4}>{questionID + 1}.&nbsp;{question.subject}&nbsp;<span className={"question_span"}>[多选题]</span>&nbsp;&nbsp;{this.state.warringVisible[questionID] ? (
+                       level={4}>{questionID + 1}.&nbsp;{question.subject}&nbsp;<span className={"question_span"}>[多选题]</span>&nbsp;&nbsp;{this.props.warringVisible[questionID] ? (
                     <span className={"question_show_warring"}>请填写本题</span>) : null}</Title>
                 <div className={"question_left"}/>
                 <Checkbox.Group onChange={this.handleMultipleChange}>
