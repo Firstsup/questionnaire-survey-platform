@@ -1,5 +1,5 @@
 const timeConversion = (timestamp) => {
-    const date = new Date(timestamp)
+    const date = new Date(timestamp * 1000)
     const Y = date.getFullYear() + '-';
     const M = date.getMonth() + 1 + '-';
     const D = date.getDate() + ' ';
@@ -8,3 +8,5 @@ const timeConversion = (timestamp) => {
     const s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
     return Y + M + D + h + m + s;
 }
+
+export default timeConversion
