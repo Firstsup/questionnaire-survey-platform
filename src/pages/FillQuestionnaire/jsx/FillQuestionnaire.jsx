@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Divider, Layout, Typography, Button, Modal, message, Spin} from 'antd';
+import {Divider, Layout, Typography, Button, Modal, message, Spin, Alert} from 'antd';
 import {Content, Footer, Header} from "antd/es/layout/layout";
 import '../css/FillQuestionnaire.css'
 import QuestionnaireExpire from "./QuestionnaireExpire";
@@ -94,9 +94,21 @@ class FillQuestionnaire extends Component {
                     return ({
                         ans_aid: answerID + 1,
                         ans: this.state.questionnaire.questions[answerID].type === "text" ? (answer.answer === null ? "" : answer.answer) : "",
-                        choice: this.state.questionnaire.questions[answerID].type === "text" ? [] : (this.state.questionnaire.questions[answerID].type === "radio" ? (answer.answer === null ? "" : String.fromCharCode(answer.answer + 64)) : (answer.answer === null ? [""] : answer.answer.map((ans) => String.fromCharCode(ans + 64))))
+                        choice: this.state.questionnaire.questions[answerID].type === "text" ? "" : (this.state.questionnaire.questions[answerID].type === "radio" ? (answer.answer === null ? "" : String.fromCharCode(answer.answer + 64)) : (answer.answer === null ? [""] : answer.answer.map((ans) => String.fromCharCode(ans + 64))))
                     })
                 })
+                // "ans_list": [{
+                //
+                //     "ans_aid": 1,
+                //
+                //     "ans": "12",
+                //     "choice": ""
+                // },{
+                //     "ans_aid": 2,
+                //
+                //     "ans": "",
+                //     "choice": ["B","C"]
+                // }]
             }
             console.log(params)
             fetch(('/api/ansFill'), {
@@ -111,7 +123,7 @@ class FillQuestionnaire extends Component {
                     if (res.ans_qid !== 0) {
                         this.props.history.push("/fillquestionnairesubmitcomplete");
                     } else {
-                        return message.error("问卷提交失败！");
+                        return message.error("问卷提交失败，请重新提交！");
                     }
                 })
         }, 2000);
@@ -123,7 +135,7 @@ class FillQuestionnaire extends Component {
 
     componentDidMount() {
         const Params = {
-            "qid": 107
+            "qid": this.props.location.search.slice(5)
         };
         fetch('/api/fill', {
             method: 'post',
@@ -167,15 +179,13 @@ class FillQuestionnaire extends Component {
     }
 
     render() {
-        if (this.state.loading === true) {
-            return (<Spin size={"large"}/>)
+        if (this.state.loading === true || this.state.questionnaire.title === "") {
+            return (<div
+                style={{height: document.documentElement.clientHeight, width: document.documentElement.clientWidth}}>
+                <Spin className={"question_spin"} tip="加载中..."/></div>)
         } else {
             const questionnaire = this.state.questionnaire;
-            if (questionnaire.status !== "active") {
-                return (
-                    <QuestionnaireExpire history={this.props.history}/>
-                )
-            } else {
+            if (questionnaire.status === "active") {
                 return (
                     <Layout className={"question_layout"}>
                         <Header className={"question_header"}>{this.getTitle()}</Header>
@@ -198,6 +208,10 @@ class FillQuestionnaire extends Component {
                             <p>{this.state.modalText}</p>
                         </Modal>
                     </Layout>
+                )
+            } else {
+                return (
+                    <QuestionnaireExpire history={this.props.history}/>
                 )
             }
         }

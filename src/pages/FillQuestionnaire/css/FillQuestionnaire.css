@@ -36,3 +36,8 @@
     text-align: center;
     color: #fa541c;
 }
+
+.question_spin {
+    margin-top: 400px !important;
+    margin-left: 50% !important;
+}
