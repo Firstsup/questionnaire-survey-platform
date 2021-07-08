@@ -97,18 +97,6 @@ class FillQuestionnaire extends Component {
                         choice: this.state.questionnaire.questions[answerID].type === "text" ? "" : (this.state.questionnaire.questions[answerID].type === "radio" ? (answer.answer === null ? "" : String.fromCharCode(answer.answer + 64)) : (answer.answer === null ? [""] : answer.answer.map((ans) => String.fromCharCode(ans + 64))))
                     })
                 })
-                // "ans_list": [{
-                //
-                //     "ans_aid": 1,
-                //
-                //     "ans": "12",
-                //     "choice": ""
-                // },{
-                //     "ans_aid": 2,
-                //
-                //     "ans": "",
-                //     "choice": ["B","C"]
-                // }]
             }
             console.log(params)
             fetch(('/api/ansFill'), {
