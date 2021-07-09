@@ -12,6 +12,8 @@ import { Tag, Divider } from 'antd';
 
 
 
+
+
  
 
  
@@ -34,15 +36,18 @@ class CreatPage1 extends  React.Component {
         
       }
       
-      handleDelete(event){//删除应该是组件发出请求，CreatPage的askList数组中删掉这一个元素 难点：拖拽元素改变顺序，数组索引怎么办
-        const target = event.target;
-        const name = target.name;
-        const value =target.value;
-        var index=event.target.getAttribute(this.state.askList.index);
-        var askList=this.state.askList;
-        askList.splice(index,1,"");
-            this.setState({askList:askList});
-           
+      handleDelete(event){
+        alert("点击删除");
+        //删除应该是组件发出请求，CreatPage的askList数组中删掉这一个元素 难点：拖拽元素改变顺序，数组索引怎么办
+       /* const target = event.target;
+        const key=event.key;
+        const initSelectInputList  = this.state.askList;
+        initSelectInputList.splice(key, 1);
+        this.initUpdateList(initSelectInputList);
+        this.setState({
+          askList:initSelectInputList
+        });
+        */
       }
 
 
@@ -59,7 +64,7 @@ class CreatPage1 extends  React.Component {
         const name = target.name;
         if (name=="addRadio"){
           this.setState(prevState => ({
-            askList: [...prevState.askList, <AddRadio key={this.state.asknum}/>]
+            askList: [...prevState.askList, <AddRadio key={this.state.asknum+1} handleDelete={this.handleDelete} />]
           }));
           this.setState({
             asknum: this.state.asknum + 1
@@ -67,7 +72,7 @@ class CreatPage1 extends  React.Component {
         }
         else if (name=="addCheckbox"){
           this.setState(prevState => ({
-            askList: [...prevState.askList, <AddCheckbox key={this.state.asknum}/>]
+            askList: [...prevState.askList, <AddCheckbox key={this.state.asknum+1}/>]
           }));
           this.setState({
             asknum: this.state.asknum + 1
@@ -75,7 +80,7 @@ class CreatPage1 extends  React.Component {
         }
         else  if (name=="addText"){
           this.setState(prevState => ({
-            askList: [...prevState.askList, <AddText key={this.state.asknum}/>]
+            askList: [...prevState.askList, <AddText key={this.state.asknum+1}/>]
           }));
           this.setState({
             asknum: this.state.asknum + 1
@@ -185,4 +190,4 @@ else if(props.id=="addCheckbox"){
 }*/
   
   
-export default CreatPage1
+export default CreatPage1;

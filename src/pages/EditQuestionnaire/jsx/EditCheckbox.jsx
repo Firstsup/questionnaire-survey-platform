@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import ReactDom from 'react-dom';
 import {DeleteOutlined,PlusOutlined}from '@ant-design/icons';
 import { Radio, Input, Space, Button  } from 'antd';
-import CreatPage from './CreatPage';
 import { //引入react-dnd
     DragSource,
     DropTarget,
@@ -10,22 +9,17 @@ import { //引入react-dnd
 
 
 
-class AddRadio extends  React.Component{
+class EditCheckbox extends  React.Component{
     constructor(props){
     super(props);
     this.state={
-        aid:'',
-        ask:'',
-        type:1,//1单选 2多选 3文本
-        isNecessary:Boolean,
-        choicenum:2,
-        choiceList: [<Radio disabled={true}  ><Input name="choicecontent" key={1} placeholder="请输入选项内容" onChange={this.handleChange}></Input></Radio>,
-        <Radio disabled={true} ><Input name="choicecontent" key={2} placeholder="请输入选项内容" onChange={this.handleChange}></Input></Radio>
-                
-    
-        ]
-    ,
-        choicecontent:[]
+        aid:this.props.aid,
+        ask:this.props.ask,
+        type:2,//1单选 2多选 3文本
+        isNecessary:this.props.isNecessary,
+        choicenum:0,
+        choiceList:this.props.choiceList,
+        
     
     
     }
@@ -41,11 +35,11 @@ class AddRadio extends  React.Component{
         const name = target.name;
         const value =target.value;
         const key = target.key;
-        if(name=="choicecontent"){
-            if(typeof this.state.choicecontent[key]=='​undefined')
+        if(name=="choiceList"){
+            if(typeof this.state.choiceList[key]=='​undefined')
             {
                 this.setState(prevState => ({
-                    choicecontent: [...prevState.choicecontent,value]
+                    choicecontent: [...prevState.choiceList,value]
                   }));
             }
             else{
@@ -61,27 +55,32 @@ class AddRadio extends  React.Component{
     
     addChoice(){
         this.setState(prevState => ({
-            choiceList: [...prevState.choiceList, <Radio disabled={true} ><Input name="choicecontent" key={this.state.choicenum+1} placeholder="请输入选项内容" onChange={this.handleChange}></Input></Radio>]
+            choiceList: [...prevState.choiceList, <Radio disabled={true} ><Input name="choiceList" key={this.state.choicenum+1} placeholder="请输入选项内容" onChange={this.handleChange}></Input></Radio>]
           }));
           this.setState({
             choicenum: this.state.choicenum + 1
           });
     }
     
-  
+    
     
     render(){
+        
+        let ask=this.props.ask;
+        let aid=this.props.aid;
+        let isNecessary=this.props.isNecessary;
+        let choiceList=this.props.choiceList;
 
     return (
      // <RenderInCreatPage>
     <div>
         <div>
             <div >
-                <span name="aid" value=""/*题号 根据该题在题目数组中的索引号+1生成 */ ></span>
+                <span name="aid" value=""/*题号 根据该题在题目数组中的索引号+1生成 */ >这是第{aid}题</span>
             </div>
     
             <div >
-             <Input name="ask" placeholder="请输入该单选题的问题" onChange={this.handleChange}></Input>
+             <Input name="ask"  onChange={this.handleChange}>{ask}</Input>
             </div>
     
            <div>
@@ -90,7 +89,7 @@ class AddRadio extends  React.Component{
     
             <div>
                 <span>该题为：</span>
-                <Radio.Group name="isNecessary" onChange={this.handleChange} >
+                <Radio.Group name="isNecessary" value={isNecessary} onChange={this.handleChange}  >
                      <Radio value={true}>必填</Radio>
                      <Radio value={false}>选填</Radio>
                 </Radio.Group>
@@ -100,7 +99,16 @@ class AddRadio extends  React.Component{
                 <Radio.Group   >
                 <Space direction="vertical" >
                 
-                    {this.state.choiceList}
+                {
+                           choiceList.map((choice, index) => {
+                               this.setState({
+                                   choicenum:choicenum+1
+                               });
+                                return (
+                                    <Radio disabled={true}><Input onChange={this.handleChange} key={index+1}>{choice}</Input></Radio>
+                                )
+                            })
+                  }
                     
                 <Button type="dashed" onClick= {this.addChoice}><PlusOutlined />添加选项</Button>
          
@@ -118,4 +126,4 @@ class AddRadio extends  React.Component{
     
     }
 
-export default AddRadio
+export default EditCheckbox
