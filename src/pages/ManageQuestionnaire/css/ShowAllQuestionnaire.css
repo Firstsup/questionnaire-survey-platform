@@ -1,0 +1,57 @@
+/* header的css */
+#header{
+  height: 50px;
+  /* background-color: blanchedalmond; */
+  border-bottom: solid rgb(156, 156, 156) 1px;
+  /* margin-bottom: 10px; */
+  position: relative;
+  width: 100%;
+}
+#userName{
+  display: inline-block;
+  width: 150px;
+  height: 100%;
+  font-size: 24px;
+  color: #1890ff;
+  /* background: #000; */
+  /* border: blue solid 1px; */
+  position: absolute;
+  right: 10%;
+  vertical-align: center;
+  text-align: right;
+}
+#userName img{
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
+}
+
+/* List的css */
+#list {
+  width: 80%;
+  margin-left: 10%;
+}
+#newQuestion {
+  margin:  18px 0;
+  width: 100px;
+  display: flex;
+}
+#addButton{
+  /* fontSize: 15px; */
+  width: "137px";
+  height: "37px";
+  border-radius: "6px";
+}
+#searchButton {
+  /* border-radius:"6px"; */
+  position: absolute;
+  right: 10%;
+  display: inline-block;
+  /* width: "600"; */
+}
+
+#changePassword{
+  width: 100px;
+  background: red;
+}
+

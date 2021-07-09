@@ -1,18 +1,15 @@
 import React from 'react';
-import { Component } from 'react';
-import {Link} from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import FormControl from '@material-ui/core/FormControl';
+// import Input from '@material-ui/core/Input';
+// import InputLabel from '@material-ui/core/InputLabel';
+// import InputAdornment from '@material-ui/core/InputAdornment';
+// import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import { BrowserRouter } from 'react-router-dom';
-import {ReactDOM,Route }from 'react-dom';
+// import { BrowserRouter } from 'react-router-dom';
+// import ReactDOM from 'react-dom';
 import Button from '@material-ui/core/Button';
-import ResetPassword from './ResetPassword';
 
 /*登录页面：
 与后端交互：判断用户名 userName，密码 userPassword是否一致
@@ -46,10 +43,11 @@ const useStyles = makeStyles((theme) => ({
  class Login1 extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {userNameLogin: '',
-                  userPasswordLogin:'',
-               
-  };
+    this.state = {userName: '',
+                  userPassword:'',
+                  userPasswordAgain:'',
+                  phoneNumber:''
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -59,16 +57,24 @@ const useStyles = makeStyles((theme) => ({
     const target = event.target;
     const name = target.name;
     const value =target.value;
+   /* if(target.name=="userPasswordAgain"){
 
+      if(value==this.state.userPassword){
+        this.setState({ userPasswordAgain: value });
+      
+    }
+      else 
+      alert('密码不一致！请检查密码');
+    }
+    */
     this.setState({
       [name]: value
     });
   }
 
   handleSubmit(event) {
-    if(this.state.userNameLogin=='李梅'&&this.state.userPasswordLogin=='1234')
-    alert(  this.state.userName + '，登录成功!');
-    else alert("登录失败，请检查用户名和密码");
+    alert(  this.state.userName + '，恭喜您注册成功!');
+    this.props.history.push('/showallquestionnaire');
     event.preventDefault();
   }
 

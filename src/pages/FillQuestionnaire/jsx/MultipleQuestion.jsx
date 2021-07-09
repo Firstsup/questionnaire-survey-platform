@@ -10,7 +10,6 @@ class MultipleQuestion extends Component {
         super(props);
         this.state = {
             choice: [],
-            warringVisible: this.props.warringVisible
         }
     }
 
@@ -26,21 +25,21 @@ class MultipleQuestion extends Component {
         let questionID = this.props.questionID;
         return (
             <div className={"question"}>
-                <div className={"left"}>
+                <div className={"question_left"}>
                     {
-                        question.isNecessary ? (<p className={"isNecessary"}>*</p>) : null
+                        question.isNecessary ? (<p className={"question_isNecessary"}>*</p>) : null
                     }
                 </div>
                 <Title className={"question_title"}
-                       level={4}>{questionID + 1}.&nbsp;{question.subject}&nbsp;<span className={"question_span"}>[多选题]</span>&nbsp;&nbsp;{this.state.warringVisible[questionID] ? (
-                    <span className={"show_warring"}>请填写本题</span>) : null}</Title>
-                <div className={"left"}/>
+                       level={4}>{questionID + 1}.&nbsp;{question.subject}&nbsp;<span className={"question_span"}>[多选题]</span>&nbsp;&nbsp;{this.props.warringVisible[questionID] ? (
+                    <span className={"question_show_warring"}>请填写本题</span>) : null}</Title>
+                <div className={"question_left"}/>
                 <Checkbox.Group onChange={this.handleMultipleChange}>
                     <Space direction="vertical">
                         {
                             question.options.map((option, optionID) => {
                                 return (
-                                    <Checkbox className={"checkbox"} key={optionID} value={optionID + 1}
+                                    <Checkbox key={optionID} value={optionID + 1}
                                     >{option}</Checkbox>
                                 )
                             })

@@ -1,14 +1,14 @@
-.header, .content, .footer {
+.question_header, .question_content, .question_footer {
     background-color: white !important;
     width: 100%;
 }
 
-.title {
+.fill_question_title {
     text-align: center;
     color: #1890ff !important;
 }
 
-.footer {
+.question_footer {
     margin-top: 3%;
     position: relative;
     height: 10%;
@@ -17,22 +17,27 @@
     color: #bfbfbf;
 }
 
-.header {
+.question_header {
     margin-top: 5%;
     margin-bottom: 3%;
 }
 
-.button {
+.question_button {
     margin: 5% auto auto;
     width: 80px;
 }
 
-.layout {
+.question_layout {
     background-color: white !important;
 }
 
-.alert {
+.question_alert {
     margin-top: 20px;
     text-align: center;
     color: #fa541c;
+}
+
+.question_spin {
+    margin-top: 400px !important;
+    margin-left: 50% !important;
 }
