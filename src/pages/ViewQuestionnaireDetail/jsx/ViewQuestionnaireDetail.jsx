@@ -88,8 +88,8 @@ class ViewQuestionnaireDetail extends Component {
                         <Descriptions.Item
                             label="截止时间">{timeConversion(questionnaire.deadline)}</Descriptions.Item>
                         <Descriptions.Item label="问卷状态" span={2}>
-                            {questionnaire.state === "发布中" ?
-                                <Badge status="processing" text="发布中"/> : (questionnaire.state === "未发布" ?
+                            {questionnaire.status === "发布中" ?
+                                <Badge status="processing" text="发布中"/> : (questionnaire.status === "未发布" ?
                                     <Badge status="default" text="未发布"/> : <Badge status="warning" text="已过期"/>)}
                         </Descriptions.Item>
                     </Descriptions>

@@ -208,7 +208,29 @@ export default class PageList extends Component {
     handleOk = (status, qid) => {
         console.log(status)
         if (status === "未发布") {
-            alert('123')
+            const params = {
+                "qid": qid,
+                "start_time": new Date().getTime()
+            };
+            console.log(params)
+            if (this.props.qid !== "") {
+                fetch('api/release', {
+                    method: 'post',
+                    body: JSON.stringify(params),
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                }).then(res => res.json())
+                    .then(res => {
+                        if (res.code === 1) {
+                            message.success("问卷已发布").then(() => null);
+                            this.setState({modalVisible: false})
+                        } else {
+                            message.error("问卷发布失败，请重试")
+                        }
+                    })
+            }
         } else if (status === "发布中") {
             copy('http://localhost:3000/fillquestionnaire?qid=' + this.state.data[0].qid);
             message.success("问卷链接已拷贝至粘贴板").then(() => null);
