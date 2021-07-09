@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { Input, Space } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { UserOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+// import { Button } from 'antd';
 import {BrowserRouter, Route,Link} from "react-router-dom";
 import Login1 from '../../Login/jsx/Login1';
 
@@ -12,7 +12,7 @@ import Login1 from '../../Login/jsx/Login1';
 
                                 
                                     */    
-class Register extends React.Component {
+class Register extends Component {
     constructor(props) {
       super(props);
       this.state = {userName: '',
@@ -45,21 +45,21 @@ class Register extends React.Component {
     }
   
     handleSubmit(event) {
-      if(this.state.userName.length!=0){
-      if((this.state.userPassword.length!=0)&&(this.state.userPassword==this.state.userPasswordAgain)&&(this.state.phoneNumber.length==4))
+      if(this.state.userName.length!==0){
+      if((this.state.userPassword.length!==0)&&(this.state.userPassword===this.state.userPasswordAgain)&&(this.state.phoneNumber.length===4))
       {
         alert(  this.state.userName + '，恭喜您注册成功!');
          event.preventDefault();
       }
     else 
     {
-      if(this.state.userPassword.length==0){
+      if(this.state.userPassword.length===0){
       alert("请输入密码！");
       event.preventDefault();}
-      else {if (this.state.userPassword!=this.state.userPasswordAgain){
+      else {if (this.state.userPassword!==this.state.userPasswordAgain){
       alert("密码不一致！");
       event.preventDefault();}
-    else if(this.state.phoneNumber.length!=4){
+    else if(this.state.phoneNumber.length!==4){
 
       alert ("密码凭证必须为4为！");
       event.preventDefault();

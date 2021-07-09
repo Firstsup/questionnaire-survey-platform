@@ -95,7 +95,7 @@ export default class SubmitListQuestionnaire extends Component {
         if(window.confirm('确定删除吗？')){
             const { data,tableRowId } = this.state
             console.log("tableRowId",tableRowId)
-            
+            console.log("data22222222",data)
             const newData = data.filter(
                 (dataObj) => {
                     console.log("data",dataObj.ans_qid)
