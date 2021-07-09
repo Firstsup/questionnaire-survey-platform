@@ -3,10 +3,7 @@ import ReactDom from 'react-dom';
 import {DeleteOutlined,PlusOutlined}from '@ant-design/icons';
 import { Radio, Input, Space, Button  } from 'antd';
 import CreatPage from './CreatPage';
-import { //引入react-dnd
-    DragSource,
-    DropTarget,
-} from 'react-dnd'
+
 
 
 
