@@ -16,44 +16,46 @@ class RadioMultipleAnalysis extends Component {
         }
     }
 
-    getCount = (answerSheet, option, question, questionID) => {
-        if (question.type === "radio") {
-            let count = 0;
-            answerSheet.forEach((answers) => {
-                if (question.options[answers[questionID].answer - 1] === option) {
-                    return count++;
-                }
-                return count;
-            })
-            return count;
-        } else {
-            let count = 0;
-            answerSheet.forEach((answers) => {
-                for (let i = 0; i < (answers[questionID].answer == null ? 0 : answers[questionID].answer.length); i++) {
-                    if (question.options[answers[questionID].answer[i] - 1] === option) {
-                        return count++;
-                    }
-                }
-                return count;
-            })
-            return count;
-        }
-    }
-
-    getSumCount = () => {
-        let c = 0;
-        for (let i = 0; i < this.props.answerSheet.length; i++) {
-            if (this.props.answerSheet[i][this.props.questionID].answer !== null) {
-                c++;
-            }
-        }
-        return c;
-    }
+    // getCount = (answerSheet, option, question, questionID) => {
+    //     if (question.type === "radio") {
+    //         let count = 0;
+    //         answerSheet.forEach((answers) => {
+    //             if (question.options[answers[questionID].answer - 1] === option) {
+    //                 return count++;
+    //             }
+    //             return count;
+    //         })
+    //         return count;
+    //     } else {
+    //         let count = 0;
+    //         answerSheet.forEach((answers) => {
+    //             for (let i = 0; i < (answers[questionID].answer == null ? 0 : answers[questionID].answer.length); i++) {
+    //                 if (question.options[answers[questionID].answer[i] - 1] === option) {
+    //                     return count++;
+    //                 }
+    //             }
+    //             return count;
+    //         })
+    //         return count;
+    //     }
+    // }
+    //
+    // getSumCount = () => {
+    //     let c = 0;
+    //     for (let i = 0; i < this.props.answerSheet.length; i++) {
+    //         if (this.props.answerSheet[i][this.props.questionID].answer !== null) {
+    //             c++;
+    //         }
+    //     }
+    //     return c;
+    // }
 
     getProportion = (count, sumCount) => {
-        return (
-            this.toPercent(count / sumCount)
-        )
+        if (sumCount === 0) {
+            return (this.toPercent(0))
+        } else {
+            return (this.toPercent(count / sumCount))
+        }
     }
 
     toPercent = (point) => {
@@ -77,16 +79,15 @@ class RadioMultipleAnalysis extends Component {
     render() {
         const questionID = this.props.questionID;
         const question = this.props.questionnaire.questions[this.props.questionID]
-        const answerSheet = this.props.answerSheet;
         const questionnaire = this.props.questionnaire;
-        const sumCount = this.getSumCount(question);
-        const counts = question.options.map((option) => {
-            return (this.getCount(answerSheet, option, question, questionID))
-        })
-        const proportions = question.options.map((option, optionID) => {
-            return (this.getProportion(counts[optionID], sumCount))
-        })
-
+        let proportions
+        if (this.props.count[questionID] !== undefined) {
+            proportions = this.props.count[questionID].map((item) => {
+                return (this.getProportion(item, this.props.countAll[questionID]))
+            })
+        } else {
+            proportions = []
+        }
         if (this.state.pieChartVisible === true) {
             $(() => {
                 let pieChart = echarts.getInstanceByDom(document.getElementById('pieChartContainer' + questionID));
@@ -107,7 +108,7 @@ class RadioMultipleAnalysis extends Component {
                                 return (
                                     {
                                         name: option,
-                                        value: counts[optionID],
+                                        value: this.props.count[questionID][optionID],
                                     }
                                 )
                             }),
@@ -162,7 +163,7 @@ class RadioMultipleAnalysis extends Component {
                         {
                             type: 'bar',
                             barWidth: '60%',
-                            data: counts.map((count) => count)
+                            data: this.props.count[questionID].map((count) => count)
                         }
                     ]
                 };
@@ -181,8 +182,8 @@ class RadioMultipleAnalysis extends Component {
                     <span className={"analysis_question_isNecessary"}>[必填]</span> :
                     <span className={"analysis_question_isNecessary"}>[非必填]</span>}</Title>
                 <RadioMultipleTable className={"analysis_table"} key={questionID} question={question}
-                                    answerSheet={answerSheet} sumCount={sumCount}
-                                    counts={counts} proportions={proportions} questionID={questionID}
+                                    count={this.props.count} countAll={this.props.countAll} proportions={proportions}
+                                    questionID={questionID}
                                     questionnaire={questionnaire}/>
                 <span className={"analysis_chart_buttons"}>{this.state.pieChartVisible ?
                     <Button className={"pieChartButton"}

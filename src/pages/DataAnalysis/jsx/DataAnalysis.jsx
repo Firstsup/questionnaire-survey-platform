@@ -1,59 +1,26 @@
 import React, {Component} from 'react';
 import AnswersAnalysis from "./AnswersAnalysis";
-import {Layout, Button} from "antd";
+import {Layout, Button, Spin} from "antd";
 import {Content, Footer, Header} from "antd/es/layout/layout";
 import '../css/DataAnalysis.css'
 import Title from "antd/es/typography/Title";
 
-const questionnaire = {
-    title: "test",
-    qid: "123",
-    state: "active",
-    questions: [
-        {
-            subject: "question1",
-            type: "radio",
-            isNecessary: true,
-            options: ["皮卡丘", "伊布", "我是谁"],
-        },
-        {
-            subject: "question2",
-            type: "multiple",
-            isNecessary: true,
-            options: ["option1", "option2", "option3"],
-        },
-        {
-            subject: "question3",
-            type: "text",
-            isNecessary: true,
-        },
-        {
-            subject: "question4",
-            type: "radio",
-            isNecessary: false,
-            options: ["option1", "option2", "option3", "option4"],
-        },
-        {
-            subject: "question5",
-            type: "multiple",
-            isNecessary: false,
-            options: ["option1", "option2", "option3", "option4"],
-        },
-        {
-            subject: "question6",
-            type: "text",
-            isNecessary: false,
-        }
-    ]
-}
-const answerSheet = [
-    [{answer: 1}, {answer: [1]}, {answer: "4531"}, {answer: null}, {answer: null}, {answer: null}],
-    [{answer: 2}, {answer: [2, 3]}, {answer: "428"}, {answer: 2}, {answer: [2, 3]}, {answer: null}],
-    [{answer: 3}, {answer: [1, 3]}, {answer: "8678"}, {answer: 3}, {answer: null}, {answer: "5"}]
-]
-const submitTime = [new Date("2020-1-1"), new Date("2020-2-2"), new Date("2020-3-3")]
-
 class DataAnalysis extends Component {
+    constructor() {
+        super();
+        this.state = {
+            questionnaire: {
+                title: "",
+                qid: "",
+                status: "",
+                questions: []
+            },
+            countAll: [],
+            count: [],
+            loading: true
+        }
+    }
+
     handleViewClick = () => {
         this.props.history.push('/submitlistquestionnaire')
     }
@@ -62,20 +29,115 @@ class DataAnalysis extends Component {
         this.props.history.goBack()
     }
 
+    componentDidMount() {
+        let max = 0;
+        const params = {
+            "qid": this.props.location.search.slice(5)
+        };
+        fetch('/api/fill', {
+            method: 'post',
+            body: JSON.stringify(params),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        }).then(res => res.json())
+            .then(res => {
+                const get = res.data.data[0];
+                this.setState({
+                    questionnaire: {
+                        title: get.title,
+                        qid: get.qid,
+                        status: get.status === 1 ? "active" : "",
+                        questions: get.ask_list.map((list) => {
+                            return ({
+                                subject: list.ask,
+                                type: list.type === 1 ? "radio" : (list.type === 2 ? "multiple" : "text"),
+                                isNecessary: list.isNecessary,
+                                options: list.choice_list.map((choice) => {
+                                    return (choice.content)
+                                })
+                            })
+                        })
+                    }
+                })
+                for (let i = 0; i < get.ask_list.length; i++) {
+                    if (get.ask_list[i].choice_list.length > max) {
+                        max = get.ask_list[i].choice_list.length
+                    }
+                }
+            })
+        fetch('/api/analysis', {
+            method: 'post',
+            body: JSON.stringify(params),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        }).then(res => res.json())
+            .then(res => {
+                const get = res.data.data;
+                let countAll = [];
+                for (const cntKey in get.cnt) {
+                    countAll.push(get.cnt[cntKey])
+                }
+                let count = [];
+                for (let i = 1; i <= max; i++) {
+                    for (const item in get) {
+                        const key = "cnt" + i
+                        if (item === key) {
+                            let countRow = [];
+                            for (const row in get[item]) {
+                                countRow.push(get[item][row])
+                            }
+                            count.push(countRow)
+                        }
+                    }
+                }
+                if (count != "") {
+                    count = count[0].map(function (col, i) {
+                        return count.map(function (row) {
+                            return row[i];
+                        })
+                    });
+                }
+                this.setState({
+                    countAll: countAll != "" ? countAll : this.state.questionnaire.questions.map(() => {
+                        return 0
+                    }),
+                    count: count != "" ? count : this.state.questionnaire.questions.map(() => {
+                        return (new Array(max).fill(0))
+                    }),
+                    loading: false
+                })
+            });
+    }
+
     render() {
-        return (
-            <Layout className={"analysis_layout"}>
-                <Header className={"analysis_header"}><Title className={"analysis_header_title"}
-                                                             level={2}>问卷《{questionnaire.title}》&nbsp;结果分析</Title></Header>
-                <Content className={"analysis_content"}><AnswersAnalysis className={"analysis_answers"}
-                                                                         questionnaire={questionnaire}
-                                                                         answerSheet={answerSheet}
-                                                                         submitTime={submitTime}/></Content>
-                <Footer className={"analysis_footer"}><Button type={"primary"} className={"analysis_view_button"}
-                                                              onClick={this.handleViewClick}>查看具体答卷</Button><Button
-                    onClick={this.handleBackClick}>返回</Button></Footer>
-            </Layout>
-        )
+        if (this.state.loading === true || this.state.questionnaire.title === "") {
+            return (
+                <div
+                    style={{
+                        height: document.documentElement.clientHeight,
+                        width: document.documentElement.clientWidth
+                    }}>
+                    <Spin className={"dataAnalysis_spin"} tip="加载中..."/></div>
+            )
+        } else {
+            return (
+                <Layout className={"analysis_layout"}>
+                    <Header className={"analysis_header"}><Title className={"analysis_header_title"}
+                                                                 level={2}>问卷《{this.state.questionnaire.title}》&nbsp;结果分析</Title></Header>
+                    <Content className={"analysis_content"}><AnswersAnalysis className={"analysis_answers"}
+                                                                             questionnaire={this.state.questionnaire}
+                                                                             countAll={this.state.countAll}
+                                                                             count={this.state.count}/></Content>
+                    <Footer className={"analysis_footer"}><Button type={"primary"} className={"analysis_view_button"}
+                                                                  onClick={this.handleViewClick}>查看具体答卷</Button><Button
+                        onClick={this.handleBackClick}>返回</Button></Footer>
+                </Layout>
+            )
+        }
     }
 }
 
