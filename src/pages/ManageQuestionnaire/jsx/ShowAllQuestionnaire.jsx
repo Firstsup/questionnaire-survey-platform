@@ -1,73 +1,17 @@
 // import { deflate } from 'pako'
-import React, {Component} from 'react'
+import React,{Component} from 'react'
+// import { useState } from 'react';
 import '../css/ShowAllQuestionnaire.css'
-import {Table, Space, Button, Input, Menu, Dropdown, message} from 'antd';
-import {PlusOutlined, DeleteOutlined, DownOutlined} from '@ant-design/icons';
-// import {nanoid} from 'nanoid';
+import { Table, Space, Button ,Input, Menu, Dropdown, message, Modal } from 'antd';
+import { PlusOutlined,DeleteOutlined,DownOutlined } from '@ant-design/icons';
 import imgPath from '../../../assets/head.png'
 import ViewQuestionnaireDetail from "../../ViewQuestionnaireDetail/jsx/ViewQuestionnaireDetail";
 import copy from 'copy-to-clipboard'
 //搜索框的
 const {Search} = Input;
 const onSearch = value => console.log(value);
+// const [isModalVisible, setIsModalVisible] = useState(false);
 
-// const data = [
-//   {qid:22,key:22,title:"test1",status:0,time:"2020-1.0"},
-//   {qid:23,key:23,title:"test1",status:0,time:"2020-1.0"},
-//   {qid:24,key:24,title:"test1",status:0,time:"2020-1.0"},
-//   {qid:25,key:25,title:"test1",status:1,time:"2020-1.0"},
-//   {qid:26,key:26,title:"test1",status:1,time:"2020-1.0"},
-//   {qid:27,key:27,title:"test1",status:1,time:"2020-1.0"}
-// ];
-
-const questionnaire = {
-    title: "test",
-    qid: "123",
-    publisher: "Firstsup",
-    state: "发布中",
-    fillerCount: 5,
-    releaseTime: new Date("2020-1-1"),
-    deadline: new Date("2020-12-31"),
-    questions: [
-        {
-            subject: "question1",
-            type: "单选题",
-            isNecessary: true,
-            options: ["option1", "option2", "option3"],
-        },
-        {
-            subject: "question2",
-            type: "多选题",
-            isNecessary: true,
-            options: ["如今，数据科学竞赛（大数据竞赛，机器学习竞赛，人工智能算法竞赛）已经成为各大知名互联网企业征集解决方案和选拔人才的第一选择，很多同学为了拿到大厂offer，纷纷加入了数据竞赛的浪潮之中。遗憾的是，大部分同学都在激烈的竞争中成为炮灰，许多人不停地上网浏览各类竞赛开源分享，却依旧感到困惑迷茫。", "option2", "option3"],
-        },
-        {
-            subject: "question3",
-            type: "文本题",
-            isNecessary: true,
-        },
-        {
-            subject: "question4",
-            type: "单选题",
-            isNecessary: false,
-            options: ["option1", "option2", "option3", "option4", "option5", "option6", "option7", "option8"],
-        },
-        {
-            subject: "question5",
-            type: "多选题",
-            isNecessary: false,
-            options: ["option1", "option2", "option3", "option4"],
-        },
-        {
-            subject: "question6",
-            type: "文本题",
-            isNecessary: false,
-        }
-    ]
-}
-
-//   const expandable = { expandedRowRender: record => <p>{record.description}</p> };
-//   const title = () => 'Here is title';
 const showHeader = true;
 const pagination = {position: 'bottom'};
 // const rowId = -1;
@@ -76,30 +20,34 @@ const pagination = {position: 'bottom'};
 // return `Total ${total} items`;
 // }
 
-export default class PageList extends Component {
-    state = {
-        size: 'large',
-        // yScroll: true,
-        bordered: false,
-        loading: false,
-        pagination,
-        // size: 'default',
-        title: undefined,
-        showHeader,
-        rowSelection: {},
-        scroll: undefined,
-        hasData: true,
-        tableLayout: undefined,
-        top: 'none',
-        bottom: 'bottomRight',
-        data: [],
-        rowId: -1,
-        selectedRowKeys: [],
-        questionnaire: questionnaire,
-        modalVisible: false
-        // user: user,
+export default class PageList extends Component{ 
+  state = {
+      size: 'large',
+      // yScroll: true,
+      bordered: false,
+      loading: false,
+      pagination,
+      // size: 'default', 
+      title: undefined,
+      showHeader,
+      rowSelection: {},
+      scroll: undefined,
+      hasData: true,
+      tableLayout: undefined,
+      top: 'none',
+      bottom: 'bottomRight',
+      data: [],
+      rowId: -1,
+      selectedRowKeys: [],
+      questionnaire: questionnaire,
+      modalVisible: false,
+      modalVisiblePassword: false,
+      originPwd:'',
+      newPwd:'',
+      checkPwd:''
+      // user: user,
     };
-    //table的每一列
+    //table的每一列 
 
     ItemonClick = ({key}) => {
         if (`${key}` === '1') {
@@ -224,126 +172,155 @@ export default class PageList extends Component {
 
     //查看结果
     handleResult = () => {
-        this.props.history.push('/dataanalysis?qid=' + this.state.rowId)
+      this.props.history.push('/dataanalysis?qid='+this.state.rowId)
     }
 
-    render() {
-        const {selectedRowKeys, rowId, size, xScroll, yScroll, data, ...state} = this.state;
-        const scroll = {};
-        const rowSelection = {
-            selectedRowKeys,
-            onChange: this.onSelectChange,
-        };
-        const menu = (
-            <Menu onClick={this.ItemonClick}>
-                <Menu.Item key="1">更改密码</Menu.Item>
-                <Menu.Item key="2">退出登录</Menu.Item>
-            </Menu>
-        )
-        // const hasSelected = selectedRowKeys.length > 0;
-        const columns = [
-            {
-                title: '问卷名称',
-                dataIndex: 'title',
-                width: "10%"
-            },
-            {
-                title: '问卷id',
-                dataIndex: 'qid',
-                width: "10%"
-            },
-            {
-                title: '问卷状态',
-                dataIndex: 'status',
-                width: "10%"
-            },
-            {
-                sorter: (a, b) => a.age - b.age,
-                title: '创建时间',
-                dataIndex: 'time',
-                width: "35%"
-            },
-            {
-                title: '操作问卷',
-                key: 'action',
-                //   sorter: true,
-
-                render: () => (
-                    <Space size="middle">
-                        <span onClick={() => this.handleDelete()}>删除</span>
-                        <a href='http://localhost:3000/'>分享</a>
-                        <a href='http://localhost:3000/'>编辑问卷</a>
-                        <span onClick={() => this.handleOnClick()}>查看问卷</span>
-                        <span onClick={() => this.handleResult()}>查看结果</span>
-                    </Space>
-                ),
-            },
-        ];
-        const tableColumns = columns
-
-        if (yScroll) {
-            scroll.y = 840;
-        }
-        if (xScroll) {
-            scroll.x = '100vw';
-        }
-        if (xScroll === 'fixed') {
-            tableColumns[0].fixed = true;
-            tableColumns[tableColumns.length - 1].fixed = 'right';
-        }
-        return (
-            <div>
-                <div>
-                    <header id="header">
-                        <div id="userName">
-                            <Dropdown overlay={menu}>
-                                <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                                    <img src={imgPath} alt="头像"/>xiejing<DownOutlined
-                                    style={{fontSize: '14px', padding: '4px'}}/>
-                                </a>
-                            </Dropdown>
-                        </div>
-                    </header>
-                </div>
-                <div id="list">
-                    <div id='newQuestion'>
-                        <Button id="deleteButton" onClick={() => this.multiDelete(this.state.selectedRowKeys)}
-                                type="primary" icon={<DeleteOutlined style={{fontSize: '16px'}}/>}>批量删除</Button>
-                        <Button id="addButton" onClick={this.createNew} type="primary" style={{margin: '0 16px'}}
-                                icon={<PlusOutlined style={{fontSize: '16px'}}/>}>新建问卷</Button>
-                        <div id="searchButton">
-                            <Search placeholder="请输入问卷名称搜索" onSearch={onSearch} enterButton/>
-                        </div>
-                    </div>
-                    {/* shape="round" */}
-
-                    <Table
-                        {...this.state}
-                        pagination={{position: [this.state.top, this.state.bottom]}}
-                        columns={tableColumns}
-                        dataSource={state.hasData ? data : null}
-                        scroll={scroll} rowSelection={rowSelection}
-                        onRow={(record) => {
-                            return {
-                                onMouseEnter: () => {
-                                    // console.log("record",record)
-                                    this.setRowId(record.qid)
-                                }
-                            }
-                        }
-                        }
-                    />
-                    <ViewQuestionnaireDetail
-                        qid={this.state.rowId}
-                        modalVisible={this.state.modalVisible}
-                        handleOk={this.handleOk}
-                        handleCancel={this.handleCancel}
-                    />
-
-                    {/* <Pagination size="small" total={50} showSizeChanger showQuickJumper /> */}
-                </div>
-            </div>
-        )
+    //得到原始密码  
+    getOriginPwd = (event) => {
+      this.setState({originPwd:event.target.value})
     }
+
+    //得到新密码
+    getNewPwd = (event) => {
+      this.setState({newPwd:event.target.value})
+    }
+
+    //检查2次密码是否一致
+    checkNewPwd = (event) => {
+      this.setState({checkPwd:event.target.value})
+    }
+
+    render(){
+      const { selectedRowKeys,rowId,size,xScroll, yScroll,statusNum,data, ...state } = this.state;
+      const scroll = {};
+      const rowSelection = {
+        selectedRowKeys,
+        onChange: this.onSelectChange,
+      };
+      for (let i of data){
+        console.log("i",i.qid)
+      }
+      // console.log("statusNum",data.map)
+      const menu = (
+        <Menu onClick={this.ItemonClick}>
+          <Menu.Item key="1">更改密码</Menu.Item>
+          <Menu.Item key="2">退出登录</Menu.Item>
+        </Menu>
+      )
+      // const hasSelected = selectedRowKeys.length > 0;
+      const columns = [
+        {
+          title: '问卷名称',
+          dataIndex: 'title',
+          width: "10%"
+        },
+        {
+          title: '问卷id',
+          dataIndex: 'qid',
+          width: "10%"
+        },
+        {
+          title: '问卷状态',
+          dataIndex: 'status',
+          width: "10%"
+        },
+        {
+          sorter: (a, b) => a.age - b.age,
+          title: '创建时间',
+          dataIndex: 'time',
+          width: "35%"
+        },
+        {
+          title: '操作问卷',
+          key: 'action',
+          dataIndex: 'action',
+          render: (text,data) => (
+            // return( 
+              <Space size="middle">
+                <span onClick={()=> this.handleOnClick()}>查看问卷</span>              
+                <span>{data.statusNum===0?"编辑问卷":""}</span>              
+                <span onClick={()=> this.handleResult()}>{data.statusNum!==0?"查看数据":""}</span>  
+                <span>{data.statusNum===1?"分享":""}</span>
+                <span onClick={()=> this.handleDelete()}>{data.statusNum===0?"删除":""}</span>
+              </Space>
+            // )
+          )
+
+            // return( 
+            // <Space size="middle">
+            //   <span onClick={()=> this.handleDelete()}>{"发布中"?"删除":""}</span>
+            //   <a href='http://localhost:3000/'>{statusNum}shanchu</a>
+            //   <a href='http://localhost:3000/'>{1>0?"编辑问卷":""}</a>
+            //   <span onClick={()=> this.handleOnClick()}>{1<0?"查看问卷":""}</span> 
+            //   <span onClick={()=> this.handleResult()}>查看结果</span>  
+            //   {/* 查看数据  1>0?"查看数据":""*/}
+            // </Space>
+            // )
+          // ),
+
+
+        },
+      ];
+      const tableColumns = columns
+
+      return(
+        <div>
+          <div>
+            <header id="header">
+              <div id="userName">
+                <Dropdown overlay={menu} >
+                  <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                  <img src={imgPath} alt="头像"/>xiejing<DownOutlined style={{ fontSize:'14px',padding:'4px'}}/>
+                  </a>
+                </Dropdown>
+              </div>
+            </header>
+          </div>
+          <div id="list">
+              <div id='newQuestion'>
+                  <Button id="deleteButton" onClick={()=>this.multiDelete(this.state.selectedRowKeys)} type="primary" icon={<DeleteOutlined style={{ fontSize:'16px'}} />} >批量删除</Button>
+                  <Button id="addButton" onClick={this.createNew} type="primary" style={{ margin:'0 16px'}} icon={<PlusOutlined style={{ fontSize:'16px'}} />} >新建问卷</Button>
+                  <div id="searchButton">
+                      <Search placeholder="请输入问卷名称搜索" onSearch={onSearch} enterButton/>
+                  </div>
+              </div>
+              {/* shape="round" */}
+              
+              <Table
+              {...this.state}
+              pagination={{ position: [this.state.top, this.state.bottom] }}
+              columns={tableColumns}
+              dataSource={state.hasData ? data : null}
+              scroll={scroll} rowSelection={rowSelection}
+              onRow = {(record) => {
+                return {
+                  onMouseEnter: () => {
+                    console.log("record",record)
+                    this.setRowId(record.qid)
+                    }
+                  }
+                }
+              }
+              />
+
+              <ViewQuestionnaireDetail
+                    questionnaire={this.state.questionnaire}
+                    modalVisible={this.state.modalVisible}
+                    qid={this.state.rowId}
+                    handleOk={this.handleOk}
+                    handleCancel={this.handleCancel}
+              />  
+
+              {/* <Pagination size="small" total={50} showSizeChanger showQuickJumper /> */}
+          </div>
+          <Modal title="修改密码" okText={"确定"}
+                cancelText={"关闭"} visible={this.state.modalVisiblePassword} onOk={this.handleOkPassword} onCancel={this.handleCancelPassword} >
+            <p><Input placeholder="请输入初始密码" style={{borderRadius:"6px"}} onChange = {this.getOriginPwd} /></p>
+            <p><Input placeholder="请输入新密码" style={{borderRadius:"6px"}} onChange = {this.getNewPwd} /></p>
+            <p><Input placeholder="请重复输入新密码" style={{borderRadius:"6px"}} onChange = {this.checkNewPwd}/></p>
+          </Modal>
+        </div>
+      )   
+  }
 }
 
