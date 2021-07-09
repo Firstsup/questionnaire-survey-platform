@@ -9,6 +9,8 @@ import SubmitListQuestionnaire from "./pages/SubmitListQuestionnaire/jsx/SubmitL
 import HomePage from './pages/testHomePage/jsx/testHomePage';
 import Register from './pages/Register/jsx/Register';
 import Login1 from './pages/Login/jsx/Login1';
+import CreatPage1 from './pages/CreatNewQuestionnaire/jsx/CreatPage1';
+import EditQuestionnaire from './pages/EditQuestionnaire/jsx/EditQuestionnaire';
 
 class App extends Component {
     render() {
@@ -22,6 +24,8 @@ class App extends Component {
                 <Route path={'/showallquestionnaire'} component={ShowAllQuestionnaire}/>
                 <Route path="/register" component={Register} />
                 <Route path="/login" component ={Login1}  />
+                <Route path="/src/pages/CreatNewQuestionnaire/jsx/CreatPage1" component ={CreatPage1} />
+                <Route path="/src/pages/EditQuestionnaire/jsx/EditQuestionnaire" component ={EditQuestionnaire} />
             </BrowserRouter>
         )
     }

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
-import {DeleteTwoTone,PlusOutlined}from '@ant-design/icons';
+import {DeleteOutlined,PlusOutlined}from '@ant-design/icons';
 import { Radio, Input, Space, Checkbox, Row, Col,Button } from 'antd';
 class AddCheckbox extends Component{
   constructor(props){
@@ -11,6 +11,7 @@ class AddCheckbox extends Component{
           type:2,
           isNecessary:Boolean,
           choicenum:2,
+          isDeleted:false,
           choiceList: [//每个选项内容
             <Checkbox disabled={true} ><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Checkbox>,
                        
@@ -25,6 +26,7 @@ class AddCheckbox extends Component{
       }
       this.addChoice = this.addChoice.bind(this);
       this.handleChange = this.handleChange.bind(this);
+      this.handleDelete = this.handleDelete.bind(this);
       }
 
 
@@ -59,6 +61,13 @@ class AddCheckbox extends Component{
             choicenum: this.state.choicenum + 1
           });
           }
+
+          handleDelete(){
+            this.setState({
+                isDeleted:true
+            })
+        }
+        
           render(){
             return (
              // <RenderInCreatPage> 应在此处用RenderInCreatPage包裹，将内容插入form指定位置
@@ -73,7 +82,7 @@ class AddCheckbox extends Component{
                     </div>
             
                     <div>
-                        <Button onClick={this.handleDelete} /*删除该题目*/> <DeleteTwoTone  /></Button>   
+                    <Button type="primary" onClick={this.handleDelete}  icon={<DeleteOutlined />}></Button>      
                     </div>
             
                     <div>

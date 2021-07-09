@@ -2,10 +2,7 @@ import React, {Component} from 'react';
 import ReactDom from 'react-dom';
 import {DeleteOutlined,PlusOutlined}from '@ant-design/icons';
 import { Radio, Input, Space, Button  } from 'antd';
-import { //引入react-dnd
-    DragSource,
-    DropTarget,
-} from 'react-dnd'
+
 
 
 
@@ -18,7 +15,7 @@ class EditCheckbox extends  React.Component{
         type:2,//1单选 2多选 3文本
         isNecessary:this.props.isNecessary,
         choicenum:0,
-        choiceList:this.props.choiceList,
+        choiceList:[''],
         
     
     
@@ -69,7 +66,9 @@ class EditCheckbox extends  React.Component{
         let ask=this.props.ask;
         let aid=this.props.aid;
         let isNecessary=this.props.isNecessary;
-        let choiceList=this.props.choiceList;
+        this.setState({
+            choiceList: this.props.choiceList
+        });
 
     return (
      // <RenderInCreatPage>
@@ -80,7 +79,7 @@ class EditCheckbox extends  React.Component{
             </div>
     
             <div >
-             <Input name="ask"  onChange={this.handleChange}>{ask}</Input>
+             <Input name="ask"  onChange={this.handleChange} placeholder={ask}></Input>
             </div>
     
            <div>
@@ -100,10 +99,8 @@ class EditCheckbox extends  React.Component{
                 <Space direction="vertical" >
                 
                 {
-                           choiceList.map((choice, index) => {
-                               this.setState({
-                                   choicenum:choicenum+1
-                               });
+                           this.state.choiceList.map((choice, index) => {
+                             
                                 return (
                                     <Radio disabled={true}><Input onChange={this.handleChange} key={index+1}>{choice}</Input></Radio>
                                 )

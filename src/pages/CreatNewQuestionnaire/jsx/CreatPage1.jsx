@@ -7,6 +7,10 @@ import AddRadio from './addRadio';
 import AddCheckbox from './addCheckbox';
 import AddText from './AddText';
 import { Tag, Divider } from 'antd';
+import { Layout } from 'antd';
+import '../css/CreatQuestion.css';
+const { Header, Footer, Sider, Content } = Layout;
+
 
 
 
@@ -35,20 +39,27 @@ class CreatPage1 extends  React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         
       }
-      
-      handleDelete(event){
-        alert("点击删除");
-        //删除应该是组件发出请求，CreatPage的askList数组中删掉这一个元素 难点：拖拽元素改变顺序，数组索引怎么办
-       /* const target = event.target;
-        const key=event.key;
-        const initSelectInputList  = this.state.askList;
-        initSelectInputList.splice(key, 1);
-        this.initUpdateList(initSelectInputList);
-        this.setState({
-          askList:initSelectInputList
-        });
-        */
-      }
+
+      componentDidUpdate(prevProps, prevState) {
+       
+      //应该删除askList中isDeleted为true的项。目前不可用，会影响添加题目
+
+      /*
+        for (var i=1;i<=this.state.asknum;i++){
+
+          if(this.state.askList[i].isDeleted==true){
+         const initSelectInputList  = this.state.askList;
+         
+         initSelectInputList.splice(i, 1);
+         this.initUpdateList(initSelectInputList);
+         this.setState({
+           askList:initSelectInputList
+         });
+         }
+       }
+       */
+ 
+  }
 
 
       handleSubmit(event){
@@ -117,24 +128,37 @@ class CreatPage1 extends  React.Component {
  
       
       render(){
-        for (var i = 0; i < this.state.asknum; i += 1){
-
-        }
+     
         
-        return(<div id="content" >
+        return(
+        <div id="content" >
+          <div className="questionsSideBar">
             <ParentComponent addChild={this.onAddChild}>
             
            
           </ParentComponent>
-          <div>
-          {this.state.askList}
-            <br/>
-            <Tag color="blue" > 目前共有  {this.state.asknum}题</Tag>
-            </div>
           <br/>
-          <Button type="primary" onClick={this.handleSubmit} shape="round" icon={<CheckOutlined />} >
+          <div>
+             <Tag color="blue" > 目前共有  {this.state.asknum}题</Tag>
+          <br/>
+        
+             <Button type="primary" onClick={this.handleSubmit} shape="round" icon={<CheckOutlined />} >
          确认创建
         </Button>
+          </div>
+          </div>
+          <div className="questionsConten" >
+            
+          <Space direction="vertical" >
+            <Input name="questionnaireTitle" placeholder="请输入问卷标题" onChange={this.handleChange}></Input>
+            <Divider>问卷内容</Divider>
+          {this.state.askList}
+          </Space>
+            
+           
+            </div>
+     
+         
           </div>
         )
       }
@@ -144,11 +168,7 @@ class CreatPage1 extends  React.Component {
 const ParentComponent = props => (
   <div>
   <div>
-  <div >
-    添加题目
-    
 
-  </div>
 
   <Row>
   <Space direction="vertical">
@@ -158,7 +178,7 @@ const ParentComponent = props => (
         <Button type="primary" name="addCheckbox" onClick={props.addChild}><PlusSquareTwoTone />
         添加多选题</Button>
         <Button type="primary" name="addText" onClick={props.addChild}><EditTwoTone /> 
-        添加单行文本题</Button>
+        添加文本题</Button>
       
       
    </Space>

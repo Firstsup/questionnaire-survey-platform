@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
-import {DeleteTwoTone,PlusOutlined}from '@ant-design/icons';
+import {DeleteOutlined,PlusOutlined}from '@ant-design/icons';
 import { Radio, Input, Space, Checkbox, Row, Col,Button } from 'antd';
 class AddText extends Component{
     constructor(props){
@@ -10,9 +10,11 @@ class AddText extends Component{
             ask:'',
             type:3,
             isNecessary:Boolean,
+            isDeleted:false,
             answer:"",
         }
         this.handleChange = this.handleChange.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
 }
 handleChange(event) {
     const target = event.target;
@@ -23,6 +25,13 @@ handleChange(event) {
       [name]: value
     });
   }
+
+  handleDelete(){
+    this.setState({
+        isDeleted:true
+    })
+}
+
 render(){
     const { TextArea } = Input;
     return(
@@ -37,7 +46,7 @@ render(){
             </div>
     
             <div>
-                <button onClick={this.handleDelete} /*删除该题目*/> <DeleteTwoTone  /></button>   
+            <Button type="primary" onClick={this.handleDelete}  icon={<DeleteOutlined />}></Button>     
             </div>
             <div>
                         <span>该题为：</span>

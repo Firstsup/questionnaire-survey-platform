@@ -16,6 +16,7 @@ class AddRadio extends  React.Component{
         type:1,//1单选 2多选 3文本
         isNecessary:Boolean,
         choicenum:2,
+        isDeleted:false,
         choiceList: [<Radio disabled={true}  ><Input name="choicecontent" key={1} placeholder="请输入选项内容" onChange={this.handleChange}></Input></Radio>,
         <Radio disabled={true} ><Input name="choicecontent" key={2} placeholder="请输入选项内容" onChange={this.handleChange}></Input></Radio>
                 
@@ -28,6 +29,7 @@ class AddRadio extends  React.Component{
     }
     this.addChoice = this.addChoice.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
  
     }
 
@@ -65,6 +67,11 @@ class AddRadio extends  React.Component{
           });
     }
     
+    handleDelete(){
+        this.setState({
+            isDeleted:true
+        })
+    }
   
     
     render(){
@@ -82,7 +89,7 @@ class AddRadio extends  React.Component{
             </div>
     
            <div>
-                <Button type="primary" onClick={this.handleDelete}  icon={<DeleteOutlined />}></Button>   
+                <Button type="primary" onClick={this.handleDelete}   icon={<DeleteOutlined />}></Button>   
            </div>
     
             <div>

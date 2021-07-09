@@ -2,10 +2,7 @@ import React, {Component} from 'react';
 import ReactDom from 'react-dom';
 import {DeleteOutlined,PlusOutlined}from '@ant-design/icons';
 import { Radio, Input, Space, Button  } from 'antd';
-import { //引入react-dnd
-    DragSource,
-    DropTarget,
-} from 'react-dnd';
+const { TextArea } = Input;
 
 class EditText extends  React.Component{
     constructor(props){
@@ -21,7 +18,7 @@ class EditText extends  React.Component{
     
     
     }
-    this.addChoice = this.addChoice.bind(this);
+    
     this.handleChange = this.handleChange.bind(this);
  
     }
@@ -45,10 +42,10 @@ class EditText extends  React.Component{
     
     render(){
         
-        let ask=this.props.ask;
-        let aid=this.props.aid;
-        let isNecessary=this.props.isNecessary;
-        let choiceList=this.props.choiceList;
+        let ask=this.state.ask;
+        let aid=this.state.aid;
+        let isNecessary=this.state.isNecessary;
+    
 
     return (
   
@@ -59,7 +56,7 @@ class EditText extends  React.Component{
             </div>
     
             <div >
-             <Input name="ask"  onChange={this.handleChange}>{ask}</Input>
+             <Input name="ask"  onChange={this.handleChange} placeholder={ask}></Input>
             </div>
     
            <div>

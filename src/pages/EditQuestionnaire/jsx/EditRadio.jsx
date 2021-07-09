@@ -2,10 +2,7 @@ import React, {Component} from 'react';
 import ReactDom from 'react-dom';
 import {DeleteOutlined,PlusOutlined}from '@ant-design/icons';
 import { Radio, Input, Space, Button  } from 'antd';
-import { //引入react-dnd
-    DragSource,
-    DropTarget,
-} from 'react-dnd'
+
 
 
 
@@ -18,7 +15,7 @@ class EditRadio extends  React.Component{
         type:1,//1单选 2多选 3文本
         isNecessary:this.props.isNecessary,
         choicenum:0,
-        choiceList:this.props.choiceList,
+        choiceList:[''],
     }
     this.addChoice = this.addChoice.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -65,10 +62,13 @@ class EditRadio extends  React.Component{
         let ask=this.props.ask;
         let aid=this.props.aid;
         let isNecessary=this.props.isNecessary;
-        let choiceList=this.props.choiceList;
-
+       
+         this.setState({
+         choiceList: this.props.choiceList
+     });
     return (
      // <RenderInCreatPage>
+     
     <div>
         <div>
             <div >
@@ -76,7 +76,7 @@ class EditRadio extends  React.Component{
             </div>
     
             <div >
-             <Input name="ask"  onChange={this.handleChange}>{ask}</Input>
+             <Input name="ask"  onChange={this.handleChange} placeholder={ask}></Input>
             </div>
     
            <div>
@@ -96,7 +96,7 @@ class EditRadio extends  React.Component{
                 <Space direction="vertical" >
                 
                 {
-                           choiceList.map((choice, index) => {
+                           this.state.choiceList.map((choice, index) => {
                                 return (
                                     <Radio disabled={true}><Input onChange={this.handleChange} key={index+1}>{choice}</Input></Radio>
                                 )

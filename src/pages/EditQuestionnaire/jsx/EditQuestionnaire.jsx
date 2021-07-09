@@ -1,14 +1,16 @@
 import React, {Component} from 'react';
 import ReactDOM from "react-dom";
-import { Row, Col,Button,Space, Radio, Input,Checkbox} from 'antd';
+import { Row, Col,Space, Radio, Input,Checkbox} from 'antd';
 import { PlusCircleTwoTone,PlusSquareTwoTone, EditTwoTone,CheckOutlined} from '@ant-design/icons';
 import {DeleteTwoTone,PlusOutlined}from '@ant-design/icons';
 import EditRadio from './EditRadio';
 import EditCheckbox from './EditCheckbox';
 import EditText from './EditText';
-import { Tag, Divider } from 'antd';
+import {Tag,Divider, Layout, Typography, Button, Modal, message, Spin, Alert} from 'antd';
+import Questions from './Questions';
 
-import HTML5Backend from 'react-dnd-html5-backend';
+import {Content, Footer, Header} from "antd/es/layout/layout";
+const {Title} = Typography;
 
   const questionnaire={userName: '张三',
   qId:123,
