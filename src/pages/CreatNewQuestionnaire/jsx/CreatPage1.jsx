@@ -37,7 +37,7 @@ class CreatPage1 extends  React.Component {
        
        // this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        
+        this.onAddChild=this.onAddChild.bind(this);
       }
 
       componentDidUpdate(prevProps, prevState) {
@@ -125,7 +125,7 @@ class CreatPage1 extends  React.Component {
        */
         
       }
- 
+
       
       render(){
      
@@ -133,10 +133,29 @@ class CreatPage1 extends  React.Component {
         return(
         <div id="content" >
           <div className="questionsSideBar">
-            <ParentComponent addChild={this.onAddChild}>
-            
+          <div>
+        <div>
+      
+      
+        <Row>
+        <Space direction="vertical">
            
-          </ParentComponent>
+            <Button type="primary" name="addRadio" onClick={this.onAddChild} icon={<PlusCircleTwoTone />}>
+              添加单选题 </Button>
+              <Button type="primary" name="addCheckbox" onClick={this.onAddChild}><PlusSquareTwoTone />
+              添加多选题</Button>
+              <Button type="primary" name="addText" onClick={this.onAddChild}><EditTwoTone /> 
+              添加文本题</Button>
+            
+            
+         </Space>
+      
+        
+        </Row>
+        </div>
+        
+        
+        </div>
           <br/>
           <div>
              <Tag color="blue" > 目前共有  {this.state.asknum}题</Tag>
@@ -165,41 +184,7 @@ class CreatPage1 extends  React.Component {
 
     
 }
-const ParentComponent = props => (
-  <div>
-  <div>
-
-
-  <Row>
-  <Space direction="vertical">
-     
-      <Button type="primary" name="addRadio" onClick={props.addChild} icon={<PlusCircleTwoTone />}>
-        添加单选题 </Button>
-        <Button type="primary" name="addCheckbox" onClick={props.addChild}><PlusSquareTwoTone />
-        添加多选题</Button>
-        <Button type="primary" name="addText" onClick={props.addChild}><EditTwoTone /> 
-        添加文本题</Button>
-      
-      
-   </Space>
-
-  
-  </Row>
-  </div>
-  
-  <form>
-  <div id="formcontent">
  
- <div>
- 
- </div>
-  </div>
-   
-
-  </form> 
-  
-  </div>
-);
 /*const ChildComponent = (props) => {
 if(props.id=="addRadio"){
   return(<div>123</div>);
