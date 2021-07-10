@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 // import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
+import {Link} from "react-router-dom";
 import AccountCircle from '@material-ui/icons/AccountCircle';
 // import { BrowserRouter } from 'react-router-dom';
 // import ReactDOM from 'react-dom';
@@ -80,12 +81,6 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-  
-    
-
-
-
-
 
 render(){
     return (
@@ -93,7 +88,7 @@ render(){
       <div>
         <Grid container spacing={1} alignItems="flex-end">
           <Grid item>
-            <AccountCircle />
+          
           </Grid>
           <form onSubmit={this.handleSubmit}>
           <Grid container direction="column"  justify="center" alignItems="center">
@@ -108,12 +103,10 @@ render(){
             >
               登录
             </Button>
-            <Button href="http://localhost:3000/src/pages/Register/jsx/Register" color="primary">
+            <Button href="http://localhost:3000/src/pages/Register/jsx/Register" type="primary">
                注册新账号
             </Button>
-            <Button href="" color="primary">
-               忘记密码
-            </Button>
+            <Link to="/src/pages/Login/jsx/ResetPassword">忘记密码 </Link>
             </Grid>
           </form>
         </Grid>

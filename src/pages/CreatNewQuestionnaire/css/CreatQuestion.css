@@ -1,0 +1,15 @@
+.questionsConten{
+    margin-left:160px;
+    background:rgb(255, 255, 255)
+}
+
+.questionsSideBar{
+    width:150px; 
+    float:left; 
+    background:rgb(255, 255, 255)
+}
+
+.questionsHeadTitle{
+    text-align: center;
+    background:rgb(255, 255, 255)
+}

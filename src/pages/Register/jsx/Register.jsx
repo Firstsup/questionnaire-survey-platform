@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { Input, Space } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { UserOutlined } from '@ant-design/icons';
-// import { Button } from 'antd';
+import { Button } from 'antd';
 import {BrowserRouter, Route,Link} from "react-router-dom";
 import Login1 from '../../Login/jsx/Login1';
 
@@ -12,7 +12,7 @@ import Login1 from '../../Login/jsx/Login1';
 
                                 
                                     */    
-class Register extends Component {
+class Register extends React.Component {
     constructor(props) {
       super(props);
       this.state = {userName: '',
@@ -45,23 +45,26 @@ class Register extends Component {
     }
   
     handleSubmit(event) {
-      if(this.state.userName.length!==0){
-      if((this.state.userPassword.length!==0)&&(this.state.userPassword===this.state.userPasswordAgain)&&(this.state.phoneNumber.length===4))
+      const target = event.target;
+      const name = target.name;
+      const value =target.value;
+      if(this.state.userName.length!=0){
+      if((this.state.userPassword.length!=0)&&(this.state.userPassword==this.state.userPasswordAgain)&&(this.state.phoneNumber.length==4))
       {
         alert(  this.state.userName + '，恭喜您注册成功!');
          event.preventDefault();
       }
     else 
     {
-      if(this.state.userPassword.length===0){
+      if(this.state.userPassword.length==0){
       alert("请输入密码！");
       event.preventDefault();}
-      else {if (this.state.userPassword!==this.state.userPasswordAgain){
+      else {if (this.state.userPassword!=this.state.userPasswordAgain){
       alert("密码不一致！");
       event.preventDefault();}
-    else if(this.state.phoneNumber.length!==4){
+    else if(this.state.phoneNumber.length!=4){
 
-      alert ("密码凭证必须为4为！");
+      alert ("密码凭证必须为4位！");
       event.preventDefault();
     }
     }
@@ -92,12 +95,14 @@ class Register extends Component {
       placeholder="请再次确认密码"  onChange={this.handleChange}
       iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
     />
-    <input  name="phoneNumber" type="number" placeholder="设置四位数字作为找回密码的凭证" onChange={this.handleChange} iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}/>
+    <Input  name="phoneNumber" type="number" placeholder="设置四位数字作为找回密码的凭证" onChange={this.handleChange} iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}/>
 
-    <button  color="primary" type="submit">注册</button>
+    <Button  type="primary" onClick={this.handleSubmit}>注册</Button>
 
-<Route path="/src/pages/Login/jsx/Login1" component={Login1} />
-<Link to="/src/pages/Login/jsx/Login1">登录已有帐号 </Link>
+
+     <Button href="http://localhost:3000/src/pages/Login/jsx/Login1" type="link">
+               登录已有账号
+            </Button>
  
   </Space>
          
