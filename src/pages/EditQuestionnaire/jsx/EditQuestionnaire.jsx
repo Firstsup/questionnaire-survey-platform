@@ -51,6 +51,7 @@ class EditQuestionnaire extends  React.Component{
         this.state = {
             questionnaire: questionnaire,
         }
+        this.onAddChild=this.onAddChild.bind(this);
     }
 
 
@@ -69,12 +70,63 @@ class EditQuestionnaire extends  React.Component{
         )
     }
 
+//以下是新建题目按钮对应的函数，根据按钮的name判断把哪个题型的子组件加在现有的askList末尾
+    onAddChild = (event) => {
+        const target = event.target;
+        const name = target.name;
+        if (name=="addRadio"){
+          this.setState(prevState => ({
+            askList: [...prevState.askList, <AddRadio key={this.state.asknum+1} handleDelete={this.handleDelete} />]
+          }));
+          this.setState({
+            asknum: this.state.asknum + 1
+          });
+        }
+        else if (name=="addCheckbox"){
+          this.setState(prevState => ({
+            askList: [...prevState.askList, <AddCheckbox key={this.state.asknum+1}/>]
+          }));
+          this.setState({
+            asknum: this.state.asknum + 1
+          });
+        }
+        else  if (name=="addText"){
+          this.setState(prevState => ({
+            askList: [...prevState.askList, <AddText key={this.state.asknum+1}/>]
+          }));
+          this.setState({
+            asknum: this.state.asknum + 1
+          });
+        }
+    }
+
     render() {
         let questionnaire = this.state.questionnaire;
             return (
                 <Layout className={"layout"}>
                     <Header className={"header"}>{this.getTitle()}</Header>
-                    <Content className={"content"}><Questions askList={questionnaire.askList}
+                    <Content className={"content"}>
+                     //以下是新建题目按钮区域   
+                    <div>
+                    <Row>
+                    <Space direction="vertical">
+                        
+                        <Button type="primary" name="addRadio" onClick={this.onAddChild} icon={<PlusCircleTwoTone />}>
+                            添加单选题 </Button>
+                            <Button type="primary" name="addCheckbox" onClick={this.onAddChild}><PlusSquareTwoTone />
+                            添加多选题</Button>
+                            <Button type="primary" name="addText" onClick={this.onAddChild}><EditTwoTone /> 
+                            添加文本题</Button>
+                        
+                        
+                    </Space>
+                    
+                    
+                    </Row>
+                     </div>
+                     //以上是新建题目按钮区域
+
+                        <Questions askList={questionnaire.askList}
                                                               /></Content>
                     <Button type={"primary"} className={"button"} onClick={this.submit}>提交</Button>
                     <Footer className={"footer"}>{this.getFooter()}</Footer>
