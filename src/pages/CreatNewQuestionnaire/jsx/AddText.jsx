@@ -16,7 +16,7 @@ class AddText extends Component{
         this.handleChange = this.handleChange.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
 }
-handleChange(event) {
+    handleChange(event) {
     const target = event.target;
     const name = target.name;
     const value =target.value;
@@ -26,10 +26,17 @@ handleChange(event) {
     });
   }
 
-  handleDelete(){
-    this.setState({
-        isDeleted:true
-    })
+     handleDelete=()=>{
+        alert(this.state.aid);
+  // alert("点击发出删除请求");
+         this.props.handleDelete(this.state.aid-1);
+    
+}
+
+    componentDidMount(){
+        this.setState({
+            aid:this.props.asknum+1
+ })
 }
 
 render(){
@@ -37,9 +44,9 @@ render(){
     return(
         
      <div>
-            <div >
-                <span name="aid" value=""/*题号 根据该题在题目数组中的索引号+1生成 */ ></span>
-            </div>
+               <div>
+                <span>第{this.state.aid}题</span>
+                </div>
     
             <div >
              <Input name="ask" placeholder="请输入问题" onChange={this.handleChange}></Input>

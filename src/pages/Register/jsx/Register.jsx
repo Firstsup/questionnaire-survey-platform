@@ -5,13 +5,22 @@ import { UserOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import {BrowserRouter, Route,Link} from "react-router-dom";
 import Login1 from '../../Login/jsx/Login1';
+import '../css/Register.css';
+import Background from '../../Login/picture/LoginPicture.jpg';
 
 /*注册页面，需要和后端交互的部分：
 判断后端数据库是否已存在该用户名，若不存在，向后端存入用户名 userName，密码 userPassword，密码凭证 phoneNumber
                                         对应的接口：
 
                                 
-                                    */    
+  */                                      
+                                   
+var sectionStyle = {
+  width: "100%",
+  height: "950px",
+  backgroundImage: `url(${Background})` 
+};       
+
 class Register extends React.Component {
     constructor(props) {
       super(props);
@@ -84,23 +93,23 @@ class Register extends React.Component {
 
       return (
  <BrowserRouter>
-  
-        <form onSubmit={this.handleSubmit}>
+        <div style={sectionStyle}>
+        <form onSubmit={this.handleSubmit} className="registerform">
 
-         <Space direction="vertical">
+         <Space direction="vertical" className="registerinner" size="large">
         
-         <Input name="userName" type="text" placeholder="请输入账号" prefix={<UserOutlined /> }  onChange={this.handleChange}/>   
-    <Input name="userPassword" type="string" placeholder="请输入密码"  onChange={this.handleChange} iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}/>
-    <Input name="userPasswordAgain" type="string"
+         <Input name="userName" type="text" placeholder="请输入账号" size="large" prefix={<UserOutlined /> }  onChange={this.handleChange}/>   
+    <Input name="userPassword" type="string" placeholder="请输入密码" size="large" onChange={this.handleChange} iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}/>
+    <Input name="userPasswordAgain" type="string" size="large"
       placeholder="请再次确认密码"  onChange={this.handleChange}
       iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
     />
-    <Input  name="phoneNumber" type="number" placeholder="设置四位数字作为找回密码的凭证" onChange={this.handleChange} iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}/>
+    <Input  name="phoneNumber" type="number" placeholder="设置四位数字作为找回密码的凭证" size="large" onChange={this.handleChange} iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}/>
 
-    <Button  type="primary" onClick={this.handleSubmit}>注册</Button>
+    <Button  type="primary" size="large" block onClick={this.handleSubmit}>注册</Button>
 
 
-     <Button href="http://localhost:3000/src/pages/Login/jsx/Login1" type="link">
+     <Button href="http://localhost:3000/src/pages/Login/jsx/Login1" type="default" ghost block>
                登录已有账号
             </Button>
  
@@ -110,6 +119,7 @@ class Register extends React.Component {
          
          
         </form> 
+        </div>
              </BrowserRouter>
       )
  
