@@ -12,7 +12,7 @@ import '../css/CreatQuestion.css';
 
 const { Header, Footer, Sider, Content } = Layout;
 
-
+//只是备份
 
 
 class CreatPage1 extends  React.Component {
