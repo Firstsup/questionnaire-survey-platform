@@ -29,23 +29,30 @@ class AddText extends Component{
      handleDelete=()=>{
         alert(this.state.aid);
   // alert("点击发出删除请求");
-         this.props.handleDelete(this.state.aid-1);
+         this.props.handleDelete(this.state.aid);
     
 }
 
-    componentDidMount(){
-        this.setState({
-            aid:this.props.asknum+1
- })
+componentDidMount(){
+    this.setState({
+        aid:this.props.aid
+    })
 }
-
+componentDidUpdate(prevProps, prevState) {
+   
+   if(prevProps.aid !== this.props.aid) {
+       this.setState({
+           aid:this.props.aid
+       })
+   }
+ }
 render(){
     const { TextArea } = Input;
     return(
         
      <div>
                <div>
-                <span>第{this.state.aid}题</span>
+                <span>第{this.state.aid+1}题</span>
                 </div>
     
             <div >

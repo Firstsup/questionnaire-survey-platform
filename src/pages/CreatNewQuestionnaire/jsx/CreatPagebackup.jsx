@@ -1,181 +1,19 @@
 import React, {Component} from 'react';
 import ReactDOM from "react-dom";
-import { Row, Col,Button,Space, Radio, Input,Checkbox} from 'antd';
-import { PlusCircleTwoTone,PlusSquareTwoTone, EditTwoTone} from '@ant-design/icons';
+import { Row, Col,Space, Button,Radio, Input,Checkbox} from 'antd';
+import { PlusCircleTwoTone,PlusSquareTwoTone, EditTwoTone,CheckOutlined} from '@ant-design/icons';
 import {DeleteTwoTone,PlusOutlined}from '@ant-design/icons';
+import AddRadio from './addRadio';
+import AddCheckbox from './addCheckbox';
+import AddText from './AddText';
+import { Tag, Divider } from 'antd';
+import { Layout } from 'antd';
+import '../css/CreatQuestion.css';
+
+const { Header, Footer, Sider, Content } = Layout;
 
 
 
-
-
-
- 
-class addRadio extends  React.Component{
-  constructor(props){
-  super(props);
-  this.state={
-      aid:'',
-      ask:'',
-      type:1,//1单选 2多选 3文本
-      isNecessary:Boolean,
-      choiceList: [//每个选项内容
-              "","",
-  
-      ]
-  
-  
-  }
-  
-  this.handleChange = this.handleChange.bind(this);
-  }
-  
-  handleChange(event) {
-      const target = event.target;
-      const name = target.name;
-      const value =target.value;
-    
-      this.setState({
-        [name]: value
-      });
-    }
-  
-  addChoice(event){
-  //根据当前数组的长度判断新建的Radio组件的value,将组件插入新建选项button的前方
-  
-  }
-  
-
-  
-  render(){
-  return (
-   // <RenderInCreatPage>
-  <div>
-      <div>
-          <div >
-              <span name="aid" value=""/*题号 根据该题在题目数组中的索引号+1生成 */ ></span>
-          </div>
-  
-          <div >
-           <Input name="ask" placeholder="请输入该单选题的问题" onChange={this.handleChange}></Input>
-          </div>
-  
-          <div>
-              <button onClick={this.handleDelete} /*删除该题目*/> <DeleteTwoTone  /></button>   
-          </div>
-  
-          <div>
-              <span>该题为：</span>
-              <Radio.Group name="isNecessary" onChange={this.handleChange} >
-                   <Radio value={true}>必填</Radio>
-                   <Radio value={false}>选填</Radio>
-              </Radio.Group>
-          </div>
-  
-          <div>
-              <Radio.Group onChange={this.handleChange} name="choiceList"  >
-              <Space direction="vertical">
-              <Radio value={1} ><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Radio>
-              <Radio value={2}><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Radio>
-              <Button type="dashed" onClick= {this.addChoice}><PlusOutlined />添加选项</Button>
-              
-          </Space>
-        </Radio.Group>
-          </div>
-  
-      </div>
-  </div>
-  // </RenderInCreatPage>
-  
-  )
-  
-  }
-  
-  }
-  
- 
-  class addCheckbox extends Component{
-    constructor(props){
-        super(props);
-        this.state={
-            aid:'',
-            ask:'',
-            type:2,
-            isNecessary:Boolean,
-            choiceList: [//每个选项内容
-              "","","","",
-        
-            ]
-        
-        
-        }
-        
-        this.handleChange = this.handleChange.bind(this);
-        }
-
-
-        handleChange(event) {
-            const target = event.target;
-            const name = target.name;
-            const value =target.value;
-          
-            this.setState({
-              [name]: value
-            });
-          }
-          addChoice(event){
-            //将组件插入新建选项button的前方
-            
-            }
-            render(){
-              return (
-               // <RenderInCreatPage> 应在此处用RenderInCreatPage包裹，将内容插入form指定位置
-              <div>
-                  <div>
-                      <div >
-                          <span name="aid" value=""/*题号 根据该题在题目数组中的索引号+1生成 */ ></span>
-                      </div>
-              
-                      <div >
-                       <Input name="ask" placeholder="请输入该单选题的问题" onChange={this.handleChange}></Input>
-                      </div>
-              
-                      <div>
-                          <button onClick={this.handleDelete} /*删除该题目*/> <DeleteTwoTone  /></button>   
-                      </div>
-              
-                      <div>
-                          <span>该题为：</span>
-                          <Radio.Group name="isNecessary" onChange={this.handleChange} >
-                               <Radio value={true}>必填</Radio>
-                               <Radio value={false}>选填</Radio>
-                          </Radio.Group>
-                      </div>
-              
-                      <div>
-                       <Checkbox.Group  onChange={this.handleChange} name="choiceList" >
-                          <Space direction="vertical">
-                              <Checkbox value="A"><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Checkbox>
-                         
-                         
-                              <Checkbox value="B"><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Checkbox>
-                           
-                           
-                              <Checkbox value="C"><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Checkbox>
-                           
-                              <Button type="dashed" onClick= {this.addChoice}><PlusOutlined />添加选项</Button>
-                          </Space>
-                        </Checkbox.Group>
-                      </div>
-              
-                  </div>
-              </div>
-              // </RenderInCreatPage>
-              
-              )
-              
-              }
-
- }
 
 class CreatPage1 extends  React.Component {
    constructor(props) {
@@ -185,22 +23,16 @@ class CreatPage1 extends  React.Component {
                       questionnaireTitle:'',
                       //questionnaireCount:0,
                       questionnaireSign:0,
-                        asknum:0,
+                        asknum:0,//题目数组的aid是从1开始的
+                        askList:[ ],//新建页面的所有key从1开始
+                        askListContent:[],//这个数组是要传给后端的内容
       };
        
        // this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-      }
-
-      handleDelete(event){//删除应该是组件发出请求，CreatPage的askList数组中删掉这一个元素 难点：拖拽元素改变顺序，数组索引怎么办
-        const target = event.target;
-        const name = target.name;
-        const value =target.value;
-        var index=event.target.getAttribute(askList.index);
-        var askList=this.state.askList;
-        askList.splice(index,1,"");
-            this.setState({askList:askList})
-           
+        this.onAddChild=this.onAddChild.bind(this);
+        this.handleDelete=this.handleDelete.bind(this);
+        
       }
 
 
@@ -208,87 +40,171 @@ class CreatPage1 extends  React.Component {
           alert("正在提交");/* 提交时遍历题目列表，如果每一项都不为空才能提交给后端*/
 
       }
-      onAddChild = () => {
-        alert("点击生效");
-      /*
-        this.setState({
-          asknum: this.state.asknum + 1
+ 
+      onAddChild = (event) => {
+        const target = event.target;
+        const name = target.name;
+        if (name=="addRadio"){ //要在页面渲染的所有题目的题目数组askList
+          this.setState(prevState => ({
+            askList: [...prevState.askList, <AddRadio asknum={this.state.asknum} key={this.state.asknum+1} handleChangeChoice={this.handleChangeChoice} handleDelete={this.handleDelete} />]
+          }));
+
+           this.setState(prevState =>({//提交时要传给后端的数组
+            askListContent:[...prevState.askListContent,
+            { aid:this.state.asknum+1,
+              ask:'',
+              type:1,//1单选 2多选 3文本
+              isNecessary:Boolean,
+              choicecontent:[" "," ",]} ]
+          }));
+
+          this.setState({
+            asknum: this.state.asknum + 1,
+            
+          });
+         
+        }
+        else if (name=="addCheckbox"){
+          this.setState(prevState => ({
+            askList: [...prevState.askList, <AddCheckbox asknum={this.state.asknum} key={this.state.asknum+1} handleChangeChoice={this.handleChangeChoice} handleDelete={this.handleDelete}/>]
+          }));
+
+          this.setState(prevState =>({
+            askListContent:[ ...prevState.askListContent,
+            { aid:this.state.asknum+1,
+              ask:'',
+              type:2,//1单选 2多选 3文本
+              isNecessary:Boolean,
+              choicecontent:[" "," ",]} ]
+          }));
+
+          this.setState({
+            asknum: this.state.asknum + 1
+          });
+        }
+        else  if (name=="addText"){
+          this.setState(prevState => ({
+            askList: [...prevState.askList, <AddText  asknum={this.state.asknum} key={this.state.asknum+1} handleDelete={this.handleDelete}/>]
+          }));
+
+          this.setState(prevState =>({//文本题没有选项，choicecontent数组为空
+            askListContent:[ ...prevState.askListContent,
+            { aid:this.state.asknum+1,
+              ask:'',
+              type:1,//1单选 2多选 3文本
+              isNecessary:Boolean,
+              choicecontent:[ ]} ]
+          }));
+
+          this.setState({
+            asknum: this.state.asknum + 1
+          });
+        }
+        
+     
+        
+      }
+
+      handleChangeChoice=(asknumber,choiceInput)=>{
+        const askListContent=this.state.askListContent.map((askContent,aid)=>{//askListContent是可以传给后端的问卷数组
+          return (
+            asknumber === aid ? {choicecontent: choiceInput} : askContent)//这里需要把问卷数组里 aid匹配子组件传入的asknumber的项 的choicecontent子数组设为choiceInput
         });
-        */
+
+        this.setState(
+          {askListContent: askListContent}
+
+        
+      );
+        
+         console.log(this.state.askListContent);
       }
 
-      render(){
-        const askList=[ ];
-        for (var i = 0; i < this.state.asknum; i += 1) {
-            askList.push(<ChildComponent key={i} />);
-          };
-        return(
-            <ParentComponent addChild={this.onAddChild} >
-            {askList}
-          </ParentComponent>
-        )
+   handleDelete=(aid)=>{//这里的aid和askList数组索引一致，是真实的aid-1
+   
+    alert("接收到删除数组第"+aid+"项的请求");
+      let tempQuestions=this.state.askList;
+      for(let i=0;i<tempQuestions.length;i++){
+          if(i===aid){
+            tempQuestions.splice(i,1);
+            break;
+          }
       }
-}
+      this.setState({
+        askList:tempQuestions
+      })
+      this.setState({
+        asknum:this.state.asknum-1
+      })
 
-const ParentComponent = props => (
-    <div>
-    <div>
-    <div >
-      添加题目
+   }
       
 
-    </div>
-
-    <Row>
-    <Space direction="vertical">
-       
-        <Button type="primary" name="addRadio" onClick={props.addChild} ><i><PlusCircleTwoTone /></i>
-          添加单选题</Button>
-          <Button type="primary" name="addCheckbox" onClick={props.addChild}><i><PlusSquareTwoTone /></i>
-          添加多选题</Button>
-          <Button type="primary" name="addText" onClick={props.addChild}><i><EditTwoTone /> </i>
-          添加单行文本题</Button>
+      
+      render(){
+      
+        
+        return(
+        <div id="content" >
+          <div className="questionsSideBar">
+          <div>
+        <div>
+      
+      
+        <Row>
+        <Space direction="vertical">
+            <Button type="primary" name="addRadio" onClick={this.onAddChild} icon={<PlusCircleTwoTone />}>
+                 添加单选题 </Button>
+            <Button type="primary" name="addCheckbox" onClick={this.onAddChild}><PlusSquareTwoTone  />
+                 添加多选题</Button>
+           <Button type="primary" name="addText" onClick={this.onAddChild}><EditTwoTone /> 
+                添加文本题</Button>
+            
+         </Space>
+      
+        
+        </Row>
+        </div>
         
         
-     </Space>
+        </div>
+          <br/>
+          <div>
+             <Tag color="blue" > 目前共有  {this.state.asknum}题</Tag>
+          <br/>
+        
+             <Button type="primary" onClick={this.handleSubmit} shape="round" icon={<CheckOutlined />} >
+         确认创建
+        </Button>
+          </div>
+          </div>
+          <div className="questionsConten" >
+            
+          <Space direction="vertical" >
+            <Input name="questionnaireTitle" placeholder="请输入问卷标题" onChange={this.handleChange}></Input>
+            <Divider>问卷内容</Divider>
+          {this.state.askList}
+          </Space>
+            
+           
+            </div>
+     
+         
+          </div>
+        )
+      }
 
     
-    </Row>
-    </div>
-    <form  //onSubmit={this.handleSubmit}
-    >
-    <div id="formcontent">
-    {props.askList}
-    </div>
-     
-   <button type="submit">保存问卷</button>
-    </form> 
-    </div>
-  );
-
-  const ChildComponent = (event) => {
-
-   
-   const target = event.target;
-    const name = target.name;
-  /*switch (name) {
-    case "addRadio":
-    <div key={this.state.asknum+1} >
-    {"添加了单选题"}
-    </div>  
-    //<addRadio/>;
-      break;
-  
-    case "addCheckbox":
-      addCheckbox();
-      break;
-    case "addText":
-      alert('调用添加文本题函数');
-      break;
-
-  }*/
-
-  return(name === "addRadio" ? <div>123</div> : (name === "addCheckbox" ? <addCheckbox key={this.state.asknum+1}/> : <addText key={this.state.asknum+1}/>));
 }
+ 
+/*const ChildComponent = (props) => {
+if(props.id=="addRadio"){
+  return(<div>123</div>);
+}
+else if(props.id=="addCheckbox"){
+  return(addCheckbox);
+}
+}*/
   
-export default CreatPage1
+  
+export default CreatPage1;

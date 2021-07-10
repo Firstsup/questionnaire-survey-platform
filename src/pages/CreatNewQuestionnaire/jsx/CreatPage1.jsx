@@ -9,6 +9,7 @@ import AddText from './AddText';
 import { Tag, Divider } from 'antd';
 import { Layout } from 'antd';
 import '../css/CreatQuestion.css';
+import CreatQuestion from './CreatQuestion';
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -23,16 +24,16 @@ class CreatPage1 extends  React.Component {
                       questionnaireTitle:'',
                       //questionnaireCount:0,
                       questionnaireSign:0,
-                        asknum:0,//题目数组的aid是从1开始的
-                        askList:[ ],//新建页面的所有key从1开始
-                        askListContent:[],//这个数组是要传给后端的内容
+                        asknum:0,//题目数组的aid是从0开始的
+                        askList:[ ], //这个数组是要传给后端的内容
+                     
       };
        
        // this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.onAddChild=this.onAddChild.bind(this);
         this.handleDelete=this.handleDelete.bind(this);
-        
+        this.handleChange=this.handleChange.bind(this);
       }
 
 
@@ -44,14 +45,12 @@ class CreatPage1 extends  React.Component {
       onAddChild = (event) => {
         const target = event.target;
         const name = target.name;
-        if (name=="addRadio"){ //要在页面渲染的所有题目的题目数组askList
-          this.setState(prevState => ({
-            askList: [...prevState.askList, <AddRadio asknum={this.state.asknum} key={this.state.asknum+1} handleChangeChoice={this.handleChangeChoice} handleDelete={this.handleDelete} />]
-          }));
+        if (name=="addRadio"){ 
+        
 
-           this.setState(prevState =>({//提交时要传给后端的数组
-            askListContent:[...prevState.askListContent,
-            { aid:this.state.asknum+1,
+           this.setState(prevState =>({
+            askList:[...prevState.askList,
+            { aid:Number,
               ask:'',
               type:1,//1单选 2多选 3文本
               isNecessary:Boolean,
@@ -65,13 +64,9 @@ class CreatPage1 extends  React.Component {
          
         }
         else if (name=="addCheckbox"){
-          this.setState(prevState => ({
-            askList: [...prevState.askList, <AddCheckbox asknum={this.state.asknum} key={this.state.asknum+1} handleChangeChoice={this.handleChangeChoice} handleDelete={this.handleDelete}/>]
-          }));
-
           this.setState(prevState =>({
-            askListContent:[ ...prevState.askListContent,
-            { aid:this.state.asknum+1,
+            askList:[...prevState.askList,
+            { aid:Number,
               ask:'',
               type:2,//1单选 2多选 3文本
               isNecessary:Boolean,
@@ -79,19 +74,18 @@ class CreatPage1 extends  React.Component {
           }));
 
           this.setState({
-            asknum: this.state.asknum + 1
+            asknum: this.state.asknum + 1,
+            
           });
         }
         else  if (name=="addText"){
-          this.setState(prevState => ({
-            askList: [...prevState.askList, <AddText asknum={this.state.asknum} key={this.state.asknum+1} handleDelete={this.handleDelete}/>]
-          }));
+
 
           this.setState(prevState =>({//文本题没有选项，choicecontent数组为空
-            askListContent:[ ...prevState.askListContent,
-            { aid:this.state.asknum+1,
+            askList:[ ...prevState.askList,
+            { aid:Number,
               ask:'',
-              type:1,//1单选 2多选 3文本
+              type:3,//1单选 2多选 3文本
               isNecessary:Boolean,
               choicecontent:[ ]} ]
           }));
@@ -104,9 +98,11 @@ class CreatPage1 extends  React.Component {
      
         
       }
+handleChange=()=>{
 
-      handleChangeChoice=(asknumber,choiceInput)=>{
-        const askListContent=this.state.askListContent.map((askContent,aid)=>{//askListContent是可以传给后端的问卷数组
+}
+     /* handleChangeChoice=(asknumber,choiceInput)=>{
+        const askListContent=this.state.askListContent.map((askContent,aid)=>{//askList是可以传给后端的问卷数组
           return (
             asknumber === aid ? {choicecontent: choiceInput} : askContent)//这里需要把问卷数组里 aid匹配子组件传入的asknumber的项 的choicecontent子数组设为choiceInput
         });
@@ -119,17 +115,14 @@ class CreatPage1 extends  React.Component {
         
          console.log(this.state.askListContent);
       }
-
-   handleDelete=(aid)=>{//这里的aid和askList数组索引一致，是真实的aid-1
+*/
+   handleDelete=(aid)=>{//这里的aid和askList数组索引一致
    
     alert("接收到删除数组第"+aid+"项的请求");
       let tempQuestions=this.state.askList;
       for(let i=0;i<tempQuestions.length;i++){
           if(i===aid){
             tempQuestions.splice(i,1);
-            for(let j=i;j<tempQuestions.length-i-1;j++){
-              tempQuestions[j].aid=tempQuestions[j].aid-1;
-            }
             break;
           }
       }
@@ -186,7 +179,7 @@ class CreatPage1 extends  React.Component {
           <Space direction="vertical" >
             <Input name="questionnaireTitle" placeholder="请输入问卷标题" onChange={this.handleChange}></Input>
             <Divider>问卷内容</Divider>
-          {this.state.askList}
+            <CreatQuestion questions={this.state.askList} handleDelete={this.handleDelete} />
           </Space>
             
            

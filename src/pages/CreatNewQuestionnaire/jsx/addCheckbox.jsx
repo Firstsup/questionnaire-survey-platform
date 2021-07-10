@@ -66,15 +66,23 @@ class AddCheckbox extends Component{
         handleDelete=()=>{
         alert(this.state.aid);
       // alert("点击发出删除请求");
-        this.props.handleDelete(this.state.aid-1);
+        this.props.handleDelete(this.state.aid);
         
        }
 
-       componentDidMount(){
+ componentDidMount(){
         this.setState({
-            aid:this.props.asknum+1
+            aid:this.props.aid
         })
     }
+    componentDidUpdate(prevProps, prevState) {
+       
+       if(prevProps.aid !== this.props.aid) {
+           this.setState({
+               aid:this.props.aid
+           })
+       }
+     }
         
           render(){
             return (
@@ -82,7 +90,7 @@ class AddCheckbox extends Component{
             <div>
                 <div>
                   <div>
-                <span>第{this.state.aid}题</span>
+                <span>第{this.state.aid+1}题</span>
                 </div>
                     <div >
                         <span name="aid" value=""/*题号 根据该题在题目数组中的索引号+1生成 */ ></span>
