@@ -27,6 +27,7 @@ class AddCheckbox extends Component{
       this.addChoice = this.addChoice.bind(this);
       this.handleChange = this.handleChange.bind(this);
       this.handleDelete = this.handleDelete.bind(this);
+
       }
 
 
@@ -62,17 +63,35 @@ class AddCheckbox extends Component{
           });
           }
 
-          handleDelete(){
-            this.setState({
-                isDeleted:true
-            })
-        }
+        handleDelete=()=>{
+        alert(this.state.aid);
+      // alert("点击发出删除请求");
+        this.props.handleDelete(this.state.aid);
+        
+       }
+
+ componentDidMount(){
+        this.setState({
+            aid:this.props.aid
+        })
+    }
+    componentDidUpdate(prevProps, prevState) {
+       
+       if(prevProps.aid !== this.props.aid) {
+           this.setState({
+               aid:this.props.aid
+           })
+       }
+     }
         
           render(){
             return (
              // <RenderInCreatPage> 应在此处用RenderInCreatPage包裹，将内容插入form指定位置
             <div>
                 <div>
+                  <div>
+                <span>第{this.state.aid+1}题</span>
+                </div>
                     <div >
                         <span name="aid" value=""/*题号 根据该题在题目数组中的索引号+1生成 */ ></span>
                     </div>
