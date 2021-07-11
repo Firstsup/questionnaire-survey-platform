@@ -1,14 +1,14 @@
-.header, .content, .footer {
+.edit_header, .edit_content, .edit_footer {
     background-color: white !important;
     width: 100%;
 }
 
-.title {
+.edit_title {
     text-align: center;
     color: #1890ff !important;
 }
 
-.footer {
+.edit_footer {
     margin-top: 3%;
     position: relative;
     height: 10%;
@@ -17,22 +17,21 @@
     color: #bfbfbf;
 }
 
-.header {
+.edit_header {
     margin-top: 5%;
     margin-bottom: 3%;
 }
 
-.button {
+.edit_button {
     margin: 5% auto auto;
     width: 80px;
 }
 
-.layout {
+.edit_layout {
     background-color: white !important;
 }
 
-.alert {
-    margin-top: 20px;
-    text-align: center;
-    color: #fa541c;
+.edit_spin {
+    margin-top: 400px !important;
+    margin-left: 50% !important;
 }

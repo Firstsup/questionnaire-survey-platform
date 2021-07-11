@@ -1,88 +1,71 @@
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
-import {DeleteOutlined,PlusOutlined}from '@ant-design/icons';
-import { Radio, Input, Space, Button  } from 'antd';
-const { TextArea } = Input;
+import {DeleteOutlined, PlusOutlined} from '@ant-design/icons';
+import {Radio, Input, Space, Button} from 'antd';
 
-class EditText extends  React.Component{
-    constructor(props){
-    super(props);
-    this.state={
-        aid:this.props.aid,
-        ask:this.props.ask,
-        type:3,//1单选 2多选 3文本
-        isNecessary:this.props.isNecessary,
-        choicenum:1,
-        choiceList:this.props.choiceList,
-        
-    
-    
-    }
-    
-    this.handleChange = this.handleChange.bind(this);
- 
+const {TextArea} = Input;
+
+class EditText extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            aid: this.props.aid,
+            subject: this.props.question.subject,
+            type: this.props.question.type,
+            isNecessary: this.props.question.isNecessary,
+            choicenum: this.props.question.options.length,
+            choiceList: this.props.question.options,
+        }
+        this.handleChange = this.handleChange.bind(this);
     }
 
-
-    
-    handleChange=  (event) => {
+    handleChange = (event) => {
         const target = event.target;
         const name = target.name;
-        const value =target.value;
+        const value = target.value;
         const key = target.key;
-       
-        this.setState({
-          [name]: value
-        })
-      }
-    
- 
-    
-    
-    
-    render(){
-        
-        let ask=this.state.ask;
-        let aid=this.state.aid;
-        let isNecessary=this.state.isNecessary;
-    
 
-    return (
-  
-    <div>
-        <div>
-            <div >
-                <span name="aid" value=""/*题号 根据该题在题目数组中的索引号+1生成 */ >这是第{aid}题</span>
-            </div>
-    
-            <div >
-             <Input name="ask"  onChange={this.handleChange} placeholder={ask}></Input>
-            </div>
-    
-           <div>
-                <Button type="primary" onClick={this.handleDelete}  icon={<DeleteOutlined />}></Button>   
-           </div>
-    
-            <div>
-                <span>该题为：</span>
-                <Radio.Group name="isNecessary" value={isNecessary} onChange={this.handleChange}  >
-                     <Radio value={true}>必填</Radio>
-                     <Radio value={false}>选填</Radio>
-                </Radio.Group>
-            </div>
-    
-            <div>
-            <TextArea rows={4} placeholder="请输入您的回答"/>
-            </div>
-    
-        </div>
-    </div>
-  
-    
-    )
-    
+        this.setState({
+            [name]: value
+        })
     }
-    
+
+
+    render() {
+        return (
+
+            <div>
+                <div>
+                    <div>
+                        <span name="aid" value=""/*题号 根据该题在题目数组中的索引号+1生成 */ >这是第{this.state.aid}题</span>
+                    </div>
+
+                    <div>
+                        <Input name="ask" onChange={this.handleChange} placeholder={this.state.subject}/>
+                    </div>
+
+                    <div>
+                        <Button type="primary" onClick={this.handleDelete} icon={<DeleteOutlined/>}/>
+                    </div>
+
+                    <div>
+                        <span>该题为：</span>
+                        <Radio.Group name="isNecessary" value={this.state.isNecessary} onChange={this.handleChange}>
+                            <Radio value={true}>必填</Radio>
+                            <Radio value={false}>选填</Radio>
+                        </Radio.Group>
+                    </div>
+                    <Button onClick={this.moveUp}>上移</Button>
+                    <Button onClick={this.moveDown}>下移</Button>
+
+                </div>
+            </div>
+
+
+        )
+
     }
+
+}
 
 export default EditText
