@@ -3,7 +3,8 @@ import { Input, Space,InputNumber,Button } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { UserOutlined } from '@ant-design/icons';
 import {BrowserRouter, Route,Link} from "react-router-dom";
-
+import '../css/Login.css';
+import Background from '../picture/LoginPicture.jpg';
 //未解决：密码切换可见状态
 /*改密码页面，需要和后端交互的部分：
 输入用户名 userName，密码凭证 phoneNumber，新密码 userPasswordNew，若用户名和密码凭证对应则存入新密码，错误则返回错误。
@@ -11,6 +12,13 @@ import {BrowserRouter, Route,Link} from "react-router-dom";
 
                                 
                                     */    
+                                    
+                                        
+  var sectionStyle = {
+  width: "100%",
+  height: "950px",
+  backgroundImage: `url(${Background})` 
+ };
 class ResetPassword extends Component {
     constructor(props) {
       super(props);
@@ -77,21 +85,21 @@ class ResetPassword extends Component {
      
     
      
-       <div>
+       <div style={sectionStyle}>
   
-        <form >
+        <form className={"loginform"} >
 
-         <Space direction="vertical">
+         <Space direction="vertical" className="resetform" size="large">
         
-         <Input name="userName" type="text" placeholder="请输入账号" prefix={<UserOutlined /> }  onChange={this.handleChange}/> 
-         <Input name="phoneNumber"  placeholder="请输入密码凭证" onChange={this.handleChange} />
-    <Input name="userPassword" type="string" placeholder="请输入新密码"  onChange={this.handleChange} />
-    <Input name="userPasswordAgain" type="string"
+         <Input name="userName" type="text" size="large" placeholder="请输入账号" prefix={<UserOutlined /> }  onChange={this.handleChange}/> 
+         <Input name="phoneNumber" size="large" placeholder="请输入4位密码凭证" onChange={this.handleChange} />
+    <Input name="userPassword" size="large" type="string" placeholder="请输入新密码"  onChange={this.handleChange} />
+    <Input name="userPasswordAgain" size="large" type="string"
       placeholder="请再次确认新密码"  onChange={this.handleChange}
       />
-    
+   
 
-    <Button  type="primary" onClick={this.handleSubmit}>修改密码</Button>
+    <Button  type="primary" size="large" block onClick={this.handleSubmit}>确认修改</Button>
 
     
 
