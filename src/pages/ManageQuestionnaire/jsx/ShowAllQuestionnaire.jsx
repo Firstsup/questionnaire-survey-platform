@@ -39,7 +39,7 @@ export default class PageList extends Component{
       data: [],
       rowId: -1,
       selectedRowKeys: [],
-      questionnaire: questionnaire,
+      // questionnaire: questionnaire,
       modalVisible: false,
       modalVisiblePassword: false,
       originPwd:'',
