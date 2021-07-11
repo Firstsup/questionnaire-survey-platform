@@ -29,7 +29,9 @@ class EditText extends React.Component {
             [name]: value
         })
     }
-
+    handleDelete = () => {
+        this.props.handleDelete(this.state.aid - 1)
+    }
 
     render() {
         return (
@@ -50,7 +52,7 @@ class EditText extends React.Component {
 
                     <div>
                         <span>该题为：</span>
-                        <Radio.Group name="isNecessary" value={this.state.isNecessary} onChange={this.handleChange}>
+                        <Radio.Group name="isNecessary"  onChange={this.handleChange}>
                             <Radio value={true}>必填</Radio>
                             <Radio value={false}>选填</Radio>
                         </Radio.Group>

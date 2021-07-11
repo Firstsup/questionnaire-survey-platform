@@ -86,7 +86,7 @@ class AddCheckbox extends Component{
         
           render(){
             return (
-             // <RenderInCreatPage> 应在此处用RenderInCreatPage包裹，将内容插入form指定位置
+            
             <div>
                 <div>
                   <div>

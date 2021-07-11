@@ -27,7 +27,7 @@ class EditRadio extends React.Component {
         if (name == "choiceList") {
             if (typeof this.state.choiceList[key] == '​undefined') {
                 this.setState(prevState => ({
-                    choicecontent: [...prevState.choiceList, value]
+                    choiceList: [...prevState.choiceList, value]
                 }));
             } else {
                 this.setState({
@@ -55,9 +55,7 @@ class EditRadio extends React.Component {
 
     addChoice() {
         this.setState(prevState => ({
-            choiceList: [...prevState.choiceList,
-                <Radio disabled={true}><Input name="choiceList" key={this.state.choicenum + 1} placeholder="请输入选项内容"
-                                              onChange={this.handleChange}/></Radio>]
+            choiceList: [...prevState.choiceList," "]
         }));
         this.setState({
             choicenum: this.state.choicenum + 1
@@ -83,7 +81,7 @@ class EditRadio extends React.Component {
 
                     <div>
                         <span>该题为：</span>
-                        <Radio.Group name="isNecessary" value={this.state.isNecessary} onChange={this.handleChange}>
+                        <Radio.Group name="isNecessary"  onChange={this.handleChange}>
                             <Radio value={true}>必填</Radio>
                             <Radio value={false}>非必填</Radio>
                         </Radio.Group>
