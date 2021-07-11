@@ -11,22 +11,11 @@ class AddRadio extends  React.Component{
     constructor(props){
     super(props);
     this.state={
-        aid:1,//新建页面的所有key从1开始
-        ask:'',
-        type:1,//1单选 2多选 3文本
-        isNecessary:Boolean,
-        choicenum:2,
-        choiceList: [//每个选项内容
-            <Radio disabled={true} ><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Radio>,
-                       
-                       
-             <Radio disabled={true} ><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Radio>,
-                         
-      
-          ],
-        choicecontent:["","",]
-    
-    
+        aid:this.props.aid,//新建页面的所有排序从0开始
+        ask:this.props.question.ask,
+        type:this.props.question.type,//1单选 2多选 3文本
+        isNecessary:this.props.question.isNecessary,
+        choiceList: this.props.question.choiceList
     }
     this.addChoice = this.addChoice.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -51,48 +40,51 @@ class AddRadio extends  React.Component{
     }
 */
     
-    handleChange=  (event) => {
+      handleChange(event) {
         const target = event.target;
         const name = target.name;
         const value =target.value;
         const key = target.key;
-       
-       
-        this.setState({
-          [name]: value
-        });
-      }
-    
-      addChoice(event){
-        //将组件插入新建选项button的前方
-        this.setState(prevState => ({
-          choiceList: [...prevState.choiceList, <Radio disabled={true} ><Input name="choicecontent" key={this.state.choicenum} placeholder="请输入选项内容" onChange={this.handleChange}></Input></Radio>]
-        }));
-        this.setState({
-          choicenum: this.state.choicenum + 1
-        });
+        if(name=="choiceList"){//查找修改的是选项数组的哪一项
+                let tempQuestions = this.state.choiceList;
+                        tempQuestions.map((choice, index) => {
+                          return (
+                            index === key ? {choice: value} : choice
+                          )
+                      })
+                this.setState({
+                  choiceList: tempQuestions   //修改了state的选项数组
+                 })
+                this.props.handleChange(this.state.aid,name,this.state.choiceList);//把修改的aid、state名称、修改后的内容传给父组件
+        }
+        else{
+                this.setState({
+                  [name]: value
+                });
+                  this.props.handleChange(this.state.aid,name,value);
+            }
         }
     
+      addChoice() {
+        this.setState(prevState => ({
+            choiceList: [...prevState.choiceList," "]
+        }));
+
+    }
     handleDelete=()=>{
-        alert(this.state.aid);
-      // alert("点击发出删除请求");
-        this.props.handleDelete(this.state.aid);
-        
-    }
-  
- componentDidMount(){
-     this.setState({
-         aid:this.props.aid
-     })
- }
- componentDidUpdate(prevProps, prevState) {
+      alert(this.state.aid);
+    // alert("点击发出删除请求");
+      this.props.handleDelete(this.state.aid);
+      
+     }
     
-    if(prevProps.aid !== this.props.aid) {
-        this.setState({
-            aid:this.props.aid
-        })
-    }
-  }
+moveUp=()=>{
+  this.props.moveUp(this.state.aid);
+}
+ moveDown=()=>{
+  this.props.moveUp(this.state.aid);
+
+}
     render(){
 
     return (
@@ -104,7 +96,7 @@ class AddRadio extends  React.Component{
             </div>
     
             <div >
-             <Input name="ask" placeholder="请输入该单选题的问题" onChange={this.handleChange}></Input>
+             <Input name="ask" placeholder={this.state.ask} onChange={this.handleChange}></Input>
             </div>
     
            <div>
@@ -113,7 +105,7 @@ class AddRadio extends  React.Component{
     
             <div>
                 <span>该题为：</span>
-                <Radio.Group name="isNecessary" onChange={this.handleChange} >
+                <Radio.Group name="isNecessary" value={this.state.isNecessary} onChange={this.handleChange} >
                      <Radio value={true}>必填</Radio>
                      <Radio value={false}>选填</Radio>
                 </Radio.Group>
@@ -123,7 +115,17 @@ class AddRadio extends  React.Component{
                 <Radio.Group   >
                 <Space direction="vertical" >
                 
-                {this.state.choiceList}
+                {
+                                    this.state.choiceList.map((choice, index) => {
+                                        return (
+                                            <Radio key={index} disabled={true}>
+                                              <Input onChange={this.handleChange}
+                                                     key={index }
+                                                     name="choiceList"
+                                                    placeholder={choice}/></Radio>
+                                        )
+                                    })
+                                }
                     <div>
 
                   
@@ -135,7 +137,8 @@ class AddRadio extends  React.Component{
             </Space>
           </Radio.Group>
             </div>
-    
+               <Button onClick={this.moveUp}>上移</Button>
+                    <Button onClick={this.moveDown}>下移</Button>
         </div>
     </div>
     // </RenderInCreatPage>

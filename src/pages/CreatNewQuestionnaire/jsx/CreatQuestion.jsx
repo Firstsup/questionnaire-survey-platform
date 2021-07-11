@@ -17,17 +17,17 @@ class CreatQuestion extends  React.Component{
                 if (question.type === 1) {
                     return (
                         <AddRadio data-index={index} key={index} question={question} aid={index} handleDelete={this.props.handleDelete}
-                            handleChange={this.props.handleChange}     />
+                        moveUp={this.props.moveUp} moveDown={this.props.moveDown} handleChange={this.props.handleChange}     />
                     )
                 } else if (question.type === 2) {
                     return (
                         <AddCheckbox data-index={index} key={index} question={question} aid={index} handleDelete={this.props.handleDelete}
-                        handleChange={this.props.handleChange}     />
+                        moveUp={this.props.moveUp} moveDown={this.props.moveDown} handleChange={this.props.handleChange}     />
                     )
                 } else {
                     return (
                         <AddText data-index={index} key={index} question={question} aid={index} handleDelete={this.props.handleDelete}
-                        handleChange={this.props.handleChange}     />
+                        moveUp={this.props.moveUp} moveDown={this.props.moveDown} handleChange={this.props.handleChange}     />
                     )
                 }
             })

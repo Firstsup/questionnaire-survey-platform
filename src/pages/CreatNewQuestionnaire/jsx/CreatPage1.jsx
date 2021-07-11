@@ -32,6 +32,8 @@ class CreatPage1 extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.moveDown=this.moveDown.bind(this);
+        this.moveUp=this.moveUp.bind(this);
     }
 
 
@@ -48,9 +50,9 @@ class CreatPage1 extends React.Component {
                     ask: '',
                     type: 1,//1单选 2多选 3文本
                     isNecessary: Boolean,
-                    choicecontent: [" ", " ",],
-                    asknum: this.state.asknum + 1,
-                }]
+                    choiceList: [" ", " ",],
+                }],
+            asknum: this.state.asknum + 1,
         }));
     }
 
@@ -62,9 +64,9 @@ class CreatPage1 extends React.Component {
                     ask: '',
                     type: 2,//1单选 2多选 3文本
                     isNecessary: Boolean,
-                    choicecontent: [" ", " ",],
-                    asknum: this.state.asknum + 1,
-                }]
+                    choiceList: [" ", " ",],
+                }] ,
+                asknum: this.state.asknum + 1,
         }));
     }
 
@@ -76,14 +78,37 @@ class CreatPage1 extends React.Component {
                     ask: '',
                     type: 3,//1单选 2多选 3文本
                     isNecessary: Boolean,
-                    choicecontent: [],
-                    asknum: this.state.asknum + 1
-                }]
+                    choiceList: [],
+                }] ,
+                 asknum: this.state.asknum + 1
         }));
     }
 
-    handleChange = () => {
+    handleChange = (aid,changeName,changeItem) => {//从子组件接受修改的题目的aid、修改的state的名称、修改后的内容
 
+        let tempaskList=this.state.askList;
+        for(let i=0;i<tempaskList.length;i++){
+            if(i==aid){
+                 //函数Object.defineProperty(object, propertyname, descriptor);
+                tempaskList[i][changeName]=changeItem;
+               
+                break;                                                       
+            }
+        }
+        this.setState({
+            askList:tempaskList
+        })
+            console.log(this.state.askList[aid]);
+        
+    }
+
+    changeTitle=(event)=>{
+        const target = event.target;
+        const name = target.name;
+        const value =target.value;
+        this.setState({
+            questionnaireTitle:value
+        })
     }
     /* handleChangeChoice=(asknumber,choiceInput)=>{
        const askListContent=this.state.askListContent.map((askContent,aid)=>{//askList是可以传给后端的问卷数组
@@ -102,7 +127,7 @@ class CreatPage1 extends React.Component {
 */
     handleDelete = (aid) => {//这里的aid和askList数组索引一致
 
-        alert("接收到删除数组第" + aid + "项的请求");
+        alert("接收到删除数组索引为" + aid + "项的请求");
         let tempQuestions = this.state.askList;
         for (let i = 0; i < tempQuestions.length; i++) {
             if (i === aid) {
@@ -117,6 +142,37 @@ class CreatPage1 extends React.Component {
             asknum: this.state.asknum - 1
         })
 
+    }
+
+    moveUp = (aid) => {
+        alert(aid);
+        let tempQuestions = this.state.askList;
+        for (let i = 0; i < tempQuestions.length; i++) {
+            if (i === aid && i !== 0) {//数组最前面的题目不能前移
+                let temp = tempQuestions[i];
+                tempQuestions[i] = tempQuestions[i - 1];
+                tempQuestions[i - 1] = temp;
+                break;
+            }
+        }
+        this.setState({
+                askList: tempQuestions
+            
+              })
+    }
+    moveDown = (aid) => {
+        let tempQuestions = this.state.askList;
+        for (let i = 0; i < tempQuestions.length; i++) {
+            if (i === aid && i !== tempQuestions.length - 1) {//数组最后一项不能再后移
+                let temp = tempQuestions[i];
+                tempQuestions[i] = tempQuestions[i + 1];
+                tempQuestions[i + 1] = temp;
+                break;
+            }
+        }
+        this.setState({
+            askList: tempQuestions
+        })
     }
 
 
@@ -163,9 +219,10 @@ class CreatPage1 extends React.Component {
                 <div className="questionsConten">
 
                     <Space direction="vertical">
-                        <Input name="questionnaireTitle" placeholder="请输入问卷标题" onChange={this.handleChange}></Input>
+                        <Input name="questionnaireTitle" placeholder="请输入问卷标题" onChange={this.changeTitle}></Input>
                         <Divider>问卷内容</Divider>
-                        <CreatQuestion questions={this.state.askList} handleDelete={this.handleDelete}/>
+                        <CreatQuestion questions={this.state.askList} handleDelete={this.handleDelete} handleChange={this.handleChange}
+                                      moveUp={this.moveUp} moveDown={this.moveDown}/>
                     </Space>
 
 
