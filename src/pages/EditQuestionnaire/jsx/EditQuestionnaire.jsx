@@ -52,7 +52,9 @@ class EditQuestionnaire extends React.Component {
         //     loading: true
         // }
      
+        this.handleDelete=this.handleDelete.bind(this);
     }
+    
 
 
 
@@ -113,11 +115,19 @@ class EditQuestionnaire extends React.Component {
 }
 
     handleDelete = (aid) => {
+        console.log("原来的问题列表"+this.state.questionnaire.questions);//先输出原来的问题列表
         let tempQuestions = this.state.questionnaire.questions
+        let test = this.state.questionnaire.questions
         for (let i = 0; i < tempQuestions.length; i++) {
             if (i === aid) {
-                tempQuestions.splice(i, 1)
-                break
+                
+                console.log("请求删除数组第"+i+"项");//输出要删除的项的数组索引
+               
+                console.log(test.splice(i, 1));//
+
+                tempQuestions.splice(i, 1);
+                 
+                break;
             }
         }
         this.setState({
@@ -127,6 +137,9 @@ class EditQuestionnaire extends React.Component {
                 questions: tempQuestions
             }
         })
+              console.log(this.state.questionnaire.questions);//输出改变后的问题列表
+
+       
     }
 
     moveUp = (aid) => {

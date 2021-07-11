@@ -6,22 +6,11 @@ class AddCheckbox extends Component{
   constructor(props){
       super(props);
       this.state={
-          aid:'',
-          ask:'',
-          type:2,
-          isNecessary:Boolean,
-          choicenum:2,
-          isDeleted:false,
-          choiceList: [//每个选项内容
-            <Checkbox disabled={true} ><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Checkbox>,
-                       
-                       
-             <Checkbox disabled={true} ><Input  placeholder="请输入选项内容" onChange={this.handleChange}></Input></Checkbox>,
-                         
-      
-          ],
-          choicecontent:[]
-      
+          aid:this.props.aid,
+          ask:this.props.question.ask,
+          type:this.props.question.type,
+          isNecessary:this.props.question.isNecessary,
+          choiceList:this.props.question.choiceList
       
       }
       this.addChoice = this.addChoice.bind(this);
@@ -35,54 +24,49 @@ class AddCheckbox extends Component{
         const target = event.target;
         const name = target.name;
         const value =target.value;
-        const key = target.key;
-        if(name=="choicecontent"){
-            if(typeof this.state.choicecontent[key]=='​undefined')
-            {
-                this.setState(prevState => ({
-                    choicecontent: [...prevState.choicecontent,value]
-                  }));
-            }
-            else{
-            this.setState({
-                [name[key]]: value
-              });}
+
+        if(name=="choiceList"){//查找修改的是选项数组的哪一项
+                let tempQuestions = this.state.choiceList;
+                const cid=event.target.getAttribute("data-index");
+                  tempQuestions.map((choice, index) => {
+                    return (
+                      index === cid ? {choice: value} : choice
+                    )
+                })
+                this.setState({
+                  choiceList: tempQuestions   //修改了state的选项数组
+              })
+                  this.props.handleChange(this.state.aid,name,this.state.choiceList);//把修改的aid、state名称、修改后的内容传给父组件
         }
         else{
-        this.setState({
-          [name]: value
-        });}
+                this.setState({
+                  [name]: value
+                });
+                  this.props.handleChange(this.state.aid,name,value);
+            }
         }
-        addChoice(event){
-          //将组件插入新建选项button的前方
+
+        addChoice() {
           this.setState(prevState => ({
-            choiceList: [...prevState.choiceList, <Checkbox disabled={true} ><Input name="choicecontent" key={this.state.choicenum} placeholder="请输入选项内容" onChange={this.handleChange}></Input></Checkbox>]
+              choiceList: [...prevState.choiceList," "]
           }));
-          this.setState({
-            choicenum: this.state.choicenum + 1
-          });
-          }
+  
+      }
 
-        handleDelete=()=>{
+      handleDelete=()=>{
         alert(this.state.aid);
-      // alert("点击发出删除请求");
-        this.props.handleDelete(this.state.aid);
-        
-       }
+  // alert("点击发出删除请求");
+         this.props.handleDelete(this.state.aid);
+    
+}
 
- componentDidMount(){
-        this.setState({
-            aid:this.props.aid
-        })
-    }
-    componentDidUpdate(prevProps, prevState) {
-       
-       if(prevProps.aid !== this.props.aid) {
-           this.setState({
-               aid:this.props.aid
-           })
-       }
-     }
+       moveUp=()=>{
+        this.props.moveUp(this.state.aid);
+      }
+       moveDown=()=>{
+        this.props.moveUp(this.state.aid);
+      
+      }
         
           render(){
             return (
@@ -92,12 +76,10 @@ class AddCheckbox extends Component{
                   <div>
                 <span>第{this.state.aid+1}题</span>
                 </div>
-                    <div >
-                        <span name="aid" value=""/*题号 根据该题在题目数组中的索引号+1生成 */ ></span>
-                    </div>
+            
             
                     <div >
-                     <Input name="ask" placeholder="请输入该单选题的问题" onChange={this.handleChange}></Input>
+                     <Input name="ask" placeholder={this.state.ask} onChange={this.handleChange}></Input>
                     </div>
             
                     <div>
@@ -106,22 +88,36 @@ class AddCheckbox extends Component{
             
                     <div>
                         <span>该题为：</span>
-                        <Radio.Group name="isNecessary" onChange={this.handleChange} >
+                        <Radio.Group name="isNecessary" value={this.state.isNecessary} onChange={this.handleChange} >
                              <Radio value={true}>必填</Radio>
                              <Radio value={false}>选填</Radio>
                         </Radio.Group>
                     </div>
             
                     <div>
-                     <Checkbox.Group  onChange={this.handleChange} name="choiceList" >
+                     <Checkbox.Group    >
                         <Space direction="vertical">
                             
-                            {this.state.choiceList}
+                             
+                {
+                           this.state.choiceList.map((choice, index) => {
+                                        return (
+                                            <Checkbox key={index } disabled={true}>
+                                              <Input onChange={this.handleChange}
+                                                     key={index} 
+                                                     data-index={index}
+                                                     name="choiceList"
+                                                     placeholder={choice}/>
+                                            </Checkbox>
+                                        )
+                                    })
+                                }
                             <Button type="dashed" onClick= {this.addChoice}><PlusOutlined />添加选项</Button>
                         </Space>
                       </Checkbox.Group>
                     </div>
-            
+                    <Button onClick={this.moveUp}>上移</Button>
+                    <Button onClick={this.moveDown}>下移</Button>
                 </div>
             </div>
             // </RenderInCreatPage>
