@@ -37,7 +37,7 @@ class EditQuestionnaire extends React.Component {
                         options: ["丁丁", "迪西", "拉拉", "小波"]
                     }, {
                         subject: "你对数据库有什么建议",
-                        type: "radio",
+                        type: "text",     //把此处的type从radio修改成了text
                         isNecessary: false,
                         options: []
                     }]
@@ -51,15 +51,11 @@ class EditQuestionnaire extends React.Component {
         //     },
         //     loading: true
         // }
-        this.onAddChild = this.onAddChild.bind(this);
+     
     }
 
 
-    getTitle = () => {
-        return (
-            <Title className={"edit_title"}>{this.state.questionnaire.title}</Title>
-        )
-    }
+
 
     getFooter = () => {
         return (
@@ -70,34 +66,51 @@ class EditQuestionnaire extends React.Component {
         )
     }
 
-//以下是新建题目按钮对应的函数，根据按钮的name判断把哪个题型的子组件加在现有的askList末尾
-    onAddChild = (event) => {
-        const target = event.target;
-        const name = target.name;
-        if (name == "addRadio") {
-            this.setState(prevState => ({
-                askList: [...prevState.askList,
-                    <AddRadio key={this.state.asknum + 1} handleDelete={this.handleDelete}/>]
-            }));
-            this.setState({
-                asknum: this.state.asknum + 1
-            });
-        } else if (name == "addCheckbox") {
-            this.setState(prevState => ({
-                askList: [...prevState.askList, <AddCheckbox key={this.state.asknum + 1}/>]
-            }));
-            this.setState({
-                asknum: this.state.asknum + 1
-            });
-        } else if (name == "addText") {
-            this.setState(prevState => ({
-                askList: [...prevState.askList, <AddText key={this.state.asknum + 1}/>]
-            }));
-            this.setState({
-                asknum: this.state.asknum + 1
-            });
-        }
-    }
+//
+    onAddRadioChild=()=>{
+        this.setState(prevState => ({
+            questionnaire:{ 
+                ...prevState.questionnaire,
+                
+                questions: [...prevState.questionnaire.questions,
+                {
+                    subject: '',
+                    type: "radio",
+                    isNecessary: Boolean,
+                    options: [" ", " ",],
+                }]
+        }}));
+}
+
+    onAddCheckboxChild=()=>{
+        this.setState(prevState => ({
+            questionnaire:{ 
+                ...prevState.questionnaire,
+                
+                questions: [...prevState.questionnaire.questions,
+                {
+                    subject: '',
+                    type: "multiple",
+                    isNecessary: Boolean,
+                    options: [" ", " ",],
+                }]
+        }}));
+}
+
+    onAddTextChild=()=>{
+        this.setState(prevState => ({
+            questionnaire:{ 
+                ...prevState.questionnaire,
+                
+                questions: [...prevState.questionnaire.questions,
+                {
+                    subject: '',
+                    type: "text",
+                    isNecessary: Boolean,
+                    options: [" ", " ",],
+                }]
+        }}));
+}
 
     handleDelete = (aid) => {
         let tempQuestions = this.state.questionnaire.questions
@@ -188,18 +201,18 @@ class EditQuestionnaire extends React.Component {
         let questionnaire = this.state.questionnaire;
         return (
             <Layout className={"edit_layout"}>
-                <Header className={"edit_header"}>{this.getTitle()}</Header>
+                <Header className={"edit_header"}><Input className={"edit_title"} placeholder={this.state.questionnaire.title}></Input></Header>
                 <Content className={"edit_content"}>
                     <div>
                         <Row>
                             <Space direction="vertical">
-                                <Button type="primary" name="addRadio" onClick={this.onAddChild}
+                                <Button type="primary" name="addRadio" onClick={this.onAddRadioChild}
                                         icon={<PlusCircleTwoTone/>}>
                                     添加单选题 </Button>
                                 <Button type="primary" name="addCheckbox"
-                                        onClick={this.onAddChild}><PlusSquareTwoTone/>
+                                        onClick={this.onAddCheckboxChild}><PlusSquareTwoTone/>
                                     添加多选题</Button>
-                                <Button type="primary" name="addText" onClick={this.onAddChild}><EditTwoTone/>
+                                <Button type="primary" name="addText" onClick={this.onAddTextChild}><EditTwoTone/>
                                     添加文本题</Button>
                             </Space>
                         </Row>

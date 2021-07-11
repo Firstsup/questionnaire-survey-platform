@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
 import {DeleteOutlined, PlusOutlined} from '@ant-design/icons';
-import {Radio, Input, Space, Button} from 'antd';
+import {Checkbox,Radio, Input, Space, Button} from 'antd';
 
 
 class EditCheckbox extends React.Component {
@@ -27,7 +27,7 @@ class EditCheckbox extends React.Component {
         if (name == "choiceList") {
             if (typeof this.state.choiceList[key] == '​undefined') {
                 this.setState(prevState => ({
-                    choicecontent: [...prevState.choiceList, value]
+                    choiceList: [...prevState.choiceList, value]
                 }));
             } else {
                 this.setState({
@@ -55,9 +55,7 @@ class EditCheckbox extends React.Component {
 
     addChoice() {
         this.setState(prevState => ({
-            choiceList: [...prevState.choiceList,
-                <Radio disabled={true}><Input name="choiceList" key={this.state.choicenum + 1} placeholder="请输入选项内容"
-                                              onChange={this.handleChange}/></Radio>]
+            choiceList: [...prevState.choiceList," "]
         }));
         this.setState({
             choicenum: this.state.choicenum + 1
@@ -84,23 +82,23 @@ class EditCheckbox extends React.Component {
 
                     <div>
                         <span>该题为：</span>
-                        <Radio.Group name="isNecessary" value={this.state.isNecessary} onChange={this.handleChange}>
+                        <Radio.Group name="isNecessary" onChange={this.handleChange}>
                             <Radio value={true}>必填</Radio>
                             <Radio value={false}>选填</Radio>
                         </Radio.Group>
                     </div>
 
                     <div>
-                        <Radio.Group>
+                        <Checkbox.Group>
                             <Space direction="vertical">
 
                                 {
                                     this.state.choiceList.map((choice, index) => {
 
                                         return (
-                                            <Radio key={index + 1} disabled={true}><Input onChange={this.handleChange}
+                                            <Checkbox key={index + 1} disabled={true}><Input onChange={this.handleChange}
                                                                                           key={index + 1}
-                                                                                          placeholder={choice}/></Radio>
+                                                                                          placeholder={choice}/></Checkbox>
                                         )
                                     })
                                 }
@@ -108,7 +106,7 @@ class EditCheckbox extends React.Component {
                                 <Button type="dashed" onClick={this.addChoice}><PlusOutlined/>添加选项</Button>
 
                             </Space>
-                        </Radio.Group>
+                        </Checkbox.Group>
                     </div>
                     <Button onClick={this.moveUp}>上移</Button>
                     <Button onClick={this.moveDown}>下移</Button>
