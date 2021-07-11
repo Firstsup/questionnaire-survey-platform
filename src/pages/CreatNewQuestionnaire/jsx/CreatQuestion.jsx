@@ -8,6 +8,7 @@ import AddCheckbox from './addCheckbox';
 import AddText from './AddText';
 import { Tag, Divider } from 'antd';
 import { Layout } from 'antd';
+import "../css/CreatQuestion.css"
 
 class CreatQuestion extends  React.Component{
     render(){
@@ -16,7 +17,8 @@ class CreatQuestion extends  React.Component{
             questions.map((question, index) => {
                 if (question.type === 1) {
                     return (
-                        <AddRadio data-index={index} key={index} question={question} aid={index} handleDelete={this.props.handleDelete}
+                        <AddRadio  data-index={index}  key={index} question={question} aid={index} ask={question.ask} type={question.type} 
+                        isNecessary={question.isNecessary} choiceList={question.choiceList} handleDelete={this.props.handleDelete}
                         moveUp={this.props.moveUp} moveDown={this.props.moveDown} handleChange={this.props.handleChange}     />
                     )
                 } else if (question.type === 2) {

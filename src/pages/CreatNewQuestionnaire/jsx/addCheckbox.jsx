@@ -24,12 +24,13 @@ class AddCheckbox extends Component{
         const target = event.target;
         const name = target.name;
         const value =target.value;
-        const key = target.key;
+
         if(name=="choiceList"){//查找修改的是选项数组的哪一项
                 let tempQuestions = this.state.choiceList;
+                const cid=event.target.getAttribute("data-index");
                   tempQuestions.map((choice, index) => {
                     return (
-                      index === key ? {choice: value} : choice
+                      index === cid ? {choice: value} : choice
                     )
                 })
                 this.setState({
@@ -52,12 +53,12 @@ class AddCheckbox extends Component{
   
       }
 
-        handleDelete=()=>{
+      handleDelete=()=>{
         alert(this.state.aid);
-      // alert("点击发出删除请求");
-        this.props.handleDelete(this.state.aid);
-        
-       }
+  // alert("点击发出删除请求");
+         this.props.handleDelete(this.state.aid);
+    
+}
 
        moveUp=()=>{
         this.props.moveUp(this.state.aid);
@@ -104,6 +105,7 @@ class AddCheckbox extends Component{
                                             <Checkbox key={index } disabled={true}>
                                               <Input onChange={this.handleChange}
                                                      key={index} 
+                                                     data-index={index}
                                                      name="choiceList"
                                                      placeholder={choice}/>
                                             </Checkbox>

@@ -1,15 +1,40 @@
 .questionsConten{
-    margin-left:160px;
-    background:rgb(255, 255, 255)
+    width:1440px;
+    height: 1600px;
+    background:rgb(195, 206, 252)
 }
 
-.questionsSideBar{
-    width:150px; 
-    float:left; 
-    background:rgb(255, 255, 255)
+.questionsSideBar1{
+    position: fixed;
+    top:100px;
+    width:400px;
+    height: 900px;
+    padding: 50px;
+    background:rgba(195, 206, 252,0)
 }
 
 .questionsHeadTitle{
     text-align: center;
     background:rgb(255, 255, 255)
+}
+
+.questionsSideBar2{
+    position:absolute;
+    left:400px;
+    width:800px;
+    height: 500px;
+
+    background:rgba(195, 206, 252,1)
+}
+.questionsSideBar3{
+    position: fixed;
+    width:500px;
+    height: 900px;
+    padding: 80px 40px;
+    background:rgb(195, 206, 252)
+}
+
+.questionsdiv{
+
+    background:rgb(195, 206, 252)
 }

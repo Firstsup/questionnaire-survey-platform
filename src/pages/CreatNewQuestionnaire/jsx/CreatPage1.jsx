@@ -8,11 +8,12 @@ import AddCheckbox from './addCheckbox';
 import AddText from './AddText';
 import {Tag, Divider} from 'antd';
 import {Layout} from 'antd';
+import { DatePicker} from 'antd';
 import '../css/CreatQuestion.css';
 import CreatQuestion from './CreatQuestion';
 
 const {Header, Footer, Sider, Content} = Layout;
-
+const { RangePicker } = DatePicker;
 
 class CreatPage1 extends React.Component {
     constructor(props) {
@@ -25,7 +26,8 @@ class CreatPage1 extends React.Component {
             questionnaireSign: 0,
             asknum: 0,//题目数组的aid是从0开始的
             askList: [], //这个数组是要传给后端的内容
-
+            creatTime:" ",
+            endTime:" "
         };
 
         // this.handleChange = this.handleChange.bind(this);
@@ -37,16 +39,19 @@ class CreatPage1 extends React.Component {
     }
 
 
-    handleSubmit(event) {
-        alert("正在提交");/* 提交时遍历题目列表，如果每一项都不为空才能提交给后端*/
-
+    handleSubmit() {
+        console.log(this.state.userName);/* 提交时遍历题目列表，如果每一项都不为空才能提交给后端*/
+        console.log(this.state.questionnaireId);
+        console.log(this.state.questionnaireTitle);
+        console.log(this.state.questionnaireSign);
+        console.log(this.state.askList);
     }
 
     onAddRadioChild = () => {
         this.setState(prevState => ({
             askList: [...prevState.askList,
                 {
-                    aid: Number,
+                    aid: this.state.asknum,
                     ask: '',
                     type: 1,//1单选 2多选 3文本
                     isNecessary: Boolean,
@@ -60,7 +65,7 @@ class CreatPage1 extends React.Component {
         this.setState(prevState => ({
             askList: [...prevState.askList,
                 {
-                    aid: Number,
+                    aid: this.state.asknum,
                     ask: '',
                     type: 2,//1单选 2多选 3文本
                     isNecessary: Boolean,
@@ -74,31 +79,30 @@ class CreatPage1 extends React.Component {
         this.setState(prevState => ({//文本题没有选项，choicecontent数组为空
             askList: [...prevState.askList,
                 {
-                    aid: Number,
+                    aid: this.state.asknum,
                     ask: '',
                     type: 3,//1单选 2多选 3文本
                     isNecessary: Boolean,
                     choiceList: [],
                 }] ,
-                 asknum: this.state.asknum + 1
+                     asknum: this.state.asknum + 1
         }));
     }
 
     handleChange = (aid,changeName,changeItem) => {//从子组件接受修改的题目的aid、修改的state的名称、修改后的内容
-
+       
         let tempaskList=this.state.askList;
         for(let i=0;i<tempaskList.length;i++){
             if(i==aid){
                  //函数Object.defineProperty(object, propertyname, descriptor);
                 tempaskList[i][changeName]=changeItem;
-               
                 break;                                                       
             }
         }
         this.setState({
             askList:tempaskList
         })
-            console.log(this.state.askList[aid]);
+            
         
     }
 
@@ -136,7 +140,7 @@ class CreatPage1 extends React.Component {
             }
         }
         this.setState({
-            askList: tempQuestions
+             askList: tempQuestions
         })
         this.setState({
             asknum: this.state.asknum - 1
@@ -157,7 +161,6 @@ class CreatPage1 extends React.Component {
         }
         this.setState({
                 askList: tempQuestions
-            
               })
     }
     moveDown = (aid) => {
@@ -175,30 +178,52 @@ class CreatPage1 extends React.Component {
         })
     }
 
+    setEndTime=(value)=>{
+        this.setState({
+            endTime:value
+        })
+    }
+
+    onOk=(value)=>{
+        console.log('问卷截止时间为：', value);
+      }
+
 
     render() {
 
 
         return (
-            <div id="content">
-                <div className="questionsSideBar">
+            <div id="content" className="questionsConten">
+                <div >
                     <div>
                         <div>
 
 
                             <Row>
-                                <Space direction="vertical">
-                                    <Button type="primary" name="addRadio" onClick={this.onAddRadioChild}
+                                <Space id="SideBar" className="questionsSideBar1" direction="vertical" align="left" size="large">
+                                    <Button type="primary" name="addRadio" onClick={this.onAddRadioChild} block size="large"
                                             icon={<PlusCircleTwoTone/>}>
                                         添加单选题 </Button>
-                                    <Button type="primary" name="addCheckbox"
+                                    <Button type="primary" name="addCheckbox" block size="large"
                                             onClick={this.onAddCheckBoxChild}><PlusSquareTwoTone/>
                                         添加多选题</Button>
-                                    <Button type="primary" name="addText"
+                                    <Button type="primary" name="addText" block size="large"
                                             onClick={this.onAddTextChild}><EditTwoTone/>
                                         添加文本题</Button>
-
-                                </Space>
+                                        <Tag color="blue" > 请选择问卷截止时间：</Tag>
+                                        <DatePicker  size="large" showTime onChange={this.setEndTime} onOk={this.onOk} />
+                                                
+                                            
+                                        <Tag color="blue"> 目前共有 {this.state.asknum}题</Tag>
+                                    
+                                        <Button type="primary" block size="large" onClick={this.handleSubmit} shape="round" icon={<CheckOutlined/>}>
+                                                保存暂不发布问卷
+                                        </Button>
+                                        <Button type="primary" block size="large" onClick={this.handleSubmit} shape="round" icon={<CheckOutlined/>}>
+                                            保存并发布问卷
+                                        </Button>
+                        
+                                    </Space>
 
 
                             </Row>
@@ -207,18 +232,11 @@ class CreatPage1 extends React.Component {
 
                     </div>
                     <br/>
-                    <div>
-                        <Tag color="blue"> 目前共有 {this.state.asknum}题</Tag>
-                        <br/>
-
-                        <Button type="primary" onClick={this.handleSubmit} shape="round" icon={<CheckOutlined/>}>
-                            确认创建
-                        </Button>
-                    </div>
                 </div>
-                <div className="questionsConten">
+ 
+                <div >
 
-                    <Space direction="vertical">
+                    <Space direction="vertical"  className="questionsSideBar2" size="middle">
                         <Input name="questionnaireTitle" placeholder="请输入问卷标题" onChange={this.changeTitle}></Input>
                         <Divider>问卷内容</Divider>
                         <CreatQuestion questions={this.state.askList} handleDelete={this.handleDelete} handleChange={this.handleChange}

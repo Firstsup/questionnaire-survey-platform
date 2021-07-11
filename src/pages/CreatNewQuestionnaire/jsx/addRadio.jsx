@@ -3,7 +3,7 @@ import ReactDom from 'react-dom';
 import {DeleteOutlined,PlusOutlined}from '@ant-design/icons';
 import { Radio, Input, Space, Button  } from 'antd';
 import CreatPage from './CreatPage';
-
+import "../css/CreatQuestion.css"
 
 
 
@@ -12,10 +12,10 @@ class AddRadio extends  React.Component{
     super(props);
     this.state={
         aid:this.props.aid,//新建页面的所有排序从0开始
-        ask:this.props.question.ask,
-        type:this.props.question.type,//1单选 2多选 3文本
-        isNecessary:this.props.question.isNecessary,
-        choiceList: this.props.question.choiceList
+        ask:this.props.ask,
+        type:this.props.type,//1单选 2多选 3文本
+        isNecessary:this.props.isNecessary,
+        choiceList: this.props.choiceList
     }
     this.addChoice = this.addChoice.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -40,18 +40,20 @@ class AddRadio extends  React.Component{
     }
 */
     
-      handleChange(event) {
-        const target = event.target;
-        const name = target.name;
-        const value =target.value;
-        const key = target.key;
+      handleChange(e) {
+       
+        const name = e.target.name;
+        const value =e.target.value;
+      
         if(name=="choiceList"){//查找修改的是选项数组的哪一项
+               const cid=e.target.getAttribute("data-index");
                 let tempQuestions = this.state.choiceList;
-                        tempQuestions.map((choice, index) => {
-                          return (
-                            index === key ? {choice: value} : choice
-                          )
-                      })
+  
+                     for(let i=0;i<tempQuestions.length;i++){
+                       if(i==cid){
+                         tempQuestions[i]=value;
+                       }
+                     }
                 this.setState({
                   choiceList: tempQuestions   //修改了state的选项数组
                  })
@@ -59,8 +61,10 @@ class AddRadio extends  React.Component{
         }
         else{
                 this.setState({
-                  [name]: value
+                  [name]: value,
                 });
+             
+               
                   this.props.handleChange(this.state.aid,name,value);
             }
         }
@@ -71,17 +75,18 @@ class AddRadio extends  React.Component{
         }));
 
     }
+
     handleDelete=()=>{
       alert(this.state.aid);
-    // alert("点击发出删除请求");
-      this.props.handleDelete(this.state.aid);
-      
-     }
+// alert("点击发出删除请求");
+       this.props.handleDelete(this.state.aid);
+  
+}
     
-moveUp=()=>{
+  moveUp=()=>{
   this.props.moveUp(this.state.aid);
 }
- moveDown=()=>{
+  moveDown=()=>{
   this.props.moveUp(this.state.aid);
 
 }
@@ -89,7 +94,7 @@ moveUp=()=>{
 
     return (
      // <RenderInCreatPage>
-    <div>
+    <div className="questionsdiv">
         <div>
             <div >
               <span>第{this.state.aid+1}题</span>
@@ -116,11 +121,12 @@ moveUp=()=>{
                 <Space direction="vertical" >
                 
                 {
-                                    this.state.choiceList.map((choice, index) => {
+                                    this.state.choiceList.map((choice,index) => {
                                         return (
-                                            <Radio key={index} disabled={true}>
+                                            <Radio  disabled={true}>
                                               <Input onChange={this.handleChange}
-                                                     key={index }
+                                                     key={index}
+                                                     data-index={index}
                                                      name="choiceList"
                                                     placeholder={choice}/></Radio>
                                         )
