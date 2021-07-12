@@ -7,10 +7,10 @@ class AddCheckbox extends Component{
       super(props);
       this.state={
           aid:this.props.aid,
-          ask:this.props.question.ask,
-          type:this.props.question.type,
-          isNecessary:this.props.question.isNecessary,
-          choiceList:this.props.question.choiceList
+          ask:this.props.ask,
+          type:this.props.type,
+          isNecessary:this.props.isNecessary,
+          choiceList:this.props.choiceList
       
       }
       this.addChoice = this.addChoice.bind(this);
@@ -20,38 +20,41 @@ class AddCheckbox extends Component{
       }
 
 
-      handleChange(event) {
-        const target = event.target;
-        const name = target.name;
-        const value =target.value;
-
+      handleChange(e) {
+       
+        const name = e.target.name;
+        const value =e.target.value;
+      
         if(name=="choiceList"){//查找修改的是选项数组的哪一项
+               const cid=e.target.getAttribute("data-index");
                 let tempQuestions = this.state.choiceList;
-                const cid=event.target.getAttribute("data-index");
-                  tempQuestions.map((choice, index) => {
-                    return (
-                      index === cid ? {choice: value} : choice
-                    )
-                })
+  
+                     for(let i=0;i<tempQuestions.length;i++){
+                       if(i==cid){
+                         tempQuestions[i]=value;
+                       }
+                     }
                 this.setState({
                   choiceList: tempQuestions   //修改了state的选项数组
-              })
-                  this.props.handleChange(this.state.aid,name,this.state.choiceList);//把修改的aid、state名称、修改后的内容传给父组件
+                 })
+                this.props.handleChange(this.state.aid,name,this.state.choiceList);//把修改的aid、state名称、修改后的内容传给父组件
         }
         else{
                 this.setState({
-                  [name]: value
+                  [name]: value,
                 });
+             
+               
                   this.props.handleChange(this.state.aid,name,value);
             }
         }
+    
+      addChoice() {
+        this.setState(prevState => ({
+            choiceList: [...prevState.choiceList," "]
+        }));
 
-        addChoice() {
-          this.setState(prevState => ({
-              choiceList: [...prevState.choiceList," "]
-          }));
-  
-      }
+    }
 
       handleDelete=()=>{
         alert(this.state.aid);
@@ -67,6 +70,17 @@ class AddCheckbox extends Component{
         this.props.moveUp(this.state.aid);
       
       }
+      componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps !== this.props) {
+            this.setState({
+              aid:this.props.aid,//新建页面的所有排序从0开始
+              ask:this.props.ask,
+              type:this.props.type,//1单选 2多选 3文本
+              isNecessary:this.props.isNecessary,
+              choiceList: this.props.choiceList
+            })
+        }
+      }
         
           render(){
             return (
@@ -79,11 +93,11 @@ class AddCheckbox extends Component{
             
             
                     <div >
-                     <Input name="ask" placeholder={this.state.ask} onChange={this.handleChange}></Input>
+                     <Input name="ask" size="large" placeholder={this.state.ask} onChange={this.handleChange}></Input>
                     </div>
             
                     <div>
-                    <Button type="primary" onClick={this.handleDelete}  icon={<DeleteOutlined />}></Button>      
+                    <Button type="primary" size="large" onClick={this.handleDelete}  icon={<DeleteOutlined />}></Button>      
                     </div>
             
                     <div>
@@ -95,18 +109,19 @@ class AddCheckbox extends Component{
                     </div>
             
                     <div>
-                     <Checkbox.Group    >
+                     <Checkbox.Group >
                         <Space direction="vertical">
                             
                              
-                {
-                           this.state.choiceList.map((choice, index) => {
+                {this.state.choiceList.map((choice, index) => {
                                         return (
-                                            <Checkbox key={index } disabled={true}>
+                                            <Checkbox key={index} disabled={true}>
                                               <Input onChange={this.handleChange}
                                                      key={index} 
                                                      data-index={index}
                                                      name="choiceList"
+                                                     size="large"
+                                                     className="asksoptions"
                                                      placeholder={choice}/>
                                             </Checkbox>
                                         )

@@ -14,15 +14,18 @@ class Questions extends Component {
             questions.map((item, aid) => {
                 if (item.type === 'radio') {
                     return (
-                        <EditRadio id={aid} key={aid} aid={aid + 1} question={item} handleDelete={this.props.handleDelete} moveUp={this.props.moveUp} moveDown={this.props.moveDown}/>
+                        <EditRadio id={aid} key={aid} aid={aid + 1} question={item} 
+                        handleChange={this.props.handleChange} handleDelete={this.props.handleDelete} moveUp={this.props.moveUp} moveDown={this.props.moveDown}/>
                     )
                 } else if (item.type === 'multiple') {
                     return (
-                        <EditCheckbox key={aid} aid={aid + 1} question={item} handleDelete={this.props.handleDelete} moveUp={this.props.moveUp} moveDown={this.props.moveDown}/>
+                        <EditCheckbox key={aid} aid={aid + 1} question={item} 
+                        handleChange={this.props.handleChange} handleDelete={this.props.handleDelete} moveUp={this.props.moveUp} moveDown={this.props.moveDown}/>
                     )
                 } else {
                     return (
-                        <EditText key={aid} aid={aid + 1} question={item} handleDelete={this.props.handleDelete} moveUp={this.props.moveUp} moveDown={this.props.moveDown}/>
+                        <EditText key={aid} aid={aid + 1} question={item} 
+                        handleChange={this.props.handleChange} handleDelete={this.props.handleDelete} moveUp={this.props.moveUp} moveDown={this.props.moveDown}/>
                     )
                 }
             })
