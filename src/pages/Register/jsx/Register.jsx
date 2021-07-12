@@ -65,7 +65,7 @@ class Register extends React.Component {
                     "pwd": this.state.userPassword,
                     "verification": this.state.phoneNumber
                 };
-                fetch('/api/register',{
+                fetch('/api/register', {
                     method: 'post',
                     body: JSON.stringify(params),
                     headers: {
@@ -73,12 +73,16 @@ class Register extends React.Component {
                         'Content-Type': 'application/json',
                     },
                 }).then(res => res.json())
-                    .then(res =>{
-                        console.log(res.code);
+                    .then(res => {
+                        if (res.code === 1) {
+                            this.props.history.push('/Login1')
+                            alert(this.state.userName + '，恭喜您注册成功!');
+                            event.preventDefault();
+                        } else {
+                            alert("用户名已存在")
+                        }
                     })
-                this.props.history.push('/Login1')
-                alert(this.state.userName + '，恭喜您注册成功!');
-                event.preventDefault();
+
             } else {
                 if (this.state.userPassword.length == 0) {
                     alert("请输入密码！");

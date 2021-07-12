@@ -142,7 +142,9 @@ class EditQuestionnaire extends React.Component {
     }
 
     moveUp = (aid) => {
+        console.log(aid)
         let tempQuestions = this.state.questionnaire.questions
+        console.log(tempQuestions)
         for (let i = 0; i < tempQuestions.length; i++) {
             if (i === aid && i !== 0) {
                 let temp = tempQuestions[i];
@@ -150,6 +152,7 @@ class EditQuestionnaire extends React.Component {
                 tempQuestions[i - 1] = temp;
             }
         }
+        console.log(tempQuestions)
         this.setState({
             questionnaire: {
                 title: this.state.title,

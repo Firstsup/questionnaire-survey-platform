@@ -77,6 +77,7 @@ class DataAnalysis extends Component {
         }).then(res => res.json())
             .then(res => {
                 const get = res.data.data;
+                console.log(get)
                 let countAll = [];
                 for (const cntKey in get.cnt) {
                     countAll.push(get.cnt[cntKey])
@@ -124,19 +125,19 @@ class DataAnalysis extends Component {
                     <Spin className={"dataAnalysis_spin"} tip="加载中..."/></div>
             )
         } else {
-            return (
-                <Layout className={"analysis_layout"}>
-                    <Header className={"analysis_header"}><Title className={"analysis_header_title"}
-                                                                 level={2}>问卷《{this.state.questionnaire.title}》&nbsp;结果分析</Title></Header>
-                    <Content className={"analysis_content"}><AnswersAnalysis className={"analysis_answers"}
-                                                                             questionnaire={this.state.questionnaire}
-                                                                             countAll={this.state.countAll}
-                                                                             count={this.state.count}/></Content>
-                    <Footer className={"analysis_footer"}><Button type={"primary"} className={"analysis_view_button"}
-                                                                  onClick={this.handleViewClick}>查看具体答卷</Button><Button
-                        onClick={this.handleBackClick}>返回</Button></Footer>
-                </Layout>
-            )
+            // return (
+            //     <Layout className={"analysis_layout"}>
+            //         <Header className={"analysis_header"}><Title className={"analysis_header_title"}
+            //                                                      level={2}>问卷《{this.state.questionnaire.title}》&nbsp;结果分析</Title></Header>
+            //         <Content className={"analysis_content"}><AnswersAnalysis className={"analysis_answers"}
+            //                                                                  questionnaire={this.state.questionnaire}
+            //                                                                  countAll={this.state.countAll}
+            //                                                                  count={this.state.count}/></Content>
+            //         <Footer className={"analysis_footer"}><Button type={"primary"} className={"analysis_view_button"}
+            //                                                       onClick={this.handleViewClick}>查看具体答卷</Button><Button
+            //             onClick={this.handleBackClick}>返回</Button></Footer>
+            //     </Layout>
+            // )
         }
     }
 }
