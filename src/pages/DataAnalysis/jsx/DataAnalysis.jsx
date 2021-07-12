@@ -22,7 +22,7 @@ class DataAnalysis extends Component {
     }
 
     handleViewClick = () => {
-        this.props.history.push('/submitlistquestionnaire')
+        this.props.history.push('/submitlistquestionnaire?qid=' + this.state.qid)
     }
 
     handleBackClick = () => {
