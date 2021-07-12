@@ -62,6 +62,19 @@ class EditCheckbox extends React.Component {
         });
     }
 
+    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+        if (prevProps !== this.props) {
+            this.setState({
+                aid: this.props.aid,
+                subject: this.props.question.subject,
+                type: this.props.question.type,
+                isNecessary: this.props.question.isNecessary,
+                choicenum: this.props.question.options.length,
+                choiceList: this.props.question.options,
+            })
+        }
+    }
+
 
     render() {
         return (

@@ -55,13 +55,25 @@ class EditRadio extends React.Component {
 
     addChoice() {
         this.setState(prevState => ({
-            choiceList: [...prevState.choiceList," "]
+            choiceList: [...prevState.choiceList, " "]
         }));
         this.setState({
             choicenum: this.state.choicenum + 1
         });
     }
 
+    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+        if (prevProps !== this.props) {
+            this.setState({
+                aid: this.props.aid,
+                subject: this.props.question.subject,
+                type: this.props.question.type,
+                isNecessary: this.props.question.isNecessary,
+                choicenum: this.props.question.options.length,
+                choiceList: this.props.question.options,
+            })
+        }
+    }
 
     render() {
         return (
@@ -81,7 +93,7 @@ class EditRadio extends React.Component {
 
                     <div>
                         <span>该题为：</span>
-                        <Radio.Group name="isNecessary"  onChange={this.handleChange}>
+                        <Radio.Group name="isNecessary" onChange={this.handleChange}>
                             <Radio value={true}>必填</Radio>
                             <Radio value={false}>非必填</Radio>
                         </Radio.Group>

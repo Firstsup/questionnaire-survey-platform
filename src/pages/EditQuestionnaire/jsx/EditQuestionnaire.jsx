@@ -31,6 +31,12 @@ class EditQuestionnaire extends React.Component {
                     options: ["皮卡丘", "杰尼龟", "小火龙"]
                 },
                     {
+                        subject: "你最喜欢哪?????",
+                        type: "radio",
+                        isNecessary: true,
+                        options: ["皮卡丘", "杰尼龟", "小火龙"]
+                    },
+                    {
                         subject: "你最喜欢哪个天线宝宝",
                         type: "multiple",
                         isNecessary: true,
@@ -51,12 +57,9 @@ class EditQuestionnaire extends React.Component {
         //     },
         //     loading: true
         // }
-     
-        this.handleDelete=this.handleDelete.bind(this);
+
+        this.handleDelete = this.handleDelete.bind(this);
     }
-    
-
-
 
 
     getFooter = () => {
@@ -69,64 +72,62 @@ class EditQuestionnaire extends React.Component {
     }
 
 //
-    onAddRadioChild=()=>{
+    onAddRadioChild = () => {
         this.setState(prevState => ({
-            questionnaire:{ 
+            questionnaire: {
                 ...prevState.questionnaire,
-                
-                questions: [...prevState.questionnaire.questions,
-                {
-                    subject: '',
-                    type: "radio",
-                    isNecessary: Boolean,
-                    options: [" ", " ",],
-                }]
-        }}));
-}
 
-    onAddCheckboxChild=()=>{
-        this.setState(prevState => ({
-            questionnaire:{ 
-                ...prevState.questionnaire,
-                
                 questions: [...prevState.questionnaire.questions,
-                {
-                    subject: '',
-                    type: "multiple",
-                    isNecessary: Boolean,
-                    options: [" ", " ",],
-                }]
-        }}));
-}
+                    {
+                        subject: '',
+                        type: "radio",
+                        isNecessary: Boolean,
+                        options: [" ", " ",],
+                    }]
+            }
+        }));
+    }
 
-    onAddTextChild=()=>{
+    onAddCheckboxChild = () => {
         this.setState(prevState => ({
-            questionnaire:{ 
+            questionnaire: {
                 ...prevState.questionnaire,
-                
+
                 questions: [...prevState.questionnaire.questions,
-                {
-                    subject: '',
-                    type: "text",
-                    isNecessary: Boolean,
-                    options: [" ", " ",],
-                }]
-        }}));
-}
+                    {
+                        subject: '',
+                        type: "multiple",
+                        isNecessary: Boolean,
+                        options: [" ", " ",],
+                    }]
+            }
+        }));
+    }
+
+    onAddTextChild = () => {
+        this.setState(prevState => ({
+            questionnaire: {
+                ...prevState.questionnaire,
+
+                questions: [...prevState.questionnaire.questions,
+                    {
+                        subject: '',
+                        type: "text",
+                        isNecessary: Boolean,
+                        options: [" ", " ",],
+                    }]
+            }
+        }));
+    }
 
     handleDelete = (aid) => {
-        console.log("原来的问题列表"+this.state.questionnaire.questions);//先输出原来的问题列表
         let tempQuestions = this.state.questionnaire.questions
         let test = this.state.questionnaire.questions
         for (let i = 0; i < tempQuestions.length; i++) {
+
             if (i === aid) {
-                
-                console.log("请求删除数组第"+i+"项");//输出要删除的项的数组索引
-               
-                console.log(test.splice(i, 1));//
 
                 tempQuestions.splice(i, 1);
-                 
                 break;
             }
         }
@@ -137,9 +138,7 @@ class EditQuestionnaire extends React.Component {
                 questions: tempQuestions
             }
         })
-              console.log(this.state.questionnaire.questions);//输出改变后的问题列表
 
-       
     }
 
     moveUp = (aid) => {
@@ -214,7 +213,8 @@ class EditQuestionnaire extends React.Component {
         let questionnaire = this.state.questionnaire;
         return (
             <Layout className={"edit_layout"}>
-                <Header className={"edit_header"}><Input className={"edit_title"} placeholder={this.state.questionnaire.title}></Input></Header>
+                <Header className={"edit_header"}><Input className={"edit_title"}
+                                                         placeholder={this.state.questionnaire.title}></Input></Header>
                 <Content className={"edit_content"}>
                     <div>
                         <Row>

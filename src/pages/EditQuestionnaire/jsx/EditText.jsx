@@ -33,6 +33,27 @@ class EditText extends React.Component {
         this.props.handleDelete(this.state.aid - 1)
     }
 
+    moveUp = () => {
+        this.props.moveUp(this.state.aid - 1)
+    }
+
+    moveDown = () => {
+        this.props.moveDown(this.state.aid - 1)
+    }
+
+    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+        if (prevProps !== this.props) {
+            this.setState({
+                aid: this.props.aid,
+                subject: this.props.question.subject,
+                type: this.props.question.type,
+                isNecessary: this.props.question.isNecessary,
+                choicenum: this.props.question.options.length,
+                choiceList: this.props.question.options,
+            })
+        }
+    }
+
     render() {
         return (
 
