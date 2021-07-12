@@ -12,6 +12,7 @@ import AddText from '../../CreatNewQuestionnaire/jsx/AddText';
 import {Tag, Divider, Layout, Typography, Button, Modal, message, Spin, Alert} from 'antd';
 import Questions from './Questions';
 import { DatePicker} from 'antd';
+import moment from "moment";
 
 import '../css/EditQuestionnaire.css'
 
@@ -26,6 +27,7 @@ class EditQuestionnaire extends React.Component {
             questionnaire: {
                 title: "fetch test",
                 qid: "107",
+                endTime:"",//问卷截止时间
                 questions: [{
                     subject: "你最喜欢哪个宝可梦",
                     type: "radio",
@@ -202,6 +204,15 @@ class EditQuestionnaire extends React.Component {
         console.log(this.state.questionnaire);
     }
 
+    onOk=(value)=>{
+        console.log('问卷截止时间为：', parseInt(moment(value).valueOf() / 1000));
+       /* this.setState({
+            endTime:
+             })
+           更新截止时间  */
+    }
+
+
     changeTitle=(e)=>{
         const value=e.target.value;
         this.setState({
@@ -288,7 +299,7 @@ class EditQuestionnaire extends React.Component {
             </Layout>
             
         ) 
-        //<Footer className={"edit_footer"}>{this.getFooter()}</Footer>
+        
         // let questionnaire = this.state.questionnaire;
         // if (this.state.loading === true || this.state.questionnaire.title === "") {
         //     return (<div
