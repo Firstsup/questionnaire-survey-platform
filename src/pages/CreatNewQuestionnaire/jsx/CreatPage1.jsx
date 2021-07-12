@@ -11,6 +11,7 @@ import {Layout} from 'antd';
 import { DatePicker} from 'antd';
 import '../css/CreatQuestion.css';
 import CreatQuestion from './CreatQuestion';
+import moment from "moment";
 
 const {Header, Footer, Sider, Content} = Layout;
 const { RangePicker } = DatePicker;
@@ -90,7 +91,7 @@ class CreatPage1 extends React.Component {
     }
 
     handleChange = (aid,changeName,changeItem) => {//从子组件接受修改的题目的aid、修改的state的名称、修改后的内容
-       
+
         let tempaskList=this.state.askList;
         for(let i=0;i<tempaskList.length;i++){
             if(i==aid){
@@ -185,7 +186,7 @@ class CreatPage1 extends React.Component {
     }
 
     onOk=(value)=>{
-        console.log('问卷截止时间为：', value);
+        console.log('问卷截止时间为：', parseInt(moment(value).valueOf() / 1000));
       }
 
 
