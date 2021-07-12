@@ -7,9 +7,9 @@ class AddText extends Component{
         super(props);
         this.state={
             aid:this.props.aid,
-            ask:this.props.question.ask,
-            type:this.props.question.type,
-            isNecessary:this.props.question.isNecessary
+            ask:this.props.ask,
+            type:this.props.type,
+            isNecessary:this.props.isNecessary
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
@@ -74,11 +74,11 @@ render(){
                 </div>
     
             <div >
-             <Input name="ask" placeholder={this.state.ask} onChange={this.handleChange}></Input>
+             <Input name="ask" size="large" placeholder={this.state.ask} onChange={this.handleChange}></Input>
             </div>
     
             <div>
-            <Button type="primary" onClick={this.handleDelete}  icon={<DeleteOutlined />}></Button>     
+            <Button type="primary" onClick={this.handleDelete} size="large"  icon={<DeleteOutlined />}></Button>     
             </div>
             <div>
                         <span>该题为：</span>

@@ -39,12 +39,20 @@ class CreatPage1 extends React.Component {
         this.moveUp=this.moveUp.bind(this);
     }
 
+getCreatTime=()=>{
+    const CreatTime= (new Date().getTime() / 1000);
+    this.setState({
+        creatTime: CreatTime
+    })
+}
 
-    handleSubmit() {
+    handleSubmit=()=> {
+        this.getCreatTime();
         console.log(this.state.userName);/* 提交时遍历题目列表，如果每一项都不为空才能提交给后端*/
         console.log(this.state.questionnaireId);
         console.log(this.state.questionnaireTitle);
         console.log(this.state.questionnaireSign);
+        console.log("问卷创建时间是："+this.state.creatTime);
         console.log(this.state.askList);
         console.log(this.state.value);
     }
@@ -185,10 +193,11 @@ class CreatPage1 extends React.Component {
         })
     }
 
+
     onOk=(value)=>{
         console.log('问卷截止时间为：', parseInt(moment(value).valueOf() / 1000));
-      }
 
+    }
 
     render() {
 

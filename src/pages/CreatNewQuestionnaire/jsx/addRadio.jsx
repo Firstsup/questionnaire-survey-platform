@@ -141,6 +141,7 @@ componentDidUpdate(prevProps, prevState, snapshot) {
                                                      data-index={index}
                                                      name="choiceList"
                                                      size="large"
+                                                     className="asksoptions"
                                                     placeholder={choice}/></Radio>
                                         )
                                     })
