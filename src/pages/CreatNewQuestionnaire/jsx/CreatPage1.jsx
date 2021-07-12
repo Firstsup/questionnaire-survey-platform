@@ -39,20 +39,28 @@ class CreatPage1 extends React.Component {
         this.moveUp=this.moveUp.bind(this);
     }
 
+getCreatTime=()=>{
+    const CreatTime= (new Date().getTime() / 1000);
+    this.setState({
+        creatTime: CreatTime
+    })
+}
 
-    handleSubmit() {
+    handleSubmit=()=> {
+        this.getCreatTime();
         console.log(this.state.userName);/* 提交时遍历题目列表，如果每一项都不为空才能提交给后端*/
         console.log(this.state.questionnaireId);
         console.log(this.state.questionnaireTitle);
         console.log(this.state.questionnaireSign);
+        console.log("问卷创建时间是："+this.state.creatTime);
         console.log(this.state.askList);
+        console.log(this.state.value);
     }
 
     onAddRadioChild = () => {
         this.setState(prevState => ({
             askList: [...prevState.askList,
                 {
-                    aid: this.state.asknum,
                     ask: '',
                     type: 1,//1单选 2多选 3文本
                     isNecessary: Boolean,
@@ -66,7 +74,7 @@ class CreatPage1 extends React.Component {
         this.setState(prevState => ({
             askList: [...prevState.askList,
                 {
-                    aid: this.state.asknum,
+
                     ask: '',
                     type: 2,//1单选 2多选 3文本
                     isNecessary: Boolean,
@@ -80,7 +88,7 @@ class CreatPage1 extends React.Component {
         this.setState(prevState => ({//文本题没有选项，choicecontent数组为空
             askList: [...prevState.askList,
                 {
-                    aid: this.state.asknum,
+
                     ask: '',
                     type: 3,//1单选 2多选 3文本
                     isNecessary: Boolean,
@@ -157,7 +165,7 @@ class CreatPage1 extends React.Component {
                 let temp = tempQuestions[i];
                 tempQuestions[i] = tempQuestions[i - 1];
                 tempQuestions[i - 1] = temp;
-                break;
+ 
             }
         }
         this.setState({
@@ -171,7 +179,7 @@ class CreatPage1 extends React.Component {
                 let temp = tempQuestions[i];
                 tempQuestions[i] = tempQuestions[i + 1];
                 tempQuestions[i + 1] = temp;
-                break;
+
             }
         }
         this.setState({
@@ -185,10 +193,11 @@ class CreatPage1 extends React.Component {
         })
     }
 
+
     onOk=(value)=>{
         console.log('问卷截止时间为：', parseInt(moment(value).valueOf() / 1000));
-      }
 
+    }
 
     render() {
 
@@ -238,7 +247,7 @@ class CreatPage1 extends React.Component {
                 <div >
 
                     <Space direction="vertical"  className="questionsSideBar2" size="middle">
-                        <Input name="questionnaireTitle" placeholder="请输入问卷标题" onChange={this.changeTitle}></Input>
+                        <Input name="questionnaireTitle" placeholder="请输入问卷标题" size="large" onChange={this.changeTitle}></Input>
                         <Divider>问卷内容</Divider>
                         <CreatQuestion questions={this.state.askList} handleDelete={this.handleDelete} handleChange={this.handleChange}
                                       moveUp={this.moveUp} moveDown={this.moveDown}/>

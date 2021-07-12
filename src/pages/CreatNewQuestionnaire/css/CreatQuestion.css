@@ -1,6 +1,6 @@
 .questionsConten{
     width:1440px;
-    height: 1600px;
+    height: 4000px;
     background:rgb(195, 206, 252)
 }
 
@@ -27,14 +27,22 @@
     background:rgba(195, 206, 252,1)
 }
 .questionsSideBar3{
-    position: fixed;
-    width:500px;
-    height: 900px;
-    padding: 80px 40px;
-    background:rgb(195, 206, 252)
+    position:absolute;
+    left:400px;
+    width:800px;
+    height: 500px;
+
+    background:rgba(195, 206, 252,1)
 }
 
 .questionsdiv{
+    position:sticky;
+    left:400px;
+    width:800px;
 
-    background:rgb(195, 206, 252)
+    background:rgba(195, 206, 252,1)
+}
+
+.asksoptions{
+    width: 500px;
 }

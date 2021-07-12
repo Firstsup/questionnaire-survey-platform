@@ -7,9 +7,9 @@ class AddText extends Component{
         super(props);
         this.state={
             aid:this.props.aid,
-            ask:this.props.question.ask,
-            type:this.props.question.type,
-            isNecessary:this.props.question.isNecessary
+            ask:this.props.ask,
+            type:this.props.type,
+            isNecessary:this.props.isNecessary
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
@@ -53,6 +53,17 @@ componentDidUpdate(prevProps, prevState) {
     this.props.moveUp(this.state.aid);
   
   }
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps !== this.props) {
+        this.setState({
+          aid:this.props.aid,//新建页面的所有排序从0开始
+          ask:this.props.ask,
+          type:this.props.type,//1单选 2多选 3文本
+          isNecessary:this.props.isNecessary,
+          choiceList: this.props.choiceList
+        })
+    }
+  }
 render(){
     const { TextArea } = Input;
     return(
@@ -63,11 +74,11 @@ render(){
                 </div>
     
             <div >
-             <Input name="ask" placeholder={this.state.ask} onChange={this.handleChange}></Input>
+             <Input name="ask" size="large" placeholder={this.state.ask} onChange={this.handleChange}></Input>
             </div>
     
             <div>
-            <Button type="primary" onClick={this.handleDelete}  icon={<DeleteOutlined />}></Button>     
+            <Button type="primary" onClick={this.handleDelete} size="large"  icon={<DeleteOutlined />}></Button>     
             </div>
             <div>
                         <span>该题为：</span>

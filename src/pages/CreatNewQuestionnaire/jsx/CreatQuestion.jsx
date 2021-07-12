@@ -14,21 +14,23 @@ class CreatQuestion extends  React.Component{
     render(){
         let questions = this.props.questions;
         return(
-            questions.map((question, index) => {
+            questions.map((question, aid) => {
                 if (question.type === 1) {
                     return (
-                        <AddRadio  data-index={index}  key={index} question={question} aid={index} ask={question.ask} type={question.type} 
+                        <AddRadio  data-index={aid}  key={aid} question={question} aid={aid} ask={question.ask} type={question.type} 
                         isNecessary={question.isNecessary} choiceList={question.choiceList} handleDelete={this.props.handleDelete}
                         moveUp={this.props.moveUp} moveDown={this.props.moveDown} handleChange={this.props.handleChange}     />
                     )
                 } else if (question.type === 2) {
                     return (
-                        <AddCheckbox data-index={index} key={index} question={question} aid={index} handleDelete={this.props.handleDelete}
+                        <AddCheckbox data-index={aid} key={aid} question={question} aid={aid} ask={question.ask} type={question.type} 
+                        isNecessary={question.isNecessary} choiceList={question.choiceList} handleDelete={this.props.handleDelete}
                         moveUp={this.props.moveUp} moveDown={this.props.moveDown} handleChange={this.props.handleChange}     />
                     )
                 } else {
                     return (
-                        <AddText data-index={index} key={index} question={question} aid={index} handleDelete={this.props.handleDelete}
+                        <AddText data-index={aid} key={aid} question={question} aid={aid} ask={question.ask} type={question.type} 
+                        isNecessary={question.isNecessary} choiceList={question.choiceList} handleDelete={this.props.handleDelete}
                         moveUp={this.props.moveUp} moveDown={this.props.moveDown} handleChange={this.props.handleChange}     />
                     )
                 }

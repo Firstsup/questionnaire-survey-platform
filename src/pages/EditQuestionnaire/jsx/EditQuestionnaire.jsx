@@ -11,12 +11,14 @@ import AddCheckbox from '../../CreatNewQuestionnaire/jsx/addCheckbox';
 import AddText from '../../CreatNewQuestionnaire/jsx/AddText';
 import {Tag, Divider, Layout, Typography, Button, Modal, message, Spin, Alert} from 'antd';
 import Questions from './Questions';
+import { DatePicker} from 'antd';
+
 import '../css/EditQuestionnaire.css'
 
 import {Content, Footer, Header} from "antd/es/layout/layout";
 
 const {Title} = Typography;
-
+const { RangePicker } = DatePicker;
 class EditQuestionnaire extends React.Component {
     constructor(props) {
         super(props);
@@ -59,6 +61,7 @@ class EditQuestionnaire extends React.Component {
         // }
 
         this.handleDelete = this.handleDelete.bind(this);
+        this.handleChange=this.handleChange.bind(this);
     }
 
 
@@ -141,6 +144,25 @@ class EditQuestionnaire extends React.Component {
 
     }
 
+    handleChange = (aid,changeName,changeItem) => {//从子组件接受修改的题目的aid、修改的state的名称、修改后的内容
+       
+        let tempQuestions=this.state.questionnaire.questions;
+        for(let i=0;i<tempQuestions.length;i++){
+            if(i==aid){
+                 //函数Object.defineProperty(object, propertyname, descriptor);
+                 tempQuestions[i][changeName]=changeItem;
+                break;                                                       
+            }
+        }
+        this.setState({
+            questionnaire: {
+                title: this.state.title,
+                qid: this.state.qid,
+                questions: tempQuestions
+            }
+        })
+    }
+
     moveUp = (aid) => {
         console.log(aid)
         let tempQuestions = this.state.questionnaire.questions
@@ -176,6 +198,20 @@ class EditQuestionnaire extends React.Component {
                 title: this.state.title,
                 qid: this.state.qid,
                 questions: tempQuestions
+            }
+        })
+    }
+    submit=()=>{
+        console.log(this.state.questionnaire);
+    }
+
+    changeTitle=(e)=>{
+        const value=e.target.value;
+        this.setState({
+            questionnaire: {
+                title: value,
+                qid: this.state.qid,
+                questions: this.state.questions
             }
         })
     }
@@ -216,29 +252,46 @@ class EditQuestionnaire extends React.Component {
         let questionnaire = this.state.questionnaire;
         return (
             <Layout className={"edit_layout"}>
-                <Header className={"edit_header"}><Input className={"edit_title"}
-                                                         placeholder={this.state.questionnaire.title}></Input></Header>
-                <Content className={"edit_content"}>
+
+              
+             
                     <div>
                         <Row>
-                            <Space direction="vertical">
+                            <Space direction="vertical" className="edit_questionsSideBar1">
                                 <Button type="primary" name="addRadio" onClick={this.onAddRadioChild}
-                                        icon={<PlusCircleTwoTone/>}>
+                                      block size="large"  icon={<PlusCircleTwoTone/>}>
                                     添加单选题 </Button>
                                 <Button type="primary" name="addCheckbox"
-                                        onClick={this.onAddCheckboxChild}><PlusSquareTwoTone/>
+                                      block size="large"  onClick={this.onAddCheckboxChild}><PlusSquareTwoTone/>
                                     添加多选题</Button>
-                                <Button type="primary" name="addText" onClick={this.onAddTextChild}><EditTwoTone/>
-                                    添加文本题</Button>
+                                <Button type="primary" name="addText" block size="large" onClick={this.onAddTextChild}><EditTwoTone/>
+                                    添加文本题</Button> 
+                                
+                                 <Tag color="blue" > 请选择问卷截止时间：</Tag>
+                                        <DatePicker  size="large" showTime onChange={this.setEndTime} onOk={this.onOk} />
+                                                
+                                            
+                                        <Tag color="blue"> 目前共有 {this.state.questionnaire.questions.length}题</Tag>
+                                    
+                                    
+                                        <Button type="primary" block size="large" onClick={this.submit} shape="round" icon={<CheckOutlined/>}>
+                                            保存并发布问卷
+                                        </Button>
+                                        <Button type={"primary"} block size="large" shape="round" onClick={this.submit} icon={<CheckOutlined/>}>保存暂不发布问卷</Button>
                             </Space>
                         </Row>
                     </div>
+                    <Space className="edit_questionsSideBar2" size="large" direction="vertical">
+                    <Input name="questionnaireTitle" placeholder={this.state.questionnaire.title} size="large" onChange={this.changeTitle}></Input>
                     <Questions questions={questionnaire.questions} handleDelete={this.handleDelete} moveUp={this.moveUp}
-                               moveDown={this.moveDown}/></Content>
-                <Button type={"primary"} className={"edit_button"} onClick={this.submit}>提交</Button>
-                <Footer className={"edit_footer"}>{this.getFooter()}</Footer>
+                               handleChange={this.handleChange} moveDown={this.moveDown}/>
+                               </Space>
+               
+              
             </Layout>
-        )
+            
+        ) 
+        //<Footer className={"edit_footer"}>{this.getFooter()}</Footer>
         // let questionnaire = this.state.questionnaire;
         // if (this.state.loading === true || this.state.questionnaire.title === "") {
         //     return (<div
