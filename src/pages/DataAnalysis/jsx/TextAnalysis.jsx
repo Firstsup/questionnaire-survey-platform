@@ -9,13 +9,17 @@ class TextAnalysis extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            qid: "",
+            aid: "",
             modalVisible: false,
-            data: this.initData()
+            data: []
         }
     }
 
     handleOnclick = () => {
         this.setState({
+            qid: this.props.qid,
+            aid: this.props.aid,
             modalVisible: true
         })
     }
@@ -69,10 +73,29 @@ class TextAnalysis extends Component {
         })
     }
 
-    render() {
-        const questionID = this.props.questionID;
-        const question = this.props.questionnaire.questions[this.props.questionID]
+    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+        const params = {
+            "qid": this.props.qid,
+            "aid": this.props.aid
+        };
+        console.log(params)
+        if (this.props.qid !== "") {
+            fetch('api/text', {
+                method: 'post',
+                body: JSON.stringify(params),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+            }).then(res => res.json())
+                .then(res => {
+                    const get = res.data.data;
+                    console.log(get)
+                })
+        }
+    }
 
+    render() {
         const columns = [
             {
                 title: <span style={{fontWeight: "bold"}}>序号</span>,
@@ -94,26 +117,26 @@ class TextAnalysis extends Component {
 
         return (
             <>
-                <Title
-                    level={5}>{questionID + 1}.&nbsp;{question.subject}&nbsp;&nbsp;<span
-                    className={"analysis_question_type"}>[文本题]</span>&nbsp;&nbsp;{question.isNecessary === true ?
-                    <span className={"analysis_question_isNecessary"}>[必填]</span> :
-                    <span className={"analysis_question_isNecessary"}>[非必填]</span>}</Title>
+                {/*<Title*/}
+                {/*    level={5}>{questionID + 1}.&nbsp;{question.subject}&nbsp;&nbsp;<span*/}
+                {/*    className={"analysis_question_type"}>[文本题]</span>&nbsp;&nbsp;{question.isNecessary === true ?*/}
+                {/*    <span className={"analysis_question_isNecessary"}>[必填]</span> :*/}
+                {/*    <span className={"analysis_question_isNecessary"}>[非必填]</span>}</Title>*/}
                 <Button className={"text_button"} type={"primary"} onClick={this.handleOnclick}>查看详细信息</Button>
-                <Modal
-                    title={questionID + 1 + '. ' + question.subject}
-                    visible={this.state.modalVisible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
-                    footer={null}
-                    width={1000}>
-                    <Search className={"text_search"} placeholder="输入搜索内容" allowClear onSearch={this.onSearch} style={{width: 350}}/>
-                    <Table columns={columns}
-                           dataSource={this.state.data}
-                           bordered
-                    />
-                </Modal>
-                <Divider/>
+                {/*<Modal*/}
+                {/*    title={questionID + 1 + '. ' + question.subject}*/}
+                {/*    visible={this.state.modalVisible}*/}
+                {/*    onOk={this.handleOk}*/}
+                {/*    onCancel={this.handleCancel}*/}
+                {/*    footer={null}*/}
+                {/*    width={1000}>*/}
+                {/*    <Search className={"text_search"} placeholder="输入搜索内容" allowClear onSearch={this.onSearch} style={{width: 350}}/>*/}
+                {/*    <Table columns={columns}*/}
+                {/*           dataSource={this.state.data}*/}
+                {/*           bordered*/}
+                {/*    />*/}
+                {/*</Modal>*/}
+                {/*<Divider/>*/}
             </>
         )
     }

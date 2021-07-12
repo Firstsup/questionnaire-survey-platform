@@ -122,12 +122,12 @@ class FillQuestionnaire extends Component {
     };
 
     componentDidMount() {
-        const Params = {
+        const params = {
             "qid": this.props.location.search.slice(5)
         };
         fetch('/api/fill', {
             method: 'post',
-            body: JSON.stringify(Params),
+            body: JSON.stringify(params),
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',

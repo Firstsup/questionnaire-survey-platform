@@ -6,11 +6,13 @@ import { makeStyles } from '@material-ui/core/styles';
 // import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
+import {Link} from "react-router-dom";
 import AccountCircle from '@material-ui/icons/AccountCircle';
 // import { BrowserRouter } from 'react-router-dom';
 // import ReactDOM from 'react-dom';
 import Button from '@material-ui/core/Button';
-
+import '../css/Login.css';
+import Background from '../picture/LoginPicture.jpg';
 /*登录页面：
 与后端交互：判断用户名 userName，密码 userPassword是否一致
                                   对应的接口：
@@ -38,15 +40,18 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
+var sectionStyle = {
+  width: "100%",
+  height: "950px",
+  backgroundImage: `url(${Background})` 
+};
 
 
  class Login1 extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {userName: '',
-                  userPassword:'',
-                  userPasswordAgain:'',
-                  phoneNumber:''
+    this.state = {userNameLogin: '',
+                   userPasswordLogin:'',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -57,63 +62,85 @@ const useStyles = makeStyles((theme) => ({
     const target = event.target;
     const name = target.name;
     const value =target.value;
-   /* if(target.name=="userPasswordAgain"){
 
-      if(value==this.state.userPassword){
-        this.setState({ userPasswordAgain: value });
-      
-    }
-      else 
-      alert('密码不一致！请检查密码');
-    }
-    */
     this.setState({
       [name]: value
     });
   }
 
+  // handleSubmit(event) {
+  //   alert(this.state.userNameLogin + '，恭喜您登录成功!');
+  //   this.props.history.push('/showallquestionnaire');
+  //   event.preventDefault();
+  // }
   handleSubmit(event) {
-    alert(  this.state.userName + '，恭喜您注册成功!');
-    this.props.history.push('/showallquestionnaire');
-    event.preventDefault();
+    const params = {
+        "user": this.state.userNameLogin,
+        "pwd": this.state.userPasswordLogin,
+    };
+    fetch('/api/login', {
+        method: 'post',
+        body: JSON.stringify(params),
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+    }).then(res => res.json())
+        .then(res => {
+            console.log(784562,res.code)
+            if (res.code === 1) {
+                // this.props.history.push('/showallquestionnaire')
+                alert(this.state.userNameLogin + '，恭喜您登录成功!');
+                this.props.history.push('/showallquestionnaire');
+                // event.preventDefault();
+            } else if (res.code === 0) {
+                alert("用户不存在")
+            } else {
+                alert("密码不正确，请重新输入")
+            }
+        })
   }
-
-
-
-  
-    
-
-
-
-
 
 render(){
     return (
 
-      <div>
+      <div style={sectionStyle}>
+        
         <Grid container spacing={1} alignItems="flex-end">
           <Grid item>
-            <AccountCircle />
+          
           </Grid>
-          <form onSubmit={this.handleSubmit}>
-          <Grid container direction="column"  justify="center" alignItems="center">
-            <TextField id="userNameLogin" label="请输入用户名"  onChange={this.handleChange}></TextField>
-            <TextField id="userPasswordLogin" label="请输入密码"  onChange={this.handleChange}></TextField>
+          <form onSubmit={this.handleSubmit} className={"loginform"}>
+          <Grid container direction="column"  justify="center" alignItems="center" className="logininner" >
+          <br/>
+        
+            <TextField name="userNameLogin" label="请输入用户名" fullWidth onChange={this.handleChange}></TextField>
+            <br/>
+            <br/>
+            <TextField name="userPasswordLogin" label="请输入密码" fullWidth onChange={this.handleChange}></TextField>
+            <br/>
             <Button
               type="submit"
-              fullWidth
+              size="large"
               variant="contained"
               color="primary"
-             
+              fullWidth
             >
               登录
             </Button>
-            <Button href="http://localhost:3000/src/pages/Register/jsx/Register" color="primary">
+            <br/>
+            <Button href="http://localhost:3000/src/pages/Register/jsx/Register" size="large"
+              variant="text"
+              color="primary">
                注册新账号
             </Button>
-            <Button href="" color="primary">
+          
+            <Button href="http://localhost:3000/src/pages/Login/jsx/ResetPassword" size="large"
+              variant="text"
+              color="primary">
                忘记密码
             </Button>
+
             </Grid>
           </form>
         </Grid>

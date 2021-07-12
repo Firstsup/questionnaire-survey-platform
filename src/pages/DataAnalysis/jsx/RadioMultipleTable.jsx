@@ -20,8 +20,8 @@ class RadioMultipleTable extends Component {
     render() {
         const question = this.props.question;
         const questionID = this.props.questionID;
-        const sumCount = this.props.sumCount;
-        const counts = this.props.counts;
+        const countAll = this.props.countAll;
+        const count = this.props.count;
         const proportions = this.props.proportions;
         const columns = [
             {
@@ -50,7 +50,7 @@ class RadioMultipleTable extends Component {
                 {
                     key: optionID,
                     option: option,
-                    count: counts[optionID],
+                    count: count[questionID][optionID],
                     proportion: <><span className={"little_bar"}
                         id={'container' + questionID + optionID}/><span className={"analysis_proportion"}>{proportions[optionID]}</span></>
                 }
@@ -59,7 +59,7 @@ class RadioMultipleTable extends Component {
 
         $(() => {
             question.options.map((option, optionID) => {
-                return (this.renderProgress(questionID, optionID, counts[optionID], sumCount))
+                return (this.renderProgress(questionID, optionID, count[questionID][optionID], countAll[questionID]))
             })
         })
 
@@ -69,7 +69,7 @@ class RadioMultipleTable extends Component {
                    dataSource={data}
                    bordered
                    pagination={false}
-                   footer={() => <span style={{fontWeight: "bold"}}>本题有效填写人次：&nbsp;{sumCount}</span>}/>
+                   footer={() => <span style={{fontWeight: "bold"}}>本题有效填写人次：&nbsp;{countAll[questionID]}</span>}/>
         )
     }
 }
