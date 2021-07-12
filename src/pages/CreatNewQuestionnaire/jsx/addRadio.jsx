@@ -90,6 +90,18 @@ class AddRadio extends  React.Component{
   this.props.moveUp(this.state.aid);
 
 }
+
+componentDidUpdate(prevProps, prevState, snapshot) {
+  if (prevProps !== this.props) {
+      this.setState({
+        aid:this.props.aid,//新建页面的所有排序从0开始
+        ask:this.props.ask,
+        type:this.props.type,//1单选 2多选 3文本
+        isNecessary:this.props.isNecessary,
+        choiceList: this.props.choiceList
+      })
+  }
+}
     render(){
 
     return (
@@ -101,11 +113,11 @@ class AddRadio extends  React.Component{
             </div>
     
             <div >
-             <Input name="ask" placeholder={this.state.ask} onChange={this.handleChange}></Input>
+             <Input name="ask" size="large" placeholder={this.state.ask} onChange={this.handleChange}></Input>
             </div>
     
            <div>
-                <Button type="primary" onClick={this.handleDelete}   icon={<DeleteOutlined />}></Button>   
+                <Button type="primary" size="large" onClick={this.handleDelete}   icon={<DeleteOutlined />}></Button>   
            </div>
     
             <div>
@@ -118,7 +130,7 @@ class AddRadio extends  React.Component{
     
             <div>
                 <Radio.Group   >
-                <Space direction="vertical" >
+                <Space direction="vertical"  >
                 
                 {
                                     this.state.choiceList.map((choice,index) => {
@@ -128,6 +140,7 @@ class AddRadio extends  React.Component{
                                                      key={index}
                                                      data-index={index}
                                                      name="choiceList"
+                                                     size="large"
                                                     placeholder={choice}/></Radio>
                                         )
                                     })
@@ -138,11 +151,13 @@ class AddRadio extends  React.Component{
                         
                         </div>
                     
-                <Button type="dashed" onClick= {this.addChoice}><PlusOutlined />添加选项</Button>
+                
          
             </Space>
           </Radio.Group>
+   
             </div>
+            <br/><Button type="dashed"  onClick= {this.addChoice}><PlusOutlined />添加选项</Button>
                <Button onClick={this.moveUp}>上移</Button>
                     <Button onClick={this.moveDown}>下移</Button>
         </div>

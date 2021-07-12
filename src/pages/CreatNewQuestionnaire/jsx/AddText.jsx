@@ -53,6 +53,17 @@ componentDidUpdate(prevProps, prevState) {
     this.props.moveUp(this.state.aid);
   
   }
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps !== this.props) {
+        this.setState({
+          aid:this.props.aid,//新建页面的所有排序从0开始
+          ask:this.props.ask,
+          type:this.props.type,//1单选 2多选 3文本
+          isNecessary:this.props.isNecessary,
+          choiceList: this.props.choiceList
+        })
+    }
+  }
 render(){
     const { TextArea } = Input;
     return(

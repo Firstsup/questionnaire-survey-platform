@@ -45,13 +45,13 @@ class CreatPage1 extends React.Component {
         console.log(this.state.questionnaireTitle);
         console.log(this.state.questionnaireSign);
         console.log(this.state.askList);
+        console.log(this.state.value);
     }
 
     onAddRadioChild = () => {
         this.setState(prevState => ({
             askList: [...prevState.askList,
                 {
-                    aid: this.state.asknum,
                     ask: '',
                     type: 1,//1单选 2多选 3文本
                     isNecessary: Boolean,
@@ -65,7 +65,7 @@ class CreatPage1 extends React.Component {
         this.setState(prevState => ({
             askList: [...prevState.askList,
                 {
-                    aid: this.state.asknum,
+
                     ask: '',
                     type: 2,//1单选 2多选 3文本
                     isNecessary: Boolean,
@@ -79,7 +79,7 @@ class CreatPage1 extends React.Component {
         this.setState(prevState => ({//文本题没有选项，choicecontent数组为空
             askList: [...prevState.askList,
                 {
-                    aid: this.state.asknum,
+
                     ask: '',
                     type: 3,//1单选 2多选 3文本
                     isNecessary: Boolean,
@@ -156,7 +156,7 @@ class CreatPage1 extends React.Component {
                 let temp = tempQuestions[i];
                 tempQuestions[i] = tempQuestions[i - 1];
                 tempQuestions[i - 1] = temp;
-                break;
+ 
             }
         }
         this.setState({
@@ -170,7 +170,7 @@ class CreatPage1 extends React.Component {
                 let temp = tempQuestions[i];
                 tempQuestions[i] = tempQuestions[i + 1];
                 tempQuestions[i + 1] = temp;
-                break;
+
             }
         }
         this.setState({
@@ -237,7 +237,7 @@ class CreatPage1 extends React.Component {
                 <div >
 
                     <Space direction="vertical"  className="questionsSideBar2" size="middle">
-                        <Input name="questionnaireTitle" placeholder="请输入问卷标题" onChange={this.changeTitle}></Input>
+                        <Input name="questionnaireTitle" placeholder="请输入问卷标题" size="large" onChange={this.changeTitle}></Input>
                         <Divider>问卷内容</Divider>
                         <CreatQuestion questions={this.state.askList} handleDelete={this.handleDelete} handleChange={this.handleChange}
                                       moveUp={this.moveUp} moveDown={this.moveDown}/>
