@@ -40,10 +40,9 @@ class CreatPage1 extends React.Component {
     }
 
 getCreatTime=()=>{
-    const CreatTime= (new Date().getTime() / 1000);
-    this.setState({
-        creatTime: CreatTime
-    })
+   const CreatTime= parseInt(new Date().getTime() / 1000)
+
+    return CreatTime;
 }
 
     handleSubmit=()=> {
@@ -52,9 +51,8 @@ getCreatTime=()=>{
         console.log(this.state.questionnaireId);
         console.log(this.state.questionnaireTitle);
         console.log(this.state.questionnaireSign);
-        console.log("问卷创建时间是："+this.state.creatTime);
+        console.log("问卷创建时间是："+this.getCreatTime());
         console.log(this.state.askList);
-        console.log(this.state.value);
     }
 
     onAddRadioChild = () => {
@@ -187,16 +185,15 @@ getCreatTime=()=>{
         })
     }
 
-    setEndTime=(value)=>{
-        this.setState({
-            endTime:value
-        })
-    }
+
 
 
     onOk=(value)=>{
         console.log('问卷截止时间为：', parseInt(moment(value).valueOf() / 1000));
-
+       /* this.setState({
+            endTime:
+             })
+             */
     }
 
     render() {
