@@ -69,7 +69,6 @@ class EditRadio extends React.Component {
         this.setState(prevState => ({
             choiceList: [...prevState.choiceList, " "]
         }));
-        
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
