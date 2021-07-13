@@ -11,7 +11,7 @@ import AddCheckbox from '../../CreatNewQuestionnaire/jsx/addCheckbox';
 import AddText from '../../CreatNewQuestionnaire/jsx/AddText';
 import {Tag, Divider, Layout, Typography, Button, Modal, message, Spin, Alert} from 'antd';
 import Questions from './Questions';
-import { DatePicker} from 'antd';
+import {DatePicker} from 'antd';
 import moment from "moment";
 
 import '../css/EditQuestionnaire.css'
@@ -19,51 +19,24 @@ import '../css/EditQuestionnaire.css'
 import {Content, Footer, Header} from "antd/es/layout/layout";
 
 const {Title} = Typography;
-const { RangePicker } = DatePicker;
+const {RangePicker} = DatePicker;
+
 class EditQuestionnaire extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             questionnaire: {
-                title: "fetch test",
-                qid: "107",
-                endTime:"",//问卷截止时间
-                questions: [{
-                    subject: "你最喜欢哪个宝可梦",
-                    type: "radio",
-                    isNecessary: true,
-                    options: ["皮卡丘", "杰尼龟", "小火龙"]
-                },
-                    {
-                        subject: "你最喜欢哪?????",
-                        type: "radio",
-                        isNecessary: true,
-                        options: ["皮卡丘", "杰尼龟", "小火龙"]
-                    },
-                    {
-                        subject: "你最喜欢哪个天线宝宝",
-                        type: "multiple",
-                        isNecessary: true,
-                        options: ["丁丁", "迪西", "拉拉", "小波"]
-                    }, {
-                        subject: "你对数据库有什么建议",
-                        type: "text",     //把此处的type从radio修改成了text
-                        isNecessary: false,
-                        options: []
-                    }]
-            }
+                title: "",
+                qid: "",
+                questions: [],
+                start_time: "",
+                end_time:"",
+            },
+            loading: true
         }
-        // this.state = {
-        //     questionnaire: {
-        //         title: "",
-        //         qid: "",
-        //         questions: [],
-        //     },
-        //     loading: true
-        // }
 
         this.handleDelete = this.handleDelete.bind(this);
-        this.handleChange=this.handleChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
 
@@ -146,14 +119,13 @@ class EditQuestionnaire extends React.Component {
 
     }
 
-    handleChange = (aid,changeName,changeItem) => {//从子组件接受修改的题目的aid、修改的state的名称、修改后的内容
-       
-        let tempQuestions=this.state.questionnaire.questions;
-        for(let i=0;i<tempQuestions.length;i++){
-            if(i==aid){
-                 //函数Object.defineProperty(object, propertyname, descriptor);
-                 tempQuestions[i][changeName]=changeItem;
-                break;                                                       
+    handleChange = (aid, changeName, changeItem) => {//从子组件接受修改的题目的aid、修改的state的名称、修改后的内容
+        let tempQuestions = this.state.questionnaire.questions;
+        for (let i = 0; i < tempQuestions.length; i++) {
+            if (i == aid) {
+                //函数Object.defineProperty(object, propertyname, descriptor);
+                tempQuestions[i][changeName] = changeItem;
+                break;
             }
         }
         this.setState({
@@ -203,21 +175,96 @@ class EditQuestionnaire extends React.Component {
             }
         })
     }
-    submit=()=>{
-        console.log(this.state.questionnaire);
+
+    save = () => {
+        const temp = this.state.questionnaire.questions.map((ask, askID) => {
+            return {
+                "ask": ask.subject,
+                "isNecessary": ask.isNecessary,
+                "type": ask.type,
+                "aid": askID + 1,
+                "choiceList": ask.choiceList.map((choice, cid) => {
+                    return {
+                        "cid": cid + 1,
+                        "content": choice
+                    }
+                })
+            }
+        })
+        const params = {
+            "qid": this.state.questionnaire.qid,
+            "title": this.state.questionnaire.title,
+            "time": this.state.questionnaire.endTime(),
+            "ask_list": temp
+        };
+        fetch('/api/edit/save', {
+            method: 'post',
+            body: JSON.stringify(params),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        }).then(res => res.json())
+            .then(res => {
+                console.log(res.code)
+                if (res.code !== 0) {
+                    this.props.history.push('/showallquestionnaire')
+                    alert("问卷修改成功!");
+                } else {
+                    alert("问卷修改失败")
+                }
+            })
     }
 
-    onOk=(value)=>{
-        console.log('问卷截止时间为：', parseInt(moment(value).valueOf() / 1000));
-       /* this.setState({
-            endTime:
-             })
-           更新截止时间  */
+    submit = () => {
+        const temp = this.state.questionnaire.questions.map((ask, askID) => {
+            return {
+                "ask": ask.subject,
+                "isNecessary": ask.isNecessary,
+                "type": ask.type,
+                "aid": askID + 1,
+                "choiceList": ask.choiceList.map((choice, cid) => {
+                    return {
+                        "cid": cid + 1,
+                        "content": choice
+                    }
+                })
+            }
+        })
+        const params = {
+            "qid": this.state.questionnaire.qid,
+            "title": this.state.questionnaire.title,
+            "start_time": this.getCreatTime(),
+            "time": this.state.questionnaire.endTime(),
+            "ask_list": temp
+        };
+        fetch('/api/edit/submit', {
+            method: 'post',
+            body: JSON.stringify(params),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        }).then(res => res.json())
+            .then(res => {
+                console.log(res.code)
+                if (res.code !== 0) {
+                    this.props.history.push('/showallquestionnaire')
+                    alert("问卷修改成功!");
+                } else {
+                    alert("问卷修改失败")
+                }
+            })
     }
 
+    onOk = (value) => {
+        this.setState({
+            end_time: parseInt(moment(value).valueOf() / 1000)
+        })
+    }
 
-    changeTitle=(e)=>{
-        const value=e.target.value;
+    changeTitle = (e) => {
+        const value = e.target.value;
         this.setState({
             questionnaire: {
                 title: value,
@@ -227,112 +274,91 @@ class EditQuestionnaire extends React.Component {
         })
     }
 
-    // componentDidMount() {
-    //     fetch('/api/edit?qid=' + this.props.location.search.slice(5), {
-    //         method: 'get',
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json',
-    //         },
-    //     }).then(res => res.json())
-    //         .then(res => {
-    //             const get = res.data.data;
-    //             this.setState({
-    //                 questionnaire: {
-    //                     title: get.title,
-    //                     qid: get.qid,
-    //                     questions: get.ask_list.map((list) => {
-    //                         return ({
-    //                             subject: list.ask,
-    //                             type: list.type === 1 ? "radio" : (list.type === 2 ? "multiple" : "text"),
-    //                             isNecessary: list.isNecessary,
-    //                             options: list.choice_list.map((choice) => {
-    //                                 return (choice.content)
-    //                             })
-    //                         })
-    //                     })
-    //                 }
-    //             })
-    //         })
-    //     this.setState({
-    //         loading: false
-    //     })
-    // }
+    componentDidMount() {
+        fetch('/api/edit?qid=' + this.props.location.search.slice(5), {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        }).then(res => res.json())
+            .then(res => {
+                const get = res.data.data;
+                this.setState({
+                    questionnaire: {
+                        title: get.title,
+                        qid: get.qid,
+                        questions: get.ask_list.map((list) => {
+                            return ({
+                                subject: list.ask,
+                                type: list.type === 1 ? "radio" : (list.type === 2 ? "multiple" : "text"),
+                                isNecessary: list.isNecessary,
+                                options: list.choice_list.map((choice) => {
+                                    return (choice.content)
+                                })
+                            })
+                        })
+                    }
+                })
+            })
+        this.setState({
+            loading: false
+        })
+    }
 
     render() {
         let questionnaire = this.state.questionnaire;
-        return (
-            <Layout className={"edit_layout"}>
+        if (this.state.loading === true || this.state.questionnaire.title === "") {
+            return (<div
+                style={{height: document.documentElement.clientHeight, width: document.documentElement.clientWidth}}>
+                <Spin className={"edit_spin"} tip="加载中..."/></div>)
+        } else {
+            return (
+                <Layout className={"edit_layout"}>
 
-              
-             
+
                     <div>
                         <Row>
                             <Space direction="vertical" className="edit_questionsSideBar1">
                                 <Button type="primary" name="addRadio" onClick={this.onAddRadioChild}
-                                      block size="large"  icon={<PlusCircleTwoTone/>}>
+                                        block size="large" icon={<PlusCircleTwoTone/>}>
                                     添加单选题 </Button>
                                 <Button type="primary" name="addCheckbox"
-                                      block size="large"  onClick={this.onAddCheckboxChild}><PlusSquareTwoTone/>
+                                        block size="large" onClick={this.onAddCheckboxChild}><PlusSquareTwoTone/>
                                     添加多选题</Button>
-                                <Button type="primary" name="addText" block size="large" onClick={this.onAddTextChild}><EditTwoTone/>
-                                    添加文本题</Button> 
-                                
-                                 <Tag color="blue" > 请选择问卷截止时间：</Tag>
-                                        <DatePicker  size="large" showTime onChange={this.setEndTime} onOk={this.onOk} />
-                                                
-                                            
-                                        <Tag color="blue"> 目前共有 {this.state.questionnaire.questions.length}题</Tag>
-                                    
-                                    
-                                        <Button type="primary" block size="large" onClick={this.submit} shape="round" icon={<CheckOutlined/>}>
-                                            保存并发布问卷
-                                        </Button>
-                                        <Button type={"primary"} block size="large" shape="round" onClick={this.submit} icon={<CheckOutlined/>}>保存暂不发布问卷</Button>
+                                <Button type="primary" name="addText" block size="large"
+                                        onClick={this.onAddTextChild}><EditTwoTone/>
+                                    添加文本题</Button>
+
+                                <Tag color="blue"> 请选择问卷截止时间：</Tag>
+                                <DatePicker size="large" showTime onOk={this.onOk}/>
+
+
+                                <Tag color="blue"> 目前共有 {this.state.questionnaire.questions.length}题</Tag>
+
+
+                                <Button type="primary" block size="large" onClick={this.submit} shape="round"
+                                        icon={<CheckOutlined/>}>
+                                    保存并发布问卷
+                                </Button>
+                                <Button type={"primary"} block size="large" shape="round" onClick={this.save}
+                                        icon={<CheckOutlined/>}>保存暂不发布问卷</Button>
                             </Space>
                         </Row>
                     </div>
                     <Space className="edit_questionsSideBar2" size="large" direction="vertical">
-                    <Input name="questionnaireTitle" placeholder={this.state.questionnaire.title} size="large" onChange={this.changeTitle}></Input>
-                    <Questions questions={questionnaire.questions} handleDelete={this.handleDelete} moveUp={this.moveUp}
-                               handleChange={this.handleChange} moveDown={this.moveDown}/>
-                               </Space>
-               
-              
-            </Layout>
-            
-        ) 
-        
-        // let questionnaire = this.state.questionnaire;
-        // if (this.state.loading === true || this.state.questionnaire.title === "") {
-        //     return (<div
-        //         style={{height: document.documentElement.clientHeight, width: document.documentElement.clientWidth}}>
-        //         <Spin className={"edit_spin"} tip="加载中..."/></div>)
-        // } else {
-        //     return (
-        //         <Layout className={"edit_layout"}>
-        //             <Header className={"edit_header"}>{this.getTitle()}</Header>
-        //             <Content className={"edit_content"}>
-        //                 <div>
-        //                     <Row>
-        //                         <Space direction="vertical">
-        //                             <Button type="primary" name="addRadio" onClick={this.onAddChild}
-        //                                     icon={<PlusCircleTwoTone/>}>
-        //                                 添加单选题 </Button>
-        //                             <Button type="primary" name="addCheckbox"
-        //                                     onClick={this.onAddChild}><PlusSquareTwoTone/>
-        //                                 添加多选题</Button>
-        //                             <Button type="primary" name="addText" onClick={this.onAddChild}><EditTwoTone/>
-        //                                 添加文本题</Button>
-        //                         </Space>
-        //                     </Row>
-        //                 </div>
-        //                 <Questions questions={questionnaire.questions} handleDelete={this.handleDelete} moveUp={this.moveUp} moveDown={this.moveDown}/></Content>
-        //             <Button type={"primary"} className={"edit_button"} onClick={this.submit}>提交</Button>
-        //             <Footer className={"edit_footer"}>{this.getFooter()}</Footer>
-        //         </Layout>
-        //     )
-        // }
+                        <Input name="questionnaireTitle" placeholder={this.state.questionnaire.title} size="large"
+                               onChange={this.changeTitle}/>
+                        <Questions questions={questionnaire.questions} handleDelete={this.handleDelete}
+                                   moveUp={this.moveUp}
+                                   handleChange={this.handleChange} moveDown={this.moveDown}/>
+                    </Space>
+
+
+                </Layout>
+
+            )
+        }
     }
 }
 

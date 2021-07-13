@@ -8,13 +8,13 @@ import AddCheckbox from './addCheckbox';
 import AddText from './AddText';
 import {Tag, Divider} from 'antd';
 import {Layout} from 'antd';
-import { DatePicker} from 'antd';
+import {DatePicker} from 'antd';
 import '../css/CreatQuestion.css';
 import CreatQuestion from './CreatQuestion';
 import moment from "moment";
 
 const {Header, Footer, Sider, Content} = Layout;
-const { RangePicker } = DatePicker;
+const {RangePicker} = DatePicker;
 
 class CreatPage1 extends React.Component {
     constructor(props) {
@@ -27,38 +27,108 @@ class CreatPage1 extends React.Component {
             questionnaireSign: 0,
             asknum: 0,//题目数组的aid是从0开始的
             askList: [], //这个数组是要传给后端的内容
-            creatTime:" ",
-            endTime:" "
+            creatTime: " ",
+            endTime: " ",
+            key: 0
         };
 
         // this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.moveDown=this.moveDown.bind(this);
-        this.moveUp=this.moveUp.bind(this);
+        this.moveDown = this.moveDown.bind(this);
+        this.moveUp = this.moveUp.bind(this);
     }
 
-getCreatTime=()=>{
-   const CreatTime= parseInt(new Date().getTime() / 1000)
+    getCreatTime = () => {
+        const CreatTime = parseInt(new Date().getTime() / 1000)
+        return CreatTime;
+    }
 
-    return CreatTime;
-}
+    handleSave = () => {
+        const temp = this.state.askList.map((ask, askID) => {
+            return {
+                "ask": ask.ask,
+                "isNecessary": ask.isNecessary,
+                "type": ask.type,
+                "aid": askID + 1,
+                "choiceList": ask.choiceList.map((choice, cid) => {
+                    return {
+                        "cid": cid + 1,
+                        "content": choice
+                    }
+                })
+            }
+        })
+        const params = {
+            "author": this.state.userName,
+            "title": this.state.questionnaireTitle,
+            "ask_list": temp
+        };
+        fetch('/api/createSave', {
+            method: 'post',
+            body: JSON.stringify(params),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        }).then(res => res.json())
+            .then(res => {
+                console.log(res.code)
+                if (res.code !== 0) {
+                    this.props.history.push('/showallquestionnaire')
+                    alert("问卷保存成功!");
+                } else {
+                    alert("问卷保存失败")
+                }
+            })
+    }
 
-    handleSubmit=()=> {
-        this.getCreatTime();
-        console.log(this.state.userName);/* 提交时遍历题目列表，如果每一项都不为空才能提交给后端*/
-        console.log(this.state.questionnaireId);
-        console.log(this.state.questionnaireTitle);
-        console.log(this.state.questionnaireSign);
-        console.log("问卷创建时间是："+this.getCreatTime());
-        console.log(this.state.askList);
+    handleSubmit = () => {
+        const temp = this.state.askList.map((ask, askID) => {
+            return {
+                "ask": ask.ask,
+                "isNecessary": ask.isNecessary,
+                "type": ask.type,
+                "aid": askID + 1,
+                "choiceList": ask.choiceList.map((choice, cid) => {
+                    return {
+                        "cid": cid + 1,
+                        "content": choice
+                    }
+                })
+            }
+        })
+        const params = {
+            "author": this.state.userName,
+            "title": this.state.questionnaireTitle,
+            "start_time": this.getCreatTime(),
+            "ask_list": temp
+        };
+        fetch('/api/createSubmit', {
+            method: 'post',
+            body: JSON.stringify(params),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        }).then(res => res.json())
+            .then(res => {
+                console.log(res.code)
+                if (res.code !== 0) {
+                    this.props.history.push('/showallquestionnaire')
+                    alert("问卷创建成功!");
+                } else {
+                    alert("问卷创建失败")
+                }
+            })
     }
 
     onAddRadioChild = () => {
         this.setState(prevState => ({
             askList: [...prevState.askList,
                 {
+
                     ask: '',
                     type: 1,//1单选 2多选 3文本
                     isNecessary: Boolean,
@@ -77,8 +147,8 @@ getCreatTime=()=>{
                     type: 2,//1单选 2多选 3文本
                     isNecessary: Boolean,
                     choiceList: [" ", " ",],
-                }] ,
-                asknum: this.state.asknum + 1,
+                }],
+            asknum: this.state.asknum + 1,
         }));
     }
 
@@ -91,34 +161,34 @@ getCreatTime=()=>{
                     type: 3,//1单选 2多选 3文本
                     isNecessary: Boolean,
                     choiceList: [],
-                }] ,
-                     asknum: this.state.asknum + 1
+                }],
+            asknum: this.state.asknum + 1
         }));
     }
 
-    handleChange = (aid,changeName,changeItem) => {//从子组件接受修改的题目的aid、修改的state的名称、修改后的内容
+    handleChange = (aid, changeName, changeItem) => {//从子组件接受修改的题目的aid、修改的state的名称、修改后的内容
 
-        let tempaskList=this.state.askList;
-        for(let i=0;i<tempaskList.length;i++){
-            if(i==aid){
-                 //函数Object.defineProperty(object, propertyname, descriptor);
-                tempaskList[i][changeName]=changeItem;
-                break;                                                       
+        let tempaskList = this.state.askList;
+        for (let i = 0; i < tempaskList.length; i++) {
+            if (i == aid) {
+                //函数Object.defineProperty(object, propertyname, descriptor);
+                tempaskList[i][changeName] = changeItem;
+                break;
             }
         }
         this.setState({
-            askList:tempaskList
+            askList: tempaskList
         })
-            
-        
+
+
     }
 
-    changeTitle=(event)=>{
+    changeTitle = (event) => {
         const target = event.target;
         const name = target.name;
-        const value =target.value;
+        const value = target.value;
         this.setState({
-            questionnaireTitle:value
+            questionnaireTitle: value
         })
     }
     /* handleChangeChoice=(asknumber,choiceInput)=>{
@@ -147,7 +217,7 @@ getCreatTime=()=>{
             }
         }
         this.setState({
-             askList: tempQuestions
+            askList: tempQuestions
         })
         this.setState({
             asknum: this.state.asknum - 1
@@ -163,12 +233,12 @@ getCreatTime=()=>{
                 let temp = tempQuestions[i];
                 tempQuestions[i] = tempQuestions[i - 1];
                 tempQuestions[i - 1] = temp;
- 
+
             }
         }
         this.setState({
-                askList: tempQuestions
-              })
+            askList: tempQuestions
+        })
     }
     moveDown = (aid) => {
         let tempQuestions = this.state.askList;
@@ -186,14 +256,12 @@ getCreatTime=()=>{
     }
 
 
-
-
-    onOk=(value)=>{
+    onOk = (value) => {
         console.log('问卷截止时间为：', parseInt(moment(value).valueOf() / 1000));
-       /* this.setState({
-            endTime:
-             })
-             */
+        /* this.setState({
+             endTime:
+              })
+              */
     }
 
     render() {
@@ -201,14 +269,16 @@ getCreatTime=()=>{
 
         return (
             <div id="content" className="questionsConten">
-                <div >
+                <div>
                     <div>
                         <div>
 
 
                             <Row>
-                                <Space id="SideBar" className="questionsSideBar1" direction="vertical" align="left" size="large">
-                                    <Button type="primary" name="addRadio" onClick={this.onAddRadioChild} block size="large"
+                                <Space id="SideBar" className="questionsSideBar1" direction="vertical" align="left"
+                                       size="large">
+                                    <Button type="primary" name="addRadio" onClick={this.onAddRadioChild} block
+                                            size="large"
                                             icon={<PlusCircleTwoTone/>}>
                                         添加单选题 </Button>
                                     <Button type="primary" name="addCheckbox" block size="large"
@@ -217,20 +287,22 @@ getCreatTime=()=>{
                                     <Button type="primary" name="addText" block size="large"
                                             onClick={this.onAddTextChild}><EditTwoTone/>
                                         添加文本题</Button>
-                                        <Tag color="blue" > 请选择问卷截止时间：</Tag>
-                                        <DatePicker  size="large" showTime onChange={this.setEndTime} onOk={this.onOk} />
-                                                
-                                            
-                                        <Tag color="blue"> 目前共有 {this.state.asknum}题</Tag>
-                                    
-                                        <Button type="primary" block size="large" onClick={this.handleSubmit} shape="round" icon={<CheckOutlined/>}>
-                                                保存暂不发布问卷
-                                        </Button>
-                                        <Button type="primary" block size="large" onClick={this.handleSubmit} shape="round" icon={<CheckOutlined/>}>
-                                            保存并发布问卷
-                                        </Button>
-                        
-                                    </Space>
+                                    <Tag color="blue"> 请选择问卷截止时间：</Tag>
+                                    <DatePicker size="large" showTime onChange={this.setEndTime} onOk={this.onOk}/>
+
+
+                                    <Tag color="blue"> 目前共有 {this.state.asknum}题</Tag>
+
+                                    <Button type="primary" block size="large" onClick={this.handleSave} shape="round"
+                                            icon={<CheckOutlined/>}>
+                                        保存暂不发布问卷
+                                    </Button>
+                                    <Button type="primary" block size="large" onClick={this.handleSubmit} shape="round"
+                                            icon={<CheckOutlined/>}>
+                                        保存并发布问卷
+                                    </Button>
+
+                                </Space>
 
 
                             </Row>
@@ -240,14 +312,16 @@ getCreatTime=()=>{
                     </div>
                     <br/>
                 </div>
- 
-                <div >
 
-                    <Space direction="vertical"  className="questionsSideBar2" size="middle">
-                        <Input name="questionnaireTitle" placeholder="请输入问卷标题" size="large" onChange={this.changeTitle}></Input>
+                <div>
+
+                    <Space direction="vertical" className="questionsSideBar2" size="middle">
+                        <Input name="questionnaireTitle" placeholder="请输入问卷标题" size="large"
+                               onChange={this.changeTitle}/>
                         <Divider>问卷内容</Divider>
-                        <CreatQuestion questions={this.state.askList} handleDelete={this.handleDelete} handleChange={this.handleChange}
-                                      moveUp={this.moveUp} moveDown={this.moveDown}/>
+                        <CreatQuestion questions={this.state.askList} handleDelete={this.handleDelete}
+                                       handleChange={this.handleChange}
+                                       moveUp={this.moveUp} moveDown={this.moveDown}/>
                     </Space>
 
 

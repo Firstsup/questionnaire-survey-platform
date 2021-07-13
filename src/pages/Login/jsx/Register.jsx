@@ -1,27 +1,17 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Input, Button, Form, Typography, message} from 'antd';
-import '../css/ResetPassword.css';
+import '../css/Register.css';
 
 const {Title} = Typography;
 
-class ResetPassword extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            userName: '',
-            userPassword: '',
-            userPasswordAgain: '',
-            phoneNumber: ''
-        };
-    }
-
+class Register extends React.Component {
     onFinish = (values) => {
         const params = {
             "user": values.username,
-            "verification": values.check,
-            "newPwd": values.password
+            "pwd": values.password,
+            "verification": values.check
         };
-        fetch('/api/forgetPwd', {
+        fetch('/api/register', {
             method: 'post',
             body: JSON.stringify(params),
             headers: {
@@ -31,14 +21,12 @@ class ResetPassword extends Component {
         }).then(res => res.json())
             .then(res => {
                 if (res.code === 1) {
-                    message.success("密码重置成功！")
+                    message.success("注册成功！")
                     setTimeout(() => {
                         this.props.history.push('/login')
                     }, 1500)
-                } else if (res.code === 0) {
-                    message.error("用户不存在，请重新输入！")
                 } else {
-                    message.error("验证不正确，请重新输入！")
+                    message.error("用户名已存在！")
                 }
             })
     }
@@ -46,10 +34,10 @@ class ResetPassword extends Component {
     render() {
         return (
             <>
-                <Title className={"reset_title"} level={1}>正&nbsp;版&nbsp;问卷星</Title>
+                <Title className={"register_title"} level={1}>正&nbsp;版&nbsp;问卷星</Title>
                 <Form
-                    name="normal_reset"
-                    className="reset-form"
+                    name="normal_register"
+                    className="register-form"
                     onFinish={this.onFinish}>
                     <Form.Item
                         name="username"
@@ -71,27 +59,8 @@ class ResetPassword extends Component {
                         <Input/>
                     </Form.Item>
                     <Form.Item
-                        name="check"
-                        label={"手机尾号后4位"}
-                        rules={[
-                            {
-                                required: true,
-                                message: '请输入手机尾号后4位！',
-                            },
-                            ({getFieldValue}) => ({
-                                validator(_, value) {
-                                    if (!value || getFieldValue('check').length === 4) {
-                                        return Promise.resolve();
-                                    }
-                                    return Promise.reject(new Error('请输入4位数字！'));
-                                },
-                            }),
-                        ]}>
-                        <Input/>
-                    </Form.Item>
-                    <Form.Item
                         name="password"
-                        label={"新密码"}
+                        label={"密码"}
                         rules={[
                             {
                                 required: true,
@@ -110,7 +79,7 @@ class ResetPassword extends Component {
                     </Form.Item>
                     <Form.Item
                         name="repassword"
-                        label={"确认新密码"}
+                        label={"确认密码"}
                         rules={[
                             {
                                 required: true,
@@ -127,8 +96,27 @@ class ResetPassword extends Component {
                         ]}>
                         <Input.Password/>
                     </Form.Item>
+                    <Form.Item
+                        name="check"
+                        label={"手机尾号后4位"}
+                        rules={[
+                            {
+                                required: true,
+                                message: '请输入手机尾号后4位！',
+                            },
+                            ({getFieldValue}) => ({
+                                validator(_, value) {
+                                    if (!value || getFieldValue('check').length === 4) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(new Error('请输入4位数字！'));
+                                },
+                            }),
+                        ]}>
+                        <Input/>
+                    </Form.Item>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" className="reset-form-button">重置密码</Button>
+                        <Button type="primary" htmlType="submit" className="register-form-button">注册</Button>
                     </Form.Item>
                 </Form>
             </>
@@ -136,5 +124,4 @@ class ResetPassword extends Component {
     }
 }
 
-
-export default ResetPassword
+export default Register
