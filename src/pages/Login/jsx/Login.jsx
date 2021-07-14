@@ -23,7 +23,7 @@ class Login extends React.Component {
                 if (res.code === 1) {
                     message.success("登录成功！")
                     setTimeout(() => {
-                        this.props.history.push('/showallquestionnaire')
+                        this.props.history.push('/showallquestionnaire?username=' + values.username)
                     }, 1500)
                 } else if (res.code === 0) {
                     message.error("用户不存在，请重新输入！")
