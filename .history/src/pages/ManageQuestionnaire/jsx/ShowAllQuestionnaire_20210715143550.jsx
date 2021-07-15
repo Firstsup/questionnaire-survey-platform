@@ -5,6 +5,7 @@ import {Table, Space, Button, Input, Menu, Dropdown, message} from 'antd';
 import {PlusOutlined, DeleteOutlined, DownOutlined} from '@ant-design/icons';
 // import {nanoid} from 'nanoid';
 import imgPath from '../../../assets/head.png'
+ViewQuestionnaireDetail
 import ViewQuestionnaireDetail from "../../ViewQuestionnaireDetail/jsx/ViewQuestionnaireDetail";
 import ModifyPassword from "../../Login/jsx/ModifyPassword"
 import copy from 'copy-to-clipboard'
@@ -48,8 +49,7 @@ export default class PageList extends Component {
 
     ItemonClick = ({key}) => {
         if (`${key}` === '1') {
-            alert("change password");
-            <ModifyPassword />
+            alert("change password")
         }
         if (`${key}` === '2') {
             this.props.history.push('/')

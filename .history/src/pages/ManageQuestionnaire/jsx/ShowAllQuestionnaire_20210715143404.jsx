@@ -6,7 +6,7 @@ import {PlusOutlined, DeleteOutlined, DownOutlined} from '@ant-design/icons';
 // import {nanoid} from 'nanoid';
 import imgPath from '../../../assets/head.png'
 import ViewQuestionnaireDetail from "../../ViewQuestionnaireDetail/jsx/ViewQuestionnaireDetail";
-import ModifyPassword from "../../Login/jsx/ModifyPassword"
+import Modify
 import copy from 'copy-to-clipboard'
 //搜索框的
 const {Search} = Input;
@@ -48,8 +48,7 @@ export default class PageList extends Component {
 
     ItemonClick = ({key}) => {
         if (`${key}` === '1') {
-            alert("change password");
-            <ModifyPassword />
+            alert("change password")
         }
         if (`${key}` === '2') {
             this.props.history.push('/')

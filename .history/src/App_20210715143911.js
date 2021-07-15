@@ -11,8 +11,7 @@ import Login from './pages/Login/jsx/Login';
 import CreatPage1 from './pages/CreatNewQuestionnaire/jsx/CreatPage1';
 import EditQuestionnaire from './pages/EditQuestionnaire/jsx/EditQuestionnaire';
 import ResetPassword from './pages/Login/jsx/ResetPassword';
-import ModifyPassword from './pages/Login/jsx/ModifyPassword';
-
+imp
 class App extends Component {
     render() {
         return (
@@ -27,7 +26,6 @@ class App extends Component {
                 <Route path={'/createpage'} component ={CreatPage1} />
                 <Route path={'/editquestionnaire'} component ={EditQuestionnaire} />
                 <Route path={'/resetpassword'} component ={ResetPassword} />
-                <Route path={'/modifypassword'} component ={ModifyPassword} />
             </BrowserRouter>
         )
     }

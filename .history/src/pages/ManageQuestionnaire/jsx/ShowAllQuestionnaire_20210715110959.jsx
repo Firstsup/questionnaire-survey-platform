@@ -6,11 +6,65 @@ import {PlusOutlined, DeleteOutlined, DownOutlined} from '@ant-design/icons';
 // import {nanoid} from 'nanoid';
 import imgPath from '../../../assets/head.png'
 import ViewQuestionnaireDetail from "../../ViewQuestionnaireDetail/jsx/ViewQuestionnaireDetail";
-import ModifyPassword from "../../Login/jsx/ModifyPassword"
 import copy from 'copy-to-clipboard'
 //搜索框的
 const {Search} = Input;
-const onSearch = value => alert('value');
+const onSearch = value => console.log(value);
+
+// const data = [
+//   {qid:22,key:22,title:"test1",status:0,time:"2020-1.0"},
+//   {qid:23,key:23,title:"test1",status:0,time:"2020-1.0"},
+//   {qid:24,key:24,title:"test1",status:0,time:"2020-1.0"},
+//   {qid:25,key:25,title:"test1",status:1,time:"2020-1.0"},
+//   {qid:26,key:26,title:"test1",status:1,time:"2020-1.0"},
+//   {qid:27,key:27,title:"test1",status:1,time:"2020-1.0"}
+// ];
+
+// const questionnaire = {
+//     title: "test",
+//     qid: "123",
+//     publisher: "Firstsup",
+//     state: "发布中",
+//     fillerCount: 5,
+//     releaseTime: new Date("2020-1-1"),
+//     deadline: new Date("2020-12-31"),
+//     questions: [
+//         {
+//             subject: "question1",
+//             type: "单选题",
+//             isNecessary: true,
+//             options: ["option1", "option2", "option3"],
+//         },
+//         {
+//             subject: "question2",
+//             type: "多选题",
+//             isNecessary: true,
+//             options: ["如今，数据科学竞赛（大数据竞赛，机器学习竞赛，人工智能算法竞赛）已经成为各大知名互联网企业征集解决方案和选拔人才的第一选择，很多同学为了拿到大厂offer，纷纷加入了数据竞赛的浪潮之中。遗憾的是，大部分同学都在激烈的竞争中成为炮灰，许多人不停地上网浏览各类竞赛开源分享，却依旧感到困惑迷茫。", "option2", "option3"],
+//         },
+//         {
+//             subject: "question3",
+//             type: "文本题",
+//             isNecessary: true,
+//         },
+//         {
+//             subject: "question4",
+//             type: "单选题",
+//             isNecessary: false,
+//             options: ["option1", "option2", "option3", "option4", "option5", "option6", "option7", "option8"],
+//         },
+//         {
+//             subject: "question5",
+//             type: "多选题",
+//             isNecessary: false,
+//             options: ["option1", "option2", "option3", "option4"],
+//         },
+//         {
+//             subject: "question6",
+//             type: "文本题",
+//             isNecessary: false,
+//         }
+//     ]
+// }
 
 //   const expandable = { expandedRowRender: record => <p>{record.description}</p> };
 //   const title = () => 'Here is title';
@@ -48,30 +102,28 @@ export default class PageList extends Component {
 
     ItemonClick = ({key}) => {
         if (`${key}` === '1') {
-            alert("change password");
-            <ModifyPassword />
+            alert("change password")
         }
         if (`${key}` === '2') {
             this.props.history.push('/')
         }
     };
 
-    //搜索
+     
     onSearch = (value) => {
-        alert(123789)
-        // let data = []
-        // for (const d in this.state.data) {
-        //     data.push(this.state.data[d])
-        // }
-        // for (let i = 0; i < data.length; i++) {
-        //     if (data[i] == null || !data[i].answer.includes(value)) {
-        //         data.splice(i, 1);
-        //         i--;
-        //     }
-        // }
-        // this.setState({
-        //     tempData: data
-        // })
+        let data = []
+        for (const d in this.state.data) {
+            data.push(this.state.data[d])
+        }
+        for (let i = 0; i < data.length; i++) {
+            if (data[i] == null || !data[i].answer.includes(value)) {
+                data.splice(i, 1);
+                i--;
+            }
+        }
+        this.setState({
+            tempData: data
+        })
     }
 
     //发送请求
@@ -297,7 +349,7 @@ export default class PageList extends Component {
                         <Button id="addButton" onClick={this.createNew} type="primary" style={{margin: '0 16px'}}
                                 icon={<PlusOutlined style={{fontSize: '16px'}}/>}>新建问卷</Button>
                         <div id="searchButton">
-                            <Search placeholder="请输入问卷名称搜索" onSearch={this.onSearch} enterButton/>
+                            <Search placeholder="请输入问卷名称搜索" onSearch={onSearch} enterButton/>
                         </div>
                     </div>
                     {/* shape="round" */}

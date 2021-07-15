@@ -48,7 +48,7 @@ export default class PageList extends Component {
 
     ItemonClick = ({key}) => {
         if (`${key}` === '1') {
-            alert("change password");
+            alert("change password")
             <ModifyPassword />
         }
         if (`${key}` === '2') {

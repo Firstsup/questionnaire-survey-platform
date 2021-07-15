@@ -48,8 +48,7 @@ export default class PageList extends Component {
 
     ItemonClick = ({key}) => {
         if (`${key}` === '1') {
-            alert("change password");
-            <ModifyPassword />
+            alert("change password")
         }
         if (`${key}` === '2') {
             this.props.history.push('/')

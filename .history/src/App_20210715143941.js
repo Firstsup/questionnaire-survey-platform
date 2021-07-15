@@ -27,7 +27,7 @@ class App extends Component {
                 <Route path={'/createpage'} component ={CreatPage1} />
                 <Route path={'/editquestionnaire'} component ={EditQuestionnaire} />
                 <Route path={'/resetpassword'} component ={ResetPassword} />
-                <Route path={'/modifypassword'} component ={ModifyPassword} />
+                <Route path={'/modifypassword'} component ={ResetPassword} />
             </BrowserRouter>
         )
     }
