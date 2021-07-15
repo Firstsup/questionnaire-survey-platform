@@ -6,9 +6,8 @@ import QuestionnaireSubmitComplete from "./pages/FillQuestionnaire/jsx/Questionn
 import ShowAllQuestionnaire from "./pages/ManageQuestionnaire/jsx/ShowAllQuestionnaire";
 import DataAnalysis from "./pages/DataAnalysis/jsx/DataAnalysis";
 import SubmitListQuestionnaire from "./pages/SubmitListQuestionnaire/jsx/SubmitListQuestionnaire";
-import HomePage from './pages/testHomePage/jsx/testHomePage';
-import Register from './pages/Register/jsx/Register';
-import Login1 from './pages/Login/jsx/Login1';
+import Register from "./pages/Login/jsx/Register";
+import Login from './pages/Login/jsx/Login';
 import CreatPage1 from './pages/CreatNewQuestionnaire/jsx/CreatPage1';
 import EditQuestionnaire from './pages/EditQuestionnaire/jsx/EditQuestionnaire';
 import ResetPassword from './pages/Login/jsx/ResetPassword';
@@ -17,17 +16,16 @@ class App extends Component {
     render() {
         return (
             <BrowserRouter>
-                <Route path="/" component={HomePage} exact />
                 <Route path={'/fillquestionnaire'} component={FillQuestionnaire}/>
                 <Route path={'/fillquestionnairesubmitcomplete'} component={QuestionnaireSubmitComplete}/>
                 <Route path={'/dataanalysis'} component={DataAnalysis}/>
                 <Route path={'/submitlistquestionnaire'} component={SubmitListQuestionnaire}/>
                 <Route path={'/showallquestionnaire'} component={ShowAllQuestionnaire}/>
-                <Route path="/src/pages/Register/jsx/Register" component={Register} />
-                <Route path="/src/pages/Login/jsx/Login1" component ={Login1}  />
-                <Route path="/src/pages/CreatNewQuestionnaire/jsx/CreatPage1" component ={CreatPage1} />
-                <Route path="/src/pages/EditQuestionnaire/jsx/EditQuestionnaire" component ={EditQuestionnaire} />
-                <Route path="/src/pages/Login/jsx/ResetPassword" component ={ResetPassword} />
+                <Route path={'/register'} component={Register} />
+                <Route path={'/login'} component ={Login}  />
+                <Route path={'/createpage'} component ={CreatPage1} />
+                <Route path={'/editquestionnaire'} component ={EditQuestionnaire} />
+                <Route path={'/resetpassword'} component ={ResetPassword} />
             </BrowserRouter>
         )
     }

@@ -22,7 +22,7 @@ class DataAnalysis extends Component {
     }
 
     handleViewClick = () => {
-        this.props.history.push('/submitlistquestionnaire')
+        this.props.history.push('/submitlistquestionnaire?qid=' + this.state.qid)
     }
 
     handleBackClick = () => {
@@ -78,22 +78,10 @@ class DataAnalysis extends Component {
             .then(res => {
                 const get = res.data.data;
                 let countAll = [];
-                for (const cntKey in get.cnt) {
-                    countAll.push(get.cnt[cntKey])
+                for (const c in get.count) {
+                    countAll.push(parseInt(get.count[c]))
                 }
-                let count = [];
-                for (let i = 1; i <= max; i++) {
-                    for (const item in get) {
-                        const key = "cnt" + i
-                        if (item === key) {
-                            let countRow = [];
-                            for (const row in get[item]) {
-                                countRow.push(get[item][row])
-                            }
-                            count.push(countRow)
-                        }
-                    }
-                }
+                let count = get.cnt;
                 if (count != "") {
                     count = count[0].map(function (col, i) {
                         return count.map(function (row) {

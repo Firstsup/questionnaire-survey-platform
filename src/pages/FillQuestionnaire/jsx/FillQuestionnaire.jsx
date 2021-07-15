@@ -89,7 +89,7 @@ class FillQuestionnaire extends Component {
             this.setState({submitConfirmLoading: false})
             const params = {
                 qid: this.state.questionnaire.qid,
-                ans_time: new Date().getTime(),
+                ans_time: parseInt(new Date().getTime() / 1000),
                 ans_list: this.state.answers.map((answer, answerID) => {
                     return ({
                         ans_aid: answerID + 1,

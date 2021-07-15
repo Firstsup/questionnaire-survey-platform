@@ -1,17 +1,17 @@
-import React, {Component} from 'react';
+import React, {Component, createContext} from 'react';
 import {Input, Button, Form, Typography, message} from 'antd';
 import '../css/ResetPassword.css';
 
 const {Title} = Typography;
 
-class ResetPassword extends Component {
+class ModifyPassword extends Component {
     onFinish = (values) => {
         const params = {
             "user": values.username,
-            "verification": values.check,
+            "originPwd": values.oripassword,
             "newPwd": values.password
         };
-        fetch('/api/forgetPwd', {
+        fetch('/api/changePwd', {
             method: 'post',
             body: JSON.stringify(params),
             headers: {
@@ -20,15 +20,16 @@ class ResetPassword extends Component {
             },
         }).then(res => res.json())
             .then(res => {
+                console.log(res)
                 if (res.code === 1) {
-                    message.success("密码重置成功！")
+                    message.success("密码修改成功！")
                     setTimeout(() => {
-                        this.props.history.push('/login')
+                        this.props.history.push('/showallquestionnaire')
                     }, 1500)
                 } else if (res.code === 0) {
                     message.error("用户不存在，请重新输入！")
                 } else {
-                    message.error("验证不正确，请重新输入！")
+                    message.error("原密码不正确，请重新输入！")
                 }
             })
     }
@@ -61,23 +62,23 @@ class ResetPassword extends Component {
                         <Input/>
                     </Form.Item>
                     <Form.Item
-                        name="check"
-                        label={"手机尾号后4位"}
+                        name="oripassword"
+                        label={"原密码"}
                         rules={[
                             {
                                 required: true,
-                                message: '请输入手机尾号后4位！',
+                                message: '请输入原密码！',
                             },
                             ({getFieldValue}) => ({
                                 validator(_, value) {
-                                    if (!value || getFieldValue('check').length === 4) {
+                                    if (!value || (getFieldValue('oripassword').length >= 4 && getFieldValue('oripassword').length <= 16)) {
                                         return Promise.resolve();
                                     }
-                                    return Promise.reject(new Error('请输入4位数字！'));
+                                    return Promise.reject(new Error('密码长度应为4-16位！'));
                                 },
                             }),
                         ]}>
-                        <Input/>
+                        <Input.Password/>
                     </Form.Item>
                     <Form.Item
                         name="password"
@@ -127,4 +128,4 @@ class ResetPassword extends Component {
 }
 
 
-export default ResetPassword
+export default ModifyPassword

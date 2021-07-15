@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Button, Modal, Table, Input, Divider} from "antd";
 import Title from "antd/es/typography/Title";
 import '../css/Analysis.css'
+import timeConversion from "../../../utils/TimeConversion";
 
 const {Search} = Input;
 
@@ -9,10 +10,11 @@ class TextAnalysis extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            qid: "",
-            aid: "",
+            qid: this.props.qid,
+            aid: this.props.aid,
             modalVisible: false,
-            data: []
+            data: [],
+            tempData: []
         }
     }
 
@@ -36,32 +38,11 @@ class TextAnalysis extends Component {
         })
     }
 
-    initData = () => {
-        let id = 0;
-        let data = this.props.answerSheet.map((answer, answerID) => {
-            if (answer[this.props.questionID].answer != null) {
-                return (
-                    {
-                        key: answerID,
-                        id: ++id,
-                        submitTime: this.props.submitTime[answerID].toLocaleDateString(),
-                        answer: answer[this.props.questionID].answer
-                    }
-                )
-            }
-            return null
-        })
-        for (let i = 0; i < data.length; i++) {
-            if (data[i] == null) {
-                data.splice(i, 1);
-                i--;
-            }
-        }
-        return data
-    }
-
     onSearch = (value) => {
-        let data = this.initData()
+        let data = []
+        for (const d in this.state.data) {
+            data.push(this.state.data[d])
+        }
         for (let i = 0; i < data.length; i++) {
             if (data[i] == null || !data[i].answer.includes(value)) {
                 data.splice(i, 1);
@@ -69,16 +50,15 @@ class TextAnalysis extends Component {
             }
         }
         this.setState({
-            data: data
+            tempData: data
         })
     }
 
-    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+    componentDidMount() {
         const params = {
             "qid": this.props.qid,
             "aid": this.props.aid
         };
-        console.log(params)
         if (this.props.qid !== "") {
             fetch('api/text', {
                 method: 'post',
@@ -90,7 +70,14 @@ class TextAnalysis extends Component {
             }).then(res => res.json())
                 .then(res => {
                     const get = res.data.data;
-                    console.log(get)
+                    let temp = []
+                    for (let i = 0; i < res.data.length; i++) {
+                        temp.push({key: i, id: i, submitTime: timeConversion(get[i].ans_time), answer: get[i].ans})
+                    }
+                    this.setState({
+                        data: temp,
+                        tempData: temp
+                    })
                 })
         }
     }
@@ -117,26 +104,27 @@ class TextAnalysis extends Component {
 
         return (
             <>
-                {/*<Title*/}
-                {/*    level={5}>{questionID + 1}.&nbsp;{question.subject}&nbsp;&nbsp;<span*/}
-                {/*    className={"analysis_question_type"}>[文本题]</span>&nbsp;&nbsp;{question.isNecessary === true ?*/}
-                {/*    <span className={"analysis_question_isNecessary"}>[必填]</span> :*/}
-                {/*    <span className={"analysis_question_isNecessary"}>[非必填]</span>}</Title>*/}
+                <Title
+                    level={5}>{this.state.aid}.&nbsp;{this.props.question.subject}&nbsp;&nbsp;<span
+                    className={"analysis_question_type"}>[文本题]</span>&nbsp;&nbsp;{this.props.question.isNecessary === true ?
+                    <span className={"analysis_question_isNecessary"}>[必填]</span> :
+                    <span className={"analysis_question_isNecessary"}>[非必填]</span>}</Title>
                 <Button className={"text_button"} type={"primary"} onClick={this.handleOnclick}>查看详细信息</Button>
-                {/*<Modal*/}
-                {/*    title={questionID + 1 + '. ' + question.subject}*/}
-                {/*    visible={this.state.modalVisible}*/}
-                {/*    onOk={this.handleOk}*/}
-                {/*    onCancel={this.handleCancel}*/}
-                {/*    footer={null}*/}
-                {/*    width={1000}>*/}
-                {/*    <Search className={"text_search"} placeholder="输入搜索内容" allowClear onSearch={this.onSearch} style={{width: 350}}/>*/}
-                {/*    <Table columns={columns}*/}
-                {/*           dataSource={this.state.data}*/}
-                {/*           bordered*/}
-                {/*    />*/}
-                {/*</Modal>*/}
-                {/*<Divider/>*/}
+                <Modal
+                    title={this.state.aid + 1 + '. ' + this.props.question.subject}
+                    visible={this.state.modalVisible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    footer={null}
+                    width={1000}>
+                    <Search className={"text_search"} placeholder="输入搜索内容" allowClear onSearch={this.onSearch}
+                            style={{width: 350}}/>
+                    <Table columns={columns}
+                           dataSource={this.state.tempData}
+                           bordered
+                    />
+                </Modal>
+                <Divider/>
             </>
         )
     }
