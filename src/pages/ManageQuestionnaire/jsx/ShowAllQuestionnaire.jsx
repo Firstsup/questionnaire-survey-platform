@@ -78,6 +78,7 @@ const pagination = {position: 'bottom'};
 
 export default class PageList extends Component {
     state = {
+        username: "123",
         size: 'large',
         // yScroll: true,
         bordered: false,
@@ -197,7 +198,8 @@ export default class PageList extends Component {
 
     //创建新问卷
     createNew = () => {
-        // console.log("createNew")
+        this.props.history.push('/showallquestionnaire?username=' + this.state.username)
+
     }
 
     handleOnClick = () => {

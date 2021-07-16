@@ -1,48 +1,47 @@
-.questionsConten{
-    width:1440px;
-    height: 4000px;
-    background:rgb(195, 206, 252)
+.create_button {
+    display: block;
+    margin-top: 30px;
 }
 
-.questionsSideBar1{
-    position: fixed;
-    top:100px;
-    width:400px;
-    height: 900px;
-    padding: 50px;
-    background:rgba(195, 206, 252,0)
+.create_affix {
+    position: absolute;
+    margin-left: 30px;
+    width: 150px;
 }
 
-.questionsHeadTitle{
+.create_content {
+    float: top;
+    margin: auto;
+    width: 70%;
+}
+
+.create_title {
+    display: inline-block;
+    width: 300px;
+    margin-top: 80px;
+}
+
+.create_statistic {
+    margin-top: 50px;
+    margin-left: 25px;
+}
+
+.create_datePicker {
+    display: inline-block;
+}
+
+.create_title_div {
     text-align: center;
-    background:rgb(255, 255, 255)
+    margin: auto auto 30px;
 }
 
-.questionsSideBar2{
-    position:absolute;
-    left:400px;
-    width:800px;
-    height: 500px;
-
-    background:rgba(195, 206, 252,1)
-}
-.questionsSideBar3{
-    position:absolute;
-    left:400px;
-    width:800px;
-    height: 500px;
-
-    background:rgba(195, 206, 252,1)
+.create_divider {
+    margin-top: 100px;
 }
 
-.questionsdiv{
-    position:sticky;
-    left:400px;
-    width:800px;
-
-    background:rgba(195, 206, 252,1)
-}
-
-.asksoptions{
-    width: 500px;
+.create_submit_button {
+    float: right;
+    margin-left: 20px;
+    margin-right: 20px;
+    display: inline-block;
 }
