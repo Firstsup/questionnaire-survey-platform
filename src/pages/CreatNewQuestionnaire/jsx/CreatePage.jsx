@@ -26,7 +26,6 @@ class CreatePage extends React.Component {
     }
 
     handleSave = () => {
-        console.log(this.state.questionnaire)
         const temp = this.state.questionnaire.questions.map((question, questionID) => {
             return {
                 "ask": question.subject,
@@ -47,29 +46,49 @@ class CreatePage extends React.Component {
             "ask_list": temp,
             "time": this.state.questionnaire.endTime
         };
-        console.log(params)
-        fetch('/api/createSave', {
-            method: 'post',
-            body: JSON.stringify(params),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-        }).then(res => res.json())
-            .then(res => {
-                if (res.code !== 0) {
-                    message.success("问卷保存成功！")
-                    setTimeout(() => {
-                        this.props.history.push('/showallquestionnaire?username=' + this.state.username)
-                    }, 1500)
-                } else {
-                    message.error("问卷保存失败，请重新提交！")
+        if (params.title !== "" && params.time !== "") {
+            let flag = 1;
+            console.log(params.ask_list)
+            for (let i = 0; i < params.ask_list.length; i++) {
+                if (params.ask_list[i].subject === "") {
+                    flag = 0;
                 }
-            })
+                for (let j = 0; j < params.ask_list[i].choice_list.length; j++) {
+                    if (params.ask_list[i].choice_list[j].cid === "" || params.ask_list[i].choice_list[j].content === "") {
+                        flag = 0
+                    }
+                }
+            }
+            if (flag === 1) {
+                if (params.ask_list.length === 0) {
+                    message.warn("问卷内容不能为空")
+                    return
+                }
+                fetch('/api/createSave', {
+                    method: 'post',
+                    body: JSON.stringify(params),
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                }).then(res => res.json())
+                    .then(res => {
+                        if (res.code !== 0) {
+                            message.success("问卷保存成功！")
+                            setTimeout(() => {
+                                this.props.history.push('/showallquestionnaire?username=' + this.state.username)
+                            }, 1500)
+                        } else {
+                            message.error("问卷保存失败，请重新提交！")
+                        }
+                    })
+                return
+            }
+        }
+        message.warn("问卷信息未填写完整")
     }
 
     handleSubmit = () => {
-        console.log(this.state.questionnaire.endTime)
         const temp = this.state.questionnaire.questions.map((question, questionID) => {
             return {
                 "ask": question.subject,
@@ -91,26 +110,46 @@ class CreatePage extends React.Component {
             "ask_list": temp,
             "time": this.state.questionnaire.endTime
         };
-        console.log(params)
-        fetch('/api/createSubmit', {
-            method: 'post',
-            body: JSON.stringify(params),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-        }).then(res => res.json())
-            .then(res => {
-                console.log(res)
-                if (res.code !== 0) {
-                    message.success("问卷创建成功！")
-                    setTimeout(() => {
-                        this.props.history.push('/showallquestionnaire?username=' + this.state.username)
-                    }, 1500)
-                } else {
-                    message.error("问卷创建失败，请重新提交！")
+        if (params.title !== "" && params.time !== "") {
+            let flag = 1;
+            console.log(params.ask_list)
+            for (let i = 0; i < params.ask_list.length; i++) {
+                if (params.ask_list[i].subject === "") {
+                    flag = 0;
                 }
-            })
+                for (let j = 0; j < params.ask_list[i].choice_list.length; j++) {
+                    if (params.ask_list[i].choice_list[j].cid === "" || params.ask_list[i].choice_list[j].content === "") {
+                        flag = 0
+                    }
+                }
+            }
+            if (flag === 1) {
+                if (params.ask_list.length === 0) {
+                    message.warn("问卷内容不能为空")
+                    return
+                }
+                fetch('/api/createSubmit', {
+                    method: 'post',
+                    body: JSON.stringify(params),
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                }).then(res => res.json())
+                    .then(res => {
+                        if (res.code !== 0) {
+                            message.success("问卷发布成功！")
+                            setTimeout(() => {
+                                this.props.history.push('/showallquestionnaire?username=' + this.state.username)
+                            }, 1500)
+                        } else {
+                            message.error("问卷发布失败，请重新提交！")
+                        }
+                    })
+                return
+            }
+        }
+        message.warn("问卷信息未填写完整")
     }
 
     onAddRadioChild = () => {
