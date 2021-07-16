@@ -339,12 +339,12 @@ class CreatePage extends React.Component {
                 </Affix>
                 <div className={"create_content"}>
                     <div className={"create_title_div"}><span
-                        className={"create_title_span"}><strong>问卷题目：</strong></span><Input className={"create_title"}
+                        className={"create_title_span"}><strong>问卷标题：</strong></span><Input className={"create_title"}
                                                                                             onCompositionStart={this.handleComposition}
                                                                                             onCompositionUpdate={this.handleComposition}
                                                                                             onCompositionEnd={this.handleComposition}
                                                                                             name="questionnaireTitle"
-                                                                                            placeholder="请输入问卷题目"
+                                                                                            placeholder="请输入问卷标题"
                                                                                             onChange={this.changeTitle}/>
                     </div>
                     <div className={"create_title_div"}>
