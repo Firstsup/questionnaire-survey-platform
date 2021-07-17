@@ -120,7 +120,7 @@ class AddMultiple extends React.Component {
         return (
             <div className={"add_div"}>
                 <Title level={3}>{this.state.aid}.&nbsp;<Input className={"add_title_input"} placeholder={"请输入题目"}
-                                                               value={this.state.question.subject}
+                                                               value={this.props.question.subject}
                                                                onChange={this.handleTitleChange}/></Title>
                 <div className={"add_isNecessary"}><span>该题为：&nbsp;&nbsp;</span>
                     <Radio.Group value={this.state.question.isNecessary} onChange={this.handleNecessaryChange}>
@@ -128,7 +128,7 @@ class AddMultiple extends React.Component {
                         <Radio value={false}>非必填</Radio>
                     </Radio.Group></div>
                 <div>
-                    {this.state.question.choiceList.map((choice, cid) => {
+                    {this.props.question.choiceList.map((choice, cid) => {
                         return (
                             <div className={"create_checkbox_div"} key={cid}>
                                 <Space className={"add_space"} direction={"vertical"}>

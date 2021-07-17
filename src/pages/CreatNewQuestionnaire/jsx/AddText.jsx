@@ -69,7 +69,7 @@ class AddText extends React.Component {
         return (
             <div className={"add_div"}>
                 <Title level={3}>{this.state.aid}.&nbsp;<Input className={"add_title_input"} placeholder={"请输入题目"}
-                                                               value={this.state.question.subject}
+                                                               value={this.props.question.subject}
                                                                onChange={this.handleTitleChange}/></Title>
                 <div className={"add_isNecessary"}><span>该题为：&nbsp;&nbsp;</span>
                     <Radio.Group value={this.state.question.isNecessary} onChange={this.handleNecessaryChange}>
