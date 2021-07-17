@@ -1,281 +1,348 @@
-import React, {Component} from 'react';
-import ReactDOM from "react-dom";
-import {Row, Col, Space, Radio, Input, Checkbox} from 'antd';
-import {PlusCircleTwoTone, PlusSquareTwoTone, EditTwoTone, CheckOutlined} from '@ant-design/icons';
-import {DeleteTwoTone, PlusOutlined} from '@ant-design/icons';
-import EditRadio from './EditRadio';
-import EditCheckbox from './EditCheckbox';
-import EditText from './EditText';
-import AddRadio from '../../CreatNewQuestionnaire/jsx/AddRadio';
-import AddMultiple from '../../CreatNewQuestionnaire/jsx/AddMultiple';
-import AddText from '../../CreatNewQuestionnaire/jsx/AddText';
-import {Tag, Divider, Layout, Typography, Button, Modal, message, Spin, Alert} from 'antd';
-import Questions from './Questions';
-import {DatePicker} from 'antd';
+import React from 'react';
+import {Affix, Button, DatePicker, Divider, Input, message, Spin, Statistic} from 'antd';
+import {CheckOutlined, EditTwoTone, PlusCircleTwoTone, PlusSquareTwoTone, ProfileOutlined} from '@ant-design/icons';
+import '../css/EditQuestion.css';
+import EditQuestion from "./EditQuestion";
 import moment from "moment";
-
-import '../css/EditQuestionnaire.css'
-
-import {Content, Footer, Header} from "antd/es/layout/layout";
-
-const {Title} = Typography;
-const {RangePicker} = DatePicker;
+import timeConversion from "../../../utils/TimeConversion";
 
 class EditQuestionnaire extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            username: '123',
             questionnaire: {
                 title: "",
-                qid: "",
                 questions: [],
-                start_time: "",
-                end_time:"",
+                createTime: "",
+                endTime: "",
             },
-            loading: true
+            questionNum: 0,
+            loading: true,
+            isNew: []
+        };
+    }
+
+    getCreatTime = () => {
+        return parseInt(new Date().getTime() / 1000);
+    }
+
+    handleSave = () => {
+        const temp = this.state.questionnaire.questions.map((question, questionID) => {
+            return {
+                "ask": question.subject,
+                "isNecessary": question.isNecessary,
+                "type": question.type === 'radio' ? 1 : (question.type === 'multiple' ? 2 : 3),
+                "aid": questionID + 1,
+                "choice_list": question.choiceList.map((choice, cid) => {
+                    return {
+                        "cid": cid + 1,
+                        "content": choice
+                    }
+                })
+            }
+        })
+        const params = {
+            "qid": this.props.location.search.slice(5),
+            "title": this.state.questionnaire.title,
+            "ask_list": temp,
+            "time": this.state.questionnaire.endTime
+        };
+        if (params.title !== "" && params.time !== "") {
+            let flag = 1;
+            for (let i = 0; i < params.ask_list.length; i++) {
+                if (params.ask_list[i].subject === "") {
+                    flag = 0;
+                }
+                for (let j = 0; j < params.ask_list[i].choice_list.length; j++) {
+                    if (params.ask_list[i].choice_list[j].cid === "" || params.ask_list[i].choice_list[j].content === "") {
+                        flag = 0
+                    }
+                }
+            }
+            if (flag === 1) {
+                if (params.ask_list.length === 0) {
+                    message.warn("问卷内容不能为空")
+                    return
+                }
+                fetch('/api/edit/save', {
+                    method: 'post',
+                    body: JSON.stringify(params),
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                }).then(res => res.json())
+                    .then(res => {
+                        if (res.code !== 0) {
+                            message.success("问卷保存成功！")
+                            setTimeout(() => {
+                                this.props.history.push('/showallquestionnaire?username=' + this.state.username)
+                            }, 1500)
+                        } else {
+                            message.error("问卷保存失败，请重新提交！")
+                        }
+                    })
+                return
+            }
         }
-
-        this.handleDelete = this.handleDelete.bind(this);
-        this.handleChange = this.handleChange.bind(this);
+        message.warn("问卷信息未填写完整")
     }
 
-
-    getFooter = () => {
-        return (
-            <div className={"edit_footer"}>
-                <Divider/>
-                <p>电子科大--字节跳动技术训练营&nbsp;&nbsp;前端二组</p>
-            </div>
-        )
+    handleSubmit = () => {
+        const temp = this.state.questionnaire.questions.map((question, questionID) => {
+            return {
+                "ask": question.subject,
+                "isNecessary": question.isNecessary,
+                "type": question.type === 'radio' ? 1 : (question.type === 'multiple' ? 2 : 3),
+                "aid": questionID + 1,
+                "choice_list": question.choiceList.map((choice, cid) => {
+                    return {
+                        "cid": cid + 1,
+                        "content": choice
+                    }
+                })
+            }
+        })
+        const params = {
+            "qid": this.props.location.search.slice(5),
+            "title": this.state.questionnaire.title,
+            "start_time": this.getCreatTime(),
+            "ask_list": temp,
+            "time": this.state.questionnaire.endTime
+        };
+        if (params.title !== "" && params.time !== "") {
+            let flag = 1;
+            for (let i = 0; i < params.ask_list.length; i++) {
+                if (params.ask_list[i].subject === "") {
+                    flag = 0;
+                }
+                for (let j = 0; j < params.ask_list[i].choice_list.length; j++) {
+                    if (params.ask_list[i].choice_list[j].cid === "" || params.ask_list[i].choice_list[j].content === "") {
+                        flag = 0
+                    }
+                }
+            }
+            if (flag === 1) {
+                if (params.ask_list.length === 0) {
+                    message.warn("问卷内容不能为空")
+                    return
+                }
+                fetch('/api/edit/submit', {
+                    method: 'post',
+                    body: JSON.stringify(params),
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                }).then(res => res.json())
+                    .then(res => {
+                        if (res.code !== 0) {
+                            message.success("问卷发布成功！")
+                            setTimeout(() => {
+                                this.props.history.push('/showallquestionnaire?username=' + this.state.username)
+                            }, 1500)
+                        } else {
+                            message.error("问卷发布失败，请重新提交！")
+                        }
+                    })
+                return
+            }
+        }
+        message.warn("问卷信息未填写完整")
     }
 
-//
     onAddRadioChild = () => {
+        let isNew = []
+        for (let i = 0; i < this.state.isNew.length; i++) {
+            isNew.push(this.state.isNew[i])
+        }
+        isNew.push(true)
         this.setState(prevState => ({
             questionnaire: {
-                ...prevState.questionnaire,
-
+                title: this.state.questionnaire.title,
                 questions: [...prevState.questionnaire.questions,
                     {
                         subject: '',
                         type: "radio",
-                        isNecessary: Boolean,
-                        options: [" ", " ",],
-                    }]
-            }
+                        isNecessary: false,
+                        choiceList: ["", ""]
+                    }],
+                createTime: this.state.questionnaire.createTime,
+                endTime: this.state.questionnaire.endTime,
+            },
+            questionNum: this.state.questionNum + 1,
+            isNew: isNew
         }));
     }
 
-    onAddCheckboxChild = () => {
+    onAddCheckBoxChild = () => {
+        let isNew = []
+        for (let i = 0; i < this.state.isNew.length; i++) {
+            isNew.push(this.state.isNew[i])
+        }
+        isNew.push(true)
         this.setState(prevState => ({
             questionnaire: {
-                ...prevState.questionnaire,
-
+                title: this.state.questionnaire.title,
                 questions: [...prevState.questionnaire.questions,
                     {
                         subject: '',
                         type: "multiple",
-                        isNecessary: Boolean,
-                        options: [" ", " ",],
-                    }]
-            }
+                        isNecessary: false,
+                        choiceList: ["", ""]
+                    }],
+                createTime: this.state.questionnaire.createTime,
+                endTime: this.state.questionnaire.endTime,
+            },
+            questionNum: this.state.questionNum + 1,
+            isNew: isNew
         }));
     }
 
     onAddTextChild = () => {
+        let isNew = []
+        for (let i = 0; i < this.state.isNew.length; i++) {
+            isNew.push(this.state.isNew[i])
+        }
+        isNew.push(true)
         this.setState(prevState => ({
             questionnaire: {
-                ...prevState.questionnaire,
-
+                title: this.state.questionnaire.title,
                 questions: [...prevState.questionnaire.questions,
                     {
                         subject: '',
                         type: "text",
-                        isNecessary: Boolean,
-                        options: [" ", " ",],
-                    }]
-            }
+                        isNecessary: false,
+                        choiceList: []
+                    }],
+                createTime: this.state.questionnaire.createTime,
+                endTime: this.state.questionnaire.endTime,
+            },
+            questionNum: this.state.questionNum + 1,
+            isNew: isNew
         }));
     }
 
-    handleDelete = (aid) => {
-        let tempQuestions = this.state.questionnaire.questions
-        let test = this.state.questionnaire.questions
-        for (let i = 0; i < tempQuestions.length; i++) {
-
-            if (i === aid) {
-
-                tempQuestions.splice(i, 1);
-                break;
-            }
-        }
-        this.setState({
-            questionnaire: {
-                title: this.state.title,
-                qid: this.state.qid,
-                questions: tempQuestions
-            }
-        })
-
-    }
-
-    handleChange = (aid, changeName, changeItem) => {//从子组件接受修改的题目的aid、修改的state的名称、修改后的内容
-        let tempQuestions = this.state.questionnaire.questions;
-        for (let i = 0; i < tempQuestions.length; i++) {
-            if (i == aid) {
-                //函数Object.defineProperty(object, propertyname, descriptor);
-                tempQuestions[i][changeName] = changeItem;
-                break;
-            }
-        }
-        this.setState({
-            questionnaire: {
-                title: this.state.title,
-                qid: this.state.qid,
-                questions: tempQuestions
-            }
-        })
-    }
-
-    moveUp = (aid) => {
-        console.log(aid)
-        let tempQuestions = this.state.questionnaire.questions
-        console.log(tempQuestions)
-        for (let i = 0; i < tempQuestions.length; i++) {
-            if (i === aid && i !== 0) {
-                let temp = tempQuestions[i];
-                tempQuestions[i] = tempQuestions[i - 1];
-                tempQuestions[i - 1] = temp;
-            }
-        }
-        console.log(tempQuestions)
-        this.setState({
-            questionnaire: {
-                title: this.state.title,
-                qid: this.state.qid,
-                questions: tempQuestions
-            }
-        })
-    }
-
-    moveDown = (aid) => {
-        let tempQuestions = this.state.questionnaire.questions
-        for (let i = 0; i < tempQuestions.length; i++) {
-            if (i === aid && i !== tempQuestions.length - 1) {
-                let temp = tempQuestions[i];
-                tempQuestions[i] = tempQuestions[i + 1];
-                tempQuestions[i + 1] = temp;
-            }
-        }
-        this.setState({
-            questionnaire: {
-                title: this.state.title,
-                qid: this.state.qid,
-                questions: tempQuestions
-            }
-        })
-    }
-
-    save = () => {
-        const temp = this.state.questionnaire.questions.map((ask, askID) => {
-            return {
-                "ask": ask.subject,
-                "isNecessary": ask.isNecessary,
-                "type": ask.type,
-                "aid": askID + 1,
-                "choiceList": ask.choiceList.map((choice, cid) => {
-                    return {
-                        "cid": cid + 1,
-                        "content": choice
-                    }
-                })
-            }
-        })
-        const params = {
-            "qid": this.state.questionnaire.qid,
-            "title": this.state.questionnaire.title,
-            "time": this.state.questionnaire.endTime(),
-            "ask_list": temp
-        };
-        fetch('/api/edit/save', {
-            method: 'post',
-            body: JSON.stringify(params),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-        }).then(res => res.json())
-            .then(res => {
-                console.log(res.code)
-                if (res.code !== 0) {
-                    this.props.history.push('/showallquestionnaire')
-                    alert("问卷修改成功!");
-                } else {
-                    alert("问卷修改失败")
-                }
-            })
-    }
-
-    submit = () => {
-        const temp = this.state.questionnaire.questions.map((ask, askID) => {
-            return {
-                "ask": ask.subject,
-                "isNecessary": ask.isNecessary,
-                "type": ask.type,
-                "aid": askID + 1,
-                "choiceList": ask.choiceList.map((choice, cid) => {
-                    return {
-                        "cid": cid + 1,
-                        "content": choice
-                    }
-                })
-            }
-        })
-        const params = {
-            "qid": this.state.questionnaire.qid,
-            "title": this.state.questionnaire.title,
-            "start_time": this.getCreatTime(),
-            "time": this.state.questionnaire.endTime(),
-            "ask_list": temp
-        };
-        fetch('/api/edit/submit', {
-            method: 'post',
-            body: JSON.stringify(params),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-        }).then(res => res.json())
-            .then(res => {
-                console.log(res.code)
-                if (res.code !== 0) {
-                    this.props.history.push('/showallquestionnaire')
-                    alert("问卷修改成功!");
-                } else {
-                    alert("问卷修改失败")
-                }
-            })
-    }
-
-    onOk = (value) => {
-        this.setState({
-            end_time: parseInt(moment(value).valueOf() / 1000)
-        })
-    }
-
     changeTitle = (e) => {
-        const value = e.target.value;
+        const value = e.target.value
         this.setState({
             questionnaire: {
                 title: value,
-                qid: this.state.qid,
-                questions: this.state.questions
+                questions: this.state.questionnaire.questions,
+                createTime: this.state.questionnaire.createTime,
+                endTime: this.state.questionnaire.endTime,
             }
+        })
+    }
+
+    chiefHandleChange = (aid, newQuestion, isNew) => {
+        let tempQuestions = this.state.questionnaire.questions;
+        for (let i = 0; i < tempQuestions.length; i++) {
+            if ((i + 1) === aid) {
+                tempQuestions[i] = newQuestion;
+                break;
+            }
+        }
+        this.setState({
+            questionnaire: {
+                title: this.state.questionnaire.title,
+                questions: tempQuestions,
+                createTime: this.state.questionnaire.createTime,
+                endTime: this.state.questionnaire.endTime,
+            },
+            isNew: isNew
+        })
+    }
+
+    chiefHandleDelete = (aid) => {
+        let tempQuestions = this.state.questionnaire.questions;
+        let tempIsNew = this.state.isNew;
+        for (let i = 0; i < tempQuestions.length; i++) {
+            if ((i + 1) === aid) {
+                tempQuestions.splice(i, 1);
+                tempIsNew.splice(i, 1);
+                break;
+            }
+        }
+        this.setState({
+            questionnaire: {
+                title: this.state.questionnaire.title,
+                questions: tempQuestions,
+                createTime: this.state.questionnaire.createTime,
+                endTime: this.state.questionnaire.endTime,
+            },
+            questionNum: this.state.questionNum - 1,
+            isNew: tempIsNew
+        })
+    }
+
+    chiefMoveUp = (aid) => {
+        let tempQuestions = this.state.questionnaire.questions;
+        let tempIsNew = this.state.isNew;
+        for (let i = 0; i < tempQuestions.length; i++) {
+            if ((i + 1) === aid && i !== 0) {
+                let temp = tempQuestions[i];
+                tempQuestions[i] = tempQuestions[i - 1];
+                tempQuestions[i - 1] = temp;
+                temp = tempIsNew[i];
+                tempIsNew[i] = tempIsNew[i - 1];
+                tempIsNew[i - 1] = temp;
+            }
+        }
+        this.setState({
+            questionnaire: {
+                title: this.state.questionnaire.title,
+                questions: tempQuestions,
+                createTime: this.state.questionnaire.createTime,
+                endTime: this.state.questionnaire.endTime,
+            },
+            isNew: tempIsNew
+        })
+    }
+
+    chiefMoveDown = (aid) => {
+        let tempQuestions = this.state.questionnaire.questions;
+        let tempIsNew = this.state.isNew;
+        for (let i = 0; i < tempQuestions.length; i++) {
+            if ((i + 1) === aid && i !== tempQuestions.length - 1) {
+                let temp = tempQuestions[i];
+                tempQuestions[i] = tempQuestions[i + 1];
+                tempQuestions[i + 1] = temp;
+                temp = tempIsNew[i];
+                tempIsNew[i] = tempIsNew[i + 1];
+                tempIsNew[i + 1] = temp;
+            }
+        }
+        this.setState({
+            questionnaire: {
+                title: this.state.questionnaire.title,
+                questions: tempQuestions,
+                createTime: this.state.questionnaire.createTime,
+                endTime: this.state.questionnaire.endTime,
+            },
+            isNew: tempIsNew
+        })
+    }
+
+    onOk = (value) => {
+        setTimeout(() => {
+            this.setState({
+                questionnaire: {
+                    title: this.state.questionnaire.title,
+                    questions: this.state.questionnaire.questions,
+                    createTime: this.state.questionnaire.createTime,
+                    endTime: parseInt(moment(value).valueOf() / 1000),
+                }
+            })
         })
     }
 
     componentDidMount() {
-        fetch('/api/edit?qid=' + this.props.location.search.slice(5), {
+        const params = {
+            "qid": this.props.location.search.slice(5)
+        };
+        fetch('/api/edit?qid=' + params.qid, {
             method: 'get',
             headers: {
                 'Accept': 'application/json',
@@ -285,81 +352,86 @@ class EditQuestionnaire extends React.Component {
             .then(res => {
                 const get = res.data.data;
                 this.setState({
+                    username: get.author,
                     questionnaire: {
                         title: get.title,
-                        qid: get.qid,
+                        endTime: get.time,
+                        createTime: "",
                         questions: get.ask_list.map((list) => {
                             return ({
                                 subject: list.ask,
                                 type: list.type === 1 ? "radio" : (list.type === 2 ? "multiple" : "text"),
                                 isNecessary: list.isNecessary,
-                                options: list.choice_list.map((choice) => {
+                                choiceList: list.choice_list.map((choice) => {
                                     return (choice.content)
                                 })
                             })
                         })
-                    }
+                    },
+                    questionNum: get.ask_list.length,
+                    isNew: get.ask_list.map(() => {
+                        return false
+                    })
                 })
-            })
+            });
         this.setState({
             loading: false
         })
     }
 
     render() {
-        let questionnaire = this.state.questionnaire;
-        if (this.state.loading === true || this.state.questionnaire.title === "") {
+        if (this.state.loading === true || (this.state.questionnaire.title === "" && this.state.questionnaire.endTime === "")) {
             return (<div
                 style={{height: document.documentElement.clientHeight, width: document.documentElement.clientWidth}}>
                 <Spin className={"edit_spin"} tip="加载中..."/></div>)
         } else {
             return (
-                <Layout className={"edit_layout"}>
-
-
-                    <div>
-                        <Row>
-                            <Space direction="vertical" className="edit_questionsSideBar1">
-                                <Button type="primary" name="addRadio" onClick={this.onAddRadioChild}
-                                        block size="large" icon={<PlusCircleTwoTone/>}>
-                                    添加单选题 </Button>
-                                <Button type="primary" name="addCheckbox"
-                                        block size="large" onClick={this.onAddCheckboxChild}><PlusSquareTwoTone/>
-                                    添加多选题</Button>
-                                <Button type="primary" name="addText" block size="large"
-                                        onClick={this.onAddTextChild}><EditTwoTone/>
-                                    添加文本题</Button>
-
-                                <Tag color="blue"> 请选择问卷截止时间：</Tag>
-                                <DatePicker size="large" showTime onOk={this.onOk}/>
-
-
-                                <Tag color="blue"> 目前共有 {this.state.questionnaire.questions.length}题</Tag>
-
-
-                                <Button type="primary" block size="large" onClick={this.submit} shape="round"
-                                        icon={<CheckOutlined/>}>
-                                    保存并发布问卷
-                                </Button>
-                                <Button type={"primary"} block size="large" shape="round" onClick={this.save}
-                                        icon={<CheckOutlined/>}>保存暂不发布问卷</Button>
-                            </Space>
-                        </Row>
+                <>
+                    <Affix className={"create_affix"} offsetTop={200}>
+                        <div>
+                            <Button className={"create_button"}
+                                    onClick={this.onAddRadioChild}><PlusCircleTwoTone/>添加单选题</Button>
+                            <Button className={"create_button"} onClick={this.onAddCheckBoxChild}><PlusSquareTwoTone/>添加多选题</Button>
+                            <Button className={"create_button"}
+                                    onClick={this.onAddTextChild}><EditTwoTone/>添加文本题</Button>
+                            <Statistic className={"create_statistic"} title="当前题目数" value={this.state.questionNum}
+                                       prefix={<ProfileOutlined/>}/>
+                        </div>
+                    </Affix>
+                    <div className={"create_content"}>
+                        <div className={"create_title_div"}><span
+                            className={"create_title_span"}><strong>问卷标题：</strong></span><Input
+                            className={"create_title"}
+                            value={this.state.questionnaire.title}
+                            name="questionnaireTitle"
+                            placeholder="请输入问卷标题"
+                            onChange={this.changeTitle}/>
+                        </div>
+                        <div className={"create_title_div"}>
+                            <span><strong>发布者：</strong>{this.state.username}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span
+                            className={"create_title_span"}><strong>问卷截止时间：</strong></span>
+                            <DatePicker className={"create_datePicker"}
+                                        defaultValue={moment(timeConversion(this.state.questionnaire.endTime), 'YYYY-MM-DD HH:mm:ss')}
+                                        showTime showNow={false} allowClear={false} onOk={this.onOk}/>
+                        </div>
+                        <Divider>问卷内容</Divider>
+                        <EditQuestion questions={this.state.questionnaire.questions}
+                                      chiefHandleDelete={this.chiefHandleDelete}
+                                      chiefHandleChange={this.chiefHandleChange}
+                                      chiefMoveUp={this.chiefMoveUp} chiefMoveDown={this.chiefMoveDown}
+                                      isNew={this.state.isNew}/>
+                        <Divider className={"create_divider"}/>
+                        <div className={"create_buttons"}>
+                            <Button className={"create_submit_button"} type="primary" onClick={this.handleSubmit}
+                                    shape="round"><CheckOutlined/>保存并发布问卷</Button>
+                            <Button className={"create_submit_button"} type="primary" onClick={this.handleSave}
+                                    shape="round"><CheckOutlined/>保存问卷</Button>
+                        </div>
                     </div>
-                    <Space className="edit_questionsSideBar2" size="large" direction="vertical">
-                        <Input name="questionnaireTitle" placeholder={this.state.questionnaire.title} size="large"
-                               onChange={this.changeTitle}/>
-                        <Questions questions={questionnaire.questions} handleDelete={this.handleDelete}
-                                   moveUp={this.moveUp}
-                                   handleChange={this.handleChange} moveDown={this.moveDown}/>
-                    </Space>
-
-
-                </Layout>
-
+                </>
             )
         }
     }
 }
 
-export default EditQuestionnaire
+export default EditQuestionnaire;
