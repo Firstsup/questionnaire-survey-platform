@@ -1,0 +1,46 @@
+.add_div {
+    width: 80%;
+    margin: 30px auto auto;
+}
+
+.add_title_input {
+    margin-top: 40px;
+    display: inline-block;
+    width: 400px;
+}
+
+.add_isNecessary {
+    margin-left: 30px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.add_choice_div {
+    margin-left: 30px;
+    display: block !important;
+    margin-top: 15px;
+}
+
+.add_choice_input {
+    width: 200px;
+}
+
+.edit_radioGroup {
+    display: block;
+}
+
+.add_choice {
+    display: block;
+    margin-left: 30px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.add_button {
+    float: right;
+    margin-left: 25px;
+}
+
+.add_title {
+    display: inline;
+}

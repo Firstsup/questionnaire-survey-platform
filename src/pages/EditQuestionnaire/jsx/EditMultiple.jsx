@@ -1,15 +1,17 @@
 import React from 'react';
 import {
+    PlusOutlined,
+    MinusOutlined,
     CloseCircleOutlined,
     UpCircleOutlined,
-    DownCircleOutlined, CheckCircleOutlined, InfoCircleOutlined
+    DownCircleOutlined, InfoCircleOutlined, CheckCircleOutlined
 } from '@ant-design/icons';
-import {Radio, Input, Button, Typography, message} from 'antd';
+import {Radio, Input, Button, Typography, Space, Checkbox, message} from 'antd';
 import "../css/EditedQuestions.css"
 
-const {Title} = Typography;
+const {Title, Text} = Typography;
 
-class EditText extends React.Component {
+class EditMultiple extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -18,6 +20,19 @@ class EditText extends React.Component {
             value: null,
             isEditing: this.props.isNew[this.props.aid - 1]
         }
+    }
+
+    addChoice = () => {
+        const temp = this.state.question.choiceList
+        temp.push("")
+        this.setState({
+            question: {
+                subject: this.state.question.subject,
+                type: this.state.question.type,
+                isNecessary: this.state.question.isNecessary,
+                choiceList: temp
+            }
+        });
     }
 
     handleTitleChange = (value) => {
@@ -45,6 +60,42 @@ class EditText extends React.Component {
         })
     }
 
+    handleChoiceChange = (value) => {
+        const newChoice = value.target.value
+        const question = {
+            subject: this.props.question.subject,
+            type: this.props.question.type,
+            isNecessary: this.props.question.isNecessary,
+            choiceList: this.props.question.choiceList.map((choice, cid) => {
+                return (
+                    value.target.name == cid ? newChoice : choice
+                )
+            })
+        }
+        this.props.chiefHandleChange(this.state.aid, question, this.props.isNew)
+    }
+
+    handleChoiceDelete = (value) => {
+        let tempChoices = this.state.question.choiceList;
+        for (let i = 0; i < tempChoices.length; i++) {
+            if (i === value) {
+                tempChoices.splice(i, 1);
+                break;
+            }
+        }
+        setTimeout(() => {
+            this.setState({
+                question: {
+                    subject: this.state.question.subject,
+                    type: this.state.question.type,
+                    isNecessary: this.state.question.isNecessary,
+                    choiceList: tempChoices
+                }
+            })
+            this.props.chiefHandleChange(this.state.aid, this.state.question, this.props.isNew)
+        })
+    }
+
     handleDelete = () => {
         this.props.chiefHandleDelete(this.state.aid);
     }
@@ -61,6 +112,11 @@ class EditText extends React.Component {
         let flag = 1
         if (this.state.question.subject === "") {
             flag = 0
+        }
+        for (let i = 0; i < this.state.question.choiceList.length; i++) {
+            if (this.state.question.choiceList[i] === "") {
+                flag = 0
+            }
         }
         if (flag === 1) {
             this.setState({
@@ -113,6 +169,29 @@ class EditText extends React.Component {
                             <Radio value={true}>必填</Radio>
                             <Radio value={false}>非必填</Radio>
                         </Radio.Group></div>
+                    <div>
+                        {this.props.question.choiceList.map((choice, cid) => {
+                            return (
+                                <div className={"create_checkbox_div"} key={cid}>
+                                    <Space className={"add_space"} direction={"vertical"}>
+                                        <div className={"add_choice_div"}>
+                                            <Checkbox defaultChecked={false} disabled><Input
+                                                className={"add_choice_input"}
+                                                id={"radio" + this.state.aid + cid}
+                                                name={cid}
+                                                placeholder={"请输入选项"}
+                                                value={choice}
+                                                onChange={this.handleChoiceChange}/></Checkbox>
+                                            <Button size={"small"} shape="circle"
+                                                    icon={<MinusOutlined/>}
+                                                    onClick={() => this.handleChoiceDelete(cid)}/>
+                                        </div>
+                                    </Space>
+                                </div>
+                            )
+                        })}
+                    </div>
+                    <Button className={"add_choice"} type="dashed" onClick={this.addChoice}><PlusOutlined/>添加选项</Button>
                     <Button className={"add_button"} size={"small"} icon={<CloseCircleOutlined/>}
                             onClick={this.handleDelete}>删除</Button>
                     <Button className={"add_button"} size={"small"} icon={<DownCircleOutlined/>}
@@ -131,6 +210,19 @@ class EditText extends React.Component {
                     <div className={"add_isNecessary"}>该题为：&nbsp;&nbsp;{this.state.question.isNecessary === true ?
                         <span>必填</span> :
                         <span>非必填</span>}</div>
+                    <div>
+                        {this.props.question.choiceList.map((choice, cid) => {
+                            return (
+                                <div className={"create_checkbox_div"} key={cid}>
+                                    <Space className={"add_space"} direction={"vertical"}>
+                                        <div className={"add_choice_div"}>
+                                            <Checkbox defaultChecked={false} disabled><Text>{choice}</Text></Checkbox>
+                                        </div>
+                                    </Space>
+                                </div>
+                            )
+                        })}
+                    </div>
                     <Button className={"add_button"} size={"small"} icon={<CloseCircleOutlined/>}
                             onClick={this.handleDelete}>删除</Button>
                     <Button className={"add_button"} size={"small"} icon={<DownCircleOutlined/>}
@@ -145,4 +237,4 @@ class EditText extends React.Component {
     }
 }
 
-export default EditText
+export default EditMultiple

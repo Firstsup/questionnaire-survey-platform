@@ -1,97 +1,90 @@
-import React, {Component} from 'react';
-import ReactDom from 'react-dom';
-import {DeleteOutlined,PlusOutlined}from '@ant-design/icons';
-import { Radio, Input, Space, Checkbox, Row, Col,Button } from 'antd';
-class AddText extends Component{
-    constructor(props){
+import React from 'react';
+import {
+    CloseCircleOutlined,
+    UpCircleOutlined,
+    DownCircleOutlined
+} from '@ant-design/icons';
+import {Radio, Input, Button, Typography} from 'antd';
+import "../css/CreatedQuestions.css"
+
+const {Title} = Typography;
+
+class AddText extends React.Component {
+    constructor(props) {
         super(props);
-        this.state={
-            aid:this.props.aid,
-            ask:this.props.ask,
-            type:this.props.type,
-            isNecessary:this.props.isNecessary
+        this.state = {
+            aid: this.props.aid,
+            question: this.props.question,
+            value: null
         }
-        this.handleChange = this.handleChange.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
-}
-    handleChange(event) {
-    const target = event.target;
-    const name = target.name;
-    const value =target.value;
-  
-    this.setState({
-        [name]: value
-      });
+    }
 
-    this.props.handleChange(this.state.aid,name,value);
-  }
+    handleTitleChange = (value) => {
+        const newSubject = value.target.value
+        const question = {
+            subject: newSubject,
+            type: this.props.question.type,
+            isNecessary: this.props.question.isNecessary,
+            choiceList: this.props.question.choiceList
+        }
+        this.props.chiefHandleChange(this.state.aid, question)
+    }
 
-     handleDelete=()=>{
-        alert(this.state.aid);
-  // alert("点击发出删除请求");
-         this.props.handleDelete(this.state.aid);
-    
-}
-
-componentDidMount(){
-    this.setState({
-        aid:this.props.aid
-    })
-}
-componentDidUpdate(prevProps, prevState) {
-   
-   if(prevProps.aid !== this.props.aid) {
-       this.setState({
-           aid:this.props.aid
-       })
-   }
- }
- moveUp=()=>{
-    this.props.moveUp(this.state.aid);
-  }
-   moveDown=()=>{
-    this.props.moveUp(this.state.aid);
-  
-  }
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevProps !== this.props) {
-        this.setState({
-          aid:this.props.aid,//新建页面的所有排序从0开始
-          ask:this.props.ask,
-          type:this.props.type,//1单选 2多选 3文本
-          isNecessary:this.props.isNecessary,
-          choiceList: this.props.choiceList
+    handleNecessaryChange = (value) => {
+        setTimeout(() => {
+            this.setState({
+                question: {
+                    subject: this.state.question.subject,
+                    type: this.state.question.type,
+                    isNecessary: value.target.value,
+                    choiceList: this.state.question.choiceList
+                }
+            })
+            this.props.chiefHandleChange(this.state.aid, this.state.question)
         })
     }
-  }
-render(){
-    const { TextArea } = Input;
-    return(
-        
-     <div>
-               <div>
-                <span>第{this.state.aid+1}题</span>
-                </div>
-    
-            <div >
-             <Input name="ask" size="large" placeholder={this.state.ask} onChange={this.handleChange}></Input>
+
+    handleDelete = () => {
+        this.props.chiefHandleDelete(this.state.aid);
+    }
+
+    moveUp = () => {
+        this.props.chiefMoveUp(this.state.aid);
+    }
+
+    moveDown = () => {
+        this.props.chiefMoveDown(this.state.aid);
+    }
+
+    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+        if (prevProps !== this.props) {
+            this.setState({
+                aid: this.props.aid,
+                question: this.props.question
+            })
+        }
+    }
+
+    render() {
+        return (
+            <div className={"add_div"}>
+                <Title level={3}>{this.state.aid}.&nbsp;<Input className={"add_title_input"} placeholder={"请输入题目"}
+                                                               value={this.props.question.subject}
+                                                               onChange={this.handleTitleChange}/></Title>
+                <div className={"add_isNecessary"}><span>该题为：&nbsp;&nbsp;</span>
+                    <Radio.Group value={this.state.question.isNecessary} onChange={this.handleNecessaryChange}>
+                        <Radio value={true}>必填</Radio>
+                        <Radio value={false}>非必填</Radio>
+                    </Radio.Group></div>
+                <Button className={"add_button"} size={"small"} icon={<CloseCircleOutlined/>}
+                        onClick={this.handleDelete}>删除</Button>
+                <Button className={"add_button"} size={"small"} icon={<DownCircleOutlined/>}
+                        onClick={this.moveDown}>下移</Button>
+                <Button className={"add_button"} size={"small"} icon={<UpCircleOutlined/>}
+                        onClick={this.moveUp}>上移</Button>
             </div>
-    
-            <div>
-            <Button type="primary" onClick={this.handleDelete} size="large"  icon={<DeleteOutlined />}></Button>     
-            </div>
-            <div>
-                        <span>该题为：</span>
-                        <Radio.Group name="isNecessary" value={this.state.isNecessary} onChange={this.handleChange} >
-                             <Radio value={true}>必填</Radio>
-                             <Radio value={false}>选填</Radio>
-                        </Radio.Group>
-                    </div>
-                    <Button onClick={this.moveUp}>上移</Button>
-                    <Button onClick={this.moveDown}>下移</Button>
-    </div>
-    )
+        )
+    }
 }
 
-}
 export default AddText

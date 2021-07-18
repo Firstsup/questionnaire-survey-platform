@@ -1,12 +1,11 @@
 import React from 'react';
-import {Affix, Button, DatePicker, Divider, Input, message, Spin, Statistic} from 'antd';
+import {Affix, Button, DatePicker, Divider, Input, message, Statistic} from 'antd';
 import {CheckOutlined, EditTwoTone, PlusCircleTwoTone, PlusSquareTwoTone, ProfileOutlined} from '@ant-design/icons';
-import '../css/EditQuestion.css';
-import EditQuestion from "./EditQuestion";
+import '../css/CreatQuestion.css';
+import CreateQuestion from './CreateQuestion';
 import moment from "moment";
-import timeConversion from "../../../utils/TimeConversion";
 
-class EditQuestionnaire extends React.Component {
+class CreatePage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -18,8 +17,7 @@ class EditQuestionnaire extends React.Component {
                 endTime: "",
             },
             questionNum: 0,
-            loading: true,
-            isNew: []
+            isOnComposition: false
         };
     }
 
@@ -43,13 +41,14 @@ class EditQuestionnaire extends React.Component {
             }
         })
         const params = {
-            "qid": this.props.location.search.slice(5),
+            "author": this.state.username,
             "title": this.state.questionnaire.title,
             "ask_list": temp,
             "time": this.state.questionnaire.endTime
         };
         if (params.title !== "" && params.time !== "") {
             let flag = 1;
+            console.log(params.ask_list)
             for (let i = 0; i < params.ask_list.length; i++) {
                 if (params.ask_list[i].subject === "") {
                     flag = 0;
@@ -65,7 +64,7 @@ class EditQuestionnaire extends React.Component {
                     message.warn("问卷内容不能为空")
                     return
                 }
-                fetch('/api/edit/save', {
+                fetch('/api/createSave', {
                     method: 'post',
                     body: JSON.stringify(params),
                     headers: {
@@ -105,7 +104,7 @@ class EditQuestionnaire extends React.Component {
             }
         })
         const params = {
-            "qid": this.props.location.search.slice(5),
+            "author": this.state.username,
             "title": this.state.questionnaire.title,
             "start_time": this.getCreatTime(),
             "ask_list": temp,
@@ -113,6 +112,7 @@ class EditQuestionnaire extends React.Component {
         };
         if (params.title !== "" && params.time !== "") {
             let flag = 1;
+            console.log(params.ask_list)
             for (let i = 0; i < params.ask_list.length; i++) {
                 if (params.ask_list[i].subject === "") {
                     flag = 0;
@@ -128,7 +128,7 @@ class EditQuestionnaire extends React.Component {
                     message.warn("问卷内容不能为空")
                     return
                 }
-                fetch('/api/edit/submit', {
+                fetch('/api/createSubmit', {
                     method: 'post',
                     body: JSON.stringify(params),
                     headers: {
@@ -153,11 +153,6 @@ class EditQuestionnaire extends React.Component {
     }
 
     onAddRadioChild = () => {
-        let isNew = []
-        for (let i = 0; i < this.state.isNew.length; i++) {
-            isNew.push(this.state.isNew[i])
-        }
-        isNew.push(true)
         this.setState(prevState => ({
             questionnaire: {
                 title: this.state.questionnaire.title,
@@ -171,17 +166,11 @@ class EditQuestionnaire extends React.Component {
                 createTime: this.state.questionnaire.createTime,
                 endTime: this.state.questionnaire.endTime,
             },
-            questionNum: this.state.questionNum + 1,
-            isNew: isNew
+            questionNum: this.state.questionNum + 1
         }));
     }
 
     onAddCheckBoxChild = () => {
-        let isNew = []
-        for (let i = 0; i < this.state.isNew.length; i++) {
-            isNew.push(this.state.isNew[i])
-        }
-        isNew.push(true)
         this.setState(prevState => ({
             questionnaire: {
                 title: this.state.questionnaire.title,
@@ -195,17 +184,11 @@ class EditQuestionnaire extends React.Component {
                 createTime: this.state.questionnaire.createTime,
                 endTime: this.state.questionnaire.endTime,
             },
-            questionNum: this.state.questionNum + 1,
-            isNew: isNew
+            questionNum: this.state.questionNum + 1
         }));
     }
 
     onAddTextChild = () => {
-        let isNew = []
-        for (let i = 0; i < this.state.isNew.length; i++) {
-            isNew.push(this.state.isNew[i])
-        }
-        isNew.push(true)
         this.setState(prevState => ({
             questionnaire: {
                 title: this.state.questionnaire.title,
@@ -219,24 +202,41 @@ class EditQuestionnaire extends React.Component {
                 createTime: this.state.questionnaire.createTime,
                 endTime: this.state.questionnaire.endTime,
             },
-            questionNum: this.state.questionNum + 1,
-            isNew: isNew
+            questionNum: this.state.questionNum + 1
         }));
     }
 
-    changeTitle = (e) => {
-        const value = e.target.value
-        this.setState({
-            questionnaire: {
-                title: value,
-                questions: this.state.questionnaire.questions,
-                createTime: this.state.questionnaire.createTime,
-                endTime: this.state.questionnaire.endTime,
+    handleComposition = (e) => {
+        setTimeout(() => {
+            if (e.type === 'compositionend') {
+                this.setState({
+                    isOnComposition: false
+                })
+                this.changeTitle(e)
+            } else {
+                this.setState({
+                    isOnComposition: true
+                })
             }
         })
     }
 
-    chiefHandleChange = (aid, newQuestion, isNew) => {
+    changeTitle = (value) => {
+        if (!this.state.isOnComposition) {
+            setTimeout(() => {
+                this.setState({
+                    questionnaire: {
+                        title: value.target.defaultValue,
+                        questions: this.state.questionnaire.questions,
+                        createTime: this.state.questionnaire.createTime,
+                        endTime: this.state.questionnaire.endTime,
+                    }
+                })
+            })
+        }
+    }
+
+    chiefHandleChange = (aid, newQuestion) => {
         let tempQuestions = this.state.questionnaire.questions;
         for (let i = 0; i < tempQuestions.length; i++) {
             if ((i + 1) === aid) {
@@ -250,18 +250,15 @@ class EditQuestionnaire extends React.Component {
                 questions: tempQuestions,
                 createTime: this.state.questionnaire.createTime,
                 endTime: this.state.questionnaire.endTime,
-            },
-            isNew: isNew
+            }
         })
     }
 
     chiefHandleDelete = (aid) => {
         let tempQuestions = this.state.questionnaire.questions;
-        let tempIsNew = this.state.isNew;
         for (let i = 0; i < tempQuestions.length; i++) {
             if ((i + 1) === aid) {
                 tempQuestions.splice(i, 1);
-                tempIsNew.splice(i, 1);
                 break;
             }
         }
@@ -272,22 +269,17 @@ class EditQuestionnaire extends React.Component {
                 createTime: this.state.questionnaire.createTime,
                 endTime: this.state.questionnaire.endTime,
             },
-            questionNum: this.state.questionNum - 1,
-            isNew: tempIsNew
+            questionNum: this.state.questionNum - 1
         })
     }
 
     chiefMoveUp = (aid) => {
         let tempQuestions = this.state.questionnaire.questions;
-        let tempIsNew = this.state.isNew;
         for (let i = 0; i < tempQuestions.length; i++) {
             if ((i + 1) === aid && i !== 0) {
                 let temp = tempQuestions[i];
                 tempQuestions[i] = tempQuestions[i - 1];
                 tempQuestions[i - 1] = temp;
-                temp = tempIsNew[i];
-                tempIsNew[i] = tempIsNew[i - 1];
-                tempIsNew[i - 1] = temp;
             }
         }
         this.setState({
@@ -296,22 +288,17 @@ class EditQuestionnaire extends React.Component {
                 questions: tempQuestions,
                 createTime: this.state.questionnaire.createTime,
                 endTime: this.state.questionnaire.endTime,
-            },
-            isNew: tempIsNew
+            }
         })
     }
 
     chiefMoveDown = (aid) => {
         let tempQuestions = this.state.questionnaire.questions;
-        let tempIsNew = this.state.isNew;
         for (let i = 0; i < tempQuestions.length; i++) {
             if ((i + 1) === aid && i !== tempQuestions.length - 1) {
                 let temp = tempQuestions[i];
                 tempQuestions[i] = tempQuestions[i + 1];
                 tempQuestions[i + 1] = temp;
-                temp = tempIsNew[i];
-                tempIsNew[i] = tempIsNew[i + 1];
-                tempIsNew[i + 1] = temp;
             }
         }
         this.setState({
@@ -320,8 +307,7 @@ class EditQuestionnaire extends React.Component {
                 questions: tempQuestions,
                 createTime: this.state.questionnaire.createTime,
                 endTime: this.state.questionnaire.endTime,
-            },
-            isNew: tempIsNew
+            }
         })
     }
 
@@ -338,100 +324,49 @@ class EditQuestionnaire extends React.Component {
         })
     }
 
-    componentDidMount() {
-        const params = {
-            "qid": this.props.location.search.slice(5)
-        };
-        fetch('/api/edit?qid=' + params.qid, {
-            method: 'get',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-        }).then(res => res.json())
-            .then(res => {
-                const get = res.data.data;
-                this.setState({
-                    username: get.author,
-                    questionnaire: {
-                        title: get.title,
-                        endTime: get.time,
-                        createTime: "",
-                        questions: get.ask_list.map((list) => {
-                            return ({
-                                subject: list.ask,
-                                type: list.type === 1 ? "radio" : (list.type === 2 ? "multiple" : "text"),
-                                isNecessary: list.isNecessary,
-                                choiceList: list.choice_list.map((choice) => {
-                                    return (choice.content)
-                                })
-                            })
-                        })
-                    },
-                    questionNum: get.ask_list.length,
-                    isNew: get.ask_list.map(() => {
-                        return false
-                    })
-                })
-            });
-        this.setState({
-            loading: false
-        })
-    }
-
     render() {
-        if (this.state.loading === true || (this.state.questionnaire.title === "" && this.state.questionnaire.endTime === "")) {
-            return (<div
-                style={{height: document.documentElement.clientHeight, width: document.documentElement.clientWidth}}>
-                <Spin className={"edit_spin"} tip="加载中..."/></div>)
-        } else {
-            return (
-                <>
-                    <Affix className={"create_affix"} offsetTop={200}>
-                        <div>
-                            <Button className={"create_button"}
-                                    onClick={this.onAddRadioChild}><PlusCircleTwoTone/>添加单选题</Button>
-                            <Button className={"create_button"} onClick={this.onAddCheckBoxChild}><PlusSquareTwoTone/>添加多选题</Button>
-                            <Button className={"create_button"}
-                                    onClick={this.onAddTextChild}><EditTwoTone/>添加文本题</Button>
-                            <Statistic className={"create_statistic"} title="当前题目数" value={this.state.questionNum}
-                                       prefix={<ProfileOutlined/>}/>
-                        </div>
-                    </Affix>
-                    <div className={"create_content"}>
-                        <div className={"create_title_div"}><span
-                            className={"create_title_span"}><strong>问卷标题：</strong></span><Input
-                            className={"create_title"}
-                            value={this.state.questionnaire.title}
-                            name="questionnaireTitle"
-                            placeholder="请输入问卷标题"
-                            onChange={this.changeTitle}/>
-                        </div>
-                        <div className={"create_title_div"}>
-                            <span><strong>发布者：</strong>{this.state.username}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span
-                            className={"create_title_span"}><strong>问卷截止时间：</strong></span>
-                            <DatePicker className={"create_datePicker"}
-                                        defaultValue={moment(timeConversion(this.state.questionnaire.endTime), 'YYYY-MM-DD HH:mm:ss')}
-                                        showTime showNow={false} allowClear={false} onOk={this.onOk}/>
-                        </div>
-                        <Divider>问卷内容</Divider>
-                        <EditQuestion questions={this.state.questionnaire.questions}
-                                      chiefHandleDelete={this.chiefHandleDelete}
-                                      chiefHandleChange={this.chiefHandleChange}
-                                      chiefMoveUp={this.chiefMoveUp} chiefMoveDown={this.chiefMoveDown}
-                                      isNew={this.state.isNew}/>
-                        <Divider className={"create_divider"}/>
-                        <div className={"create_buttons"}>
-                            <Button className={"create_submit_button"} type="primary" onClick={this.handleSubmit}
-                                    shape="round"><CheckOutlined/>保存并发布问卷</Button>
-                            <Button className={"create_submit_button"} type="primary" onClick={this.handleSave}
-                                    shape="round"><CheckOutlined/>保存问卷</Button>
-                        </div>
+        return (
+            <>
+                <Affix className={"create_affix"} offsetTop={200}>
+                    <div>
+                        <Button className={"create_button"}
+                                onClick={this.onAddRadioChild}><PlusCircleTwoTone/>添加单选题</Button>
+                        <Button className={"create_button"} onClick={this.onAddCheckBoxChild}><PlusSquareTwoTone/>添加多选题</Button>
+                        <Button className={"create_button"} onClick={this.onAddTextChild}><EditTwoTone/>添加文本题</Button>
+                        <Statistic className={"create_statistic"} title="当前题目数" value={this.state.questionNum}
+                                   prefix={<ProfileOutlined/>}/>
                     </div>
-                </>
-            )
-        }
+                </Affix>
+                <div className={"create_content"}>
+                    <div className={"create_title_div"}><span
+                        className={"create_title_span"}><strong>问卷标题：</strong></span><Input className={"create_title"}
+                                                                                            onCompositionStart={this.handleComposition}
+                                                                                            onCompositionUpdate={this.handleComposition}
+                                                                                            onCompositionEnd={this.handleComposition}
+                                                                                            name="questionnaireTitle"
+                                                                                            placeholder="请输入问卷标题"
+                                                                                            onChange={this.changeTitle}/>
+                    </div>
+                    <div className={"create_title_div"}>
+                        <span><strong>发布者：</strong>{this.state.username}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span
+                        className={"create_title_span"}><strong>问卷截止时间：</strong></span>
+                        <DatePicker className={"create_datePicker"} showTime showNow={false} onOk={this.onOk}/></div>
+                    <Divider>问卷内容</Divider>
+                    <CreateQuestion questions={this.state.questionnaire.questions}
+                                    chiefHandleDelete={this.chiefHandleDelete}
+                                    chiefHandleChange={this.chiefHandleChange}
+                                    chiefMoveUp={this.chiefMoveUp} chiefMoveDown={this.chiefMoveDown}/>
+                    <Divider className={"create_divider"}/>
+                    <div className={"create_buttons"}>
+                        <Button className={"create_submit_button"} type="primary" onClick={this.handleSubmit}
+                                shape="round"><CheckOutlined/>保存并发布问卷</Button>
+                        <Button className={"create_submit_button"} type="primary" onClick={this.handleSave}
+                                shape="round"><CheckOutlined/>保存问卷</Button>
+                    </div>
+                </div>
+            </>
+        )
     }
 }
 
-export default EditQuestionnaire;
+export default CreatePage;
