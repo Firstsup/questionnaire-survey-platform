@@ -1,0 +1,41 @@
+.analysis_header, .analysis_content, .analysis_footer {
+  background-color: white !important;
+  width: 100%;
+}
+
+.analysis_layout {
+  background-color: white !important;
+}
+
+.analysis_header {
+  margin-top: 3%;
+  margin-bottom: 3%;
+}
+
+.analysis_header_title {
+  text-align: center;
+  color: #0050b3 !important;
+}
+
+.analysis_content {
+  margin: auto;
+  width: 80%;
+  border-style: solid;
+  border-color: #f0f5ff;
+  padding: 20px 20px;
+}
+
+.analysis_footer {
+  margin-top: 3%;
+  margin-bottom: 5%;
+  text-align: center;
+}
+
+.analysis_view_button {
+  margin-right: 100px;
+}
+
+.dataAnalysis_spin {
+  margin-top: 400px !important;
+  margin-left: 50% !important;
+}

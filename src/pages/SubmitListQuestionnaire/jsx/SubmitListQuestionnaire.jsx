@@ -1,15 +1,11 @@
 import React, { Component } from 'react'
-import { Table, Space, message } from 'antd';
-// import reqwest from 'reqwest';
+import { Table, Space, message,Layout, Button, Spin } from 'antd';
+import {Content, Footer, Header} from "antd/es/layout/layout";
 import { DeleteOutlined,EyeOutlined  } from '@ant-design/icons';
 import SubmitDetailQuestionnaire from './SubmitDetailQuestionnaire'
 import timeConversion from "../../../utils/TimeConversion"
-
-// const getRandomuserParams = params => ({
-//     results: params.pagination.pageSize,
-//     page: params.pagination.current,
-//     ...params,
-// });
+import '../css/SubmitListQuestionnaire.css'
+import Title from "antd/es/typography/Title";
 
 export default class SubmitListQuestionnaire extends Component {
     constructor(props) {
@@ -19,27 +15,18 @@ export default class SubmitListQuestionnaire extends Component {
             qid:"",
             ans_qid:'',
             answers:'',
-            // questions:'',
-            // questions: [],
+            title:'',
+            xuhao:'',
             questionnaire: {
-                // title: "",
-                // publisher: "",
-                // fillerCount: 0,
-                // qid: "",
-                // releaseTime: "",
-                // deadline: "",
-                // state: 0,
                 questions: []
             },
             questionnnaireIndex: -1,
-            // ans_qid: ans_qid,
             pagination: {
                 current: 1,
                 pageSize: 10,
             },
             loading: false,
             tableRowId: -1,
-            // questionnaire: questionnaire,
             modalVisible: false
         }
     }
@@ -58,51 +45,40 @@ export default class SubmitListQuestionnaire extends Component {
             },
         }).then(res => res.json())
             .then(res =>{
-            console.log("fanhuide:",res.data);
-            console.log("res.data.data2",res.data.data2);
             var anslist = res.data.data1[0].ans_list
-            // .map((list)=>{
-            //     return list.choice
-            // })
-            console.log('choice',anslist);
             this.setState({
                 questionnaire: {
                     questions: res.data.data2[0].ask_list.map((list,index) => {
                         var anss = [] 
                         if(list.type === 1){
-                            var a =  anslist[index].choice[0].charCodeAt(0) - 65                        
+                          if(anslist[index].choice[0] == ''){        
+                            anss.push("用户未回答");  
+                          }   
+                          else{
+                            var a =  anslist[index].choice[0].charCodeAt(0) - 65  
                             anss.push(res.data.data2[0].ask_list[index].choice_list[a].content)
-                            console.log("a2 is ",anss);
+                          }      
                         }
                         else if(list.type === 2){
-                            let i = 0;
-                            while(i <　(anslist[index].choice.length)){
-                                
-                                console.log("aa22",anslist[index].choice[i]);
-                                i++;
-                            }
-
-                            // for (var prop in res.data.data2[0].ask_list[index].choice_list) {
-                            //     console.log("obj." + prop + " = " + obj[prop]);
-                            // }
-
+                          let arr = []
+                          if(anslist[index].choice[0] == '')
+                            anss.push("用户未回答");
+                          else{
                             for(let i = 0; i < (anslist[index].choice.length); i++){
-                                console.log("aa",anslist[index].choice[i]);
+                              arr.push(anslist[index].choice[i].charCodeAt(0) - 65);
                             }
-                            anslist[index].choice.map((item,index)=>{
-                                console.log("item",item);
-                                let a = item.charCodeAt(0) - 65  
-                                console.log("ye",res.data.data2[0].ask_list[index].choice_list[a]);
-                                
-                                // anss.push(res.data.data2[0].ask_list[index].choice_list[a].content)                    
+                            var j = 0;
+                            arr.map((item)=>{
+                              anss.push(res.data.data2[0].ask_list[index].choice_list[item].content);
                             })
-                            console.log("a2 is ",anss);
-                            // var a =  anslist[index].choice
-                            
+                          }
                         }
                         else if(list.type === 3){
-                            var a =  anslist[index].ans
-                            console.log("a3 is ",a);
+                          var a =  anslist[index].ans
+                          if(a == '')
+                            anss.push("用户未回答");
+                          else
+                            anss.push(a)
                         }
                         return ({
                             subject: list.ask,
@@ -114,7 +90,6 @@ export default class SubmitListQuestionnaire extends Component {
                 }
             })
             this.setState({answers: res.data.data1[0]})
-            console.log(75123459,this.state.answers);
         });
         this.setState({modalVisible: true})
     }
@@ -126,8 +101,6 @@ export default class SubmitListQuestionnaire extends Component {
     handleDelete = () => {
         if(window.confirm('确定删除吗？')){
             const { data,tableRowId } = this.state
-            console.log("tableRowId",tableRowId)
-            console.log("data22222222",data)
             const Params = {
                 "ans_qid":tableRowId
             };
@@ -140,12 +113,9 @@ export default class SubmitListQuestionnaire extends Component {
                 },
             }).then(res => res.json())
                 .then(res =>{
-                console.log("delete:",res);
                 if (res.code === 1) {
                     const newData = data.filter(
                         (dataObj) => {
-                            console.log("data",dataObj.ans_qid)
-                            console.log(dataObj.ans_qid !== tableRowId)
                             return dataObj.ans_qid !== tableRowId
                         }
                     )
@@ -159,14 +129,16 @@ export default class SubmitListQuestionnaire extends Component {
         }
     }
 
-    settableRowId = (qid,ans_qid) => {
-        this.setState({tableRowId:ans_qid,qid:qid,ans_qid:ans_qid})
+    settableRowId = (qid,ans_qid,key) => {
+        this.setState({tableRowId:ans_qid,qid:qid,ans_qid:ans_qid,xuhao:key})
     }
 
     componentDidMount() {
         const Params = {
-            "qid":this.props.location.search.slice(5)
+          "qid":(this.props.location.search.split('=')[1]).split('&')[0],
+          "title":this.props.location.search.split('=')[2]
         };
+        this.setState({title:this.props.location.search.split('=')[2],qid:(this.props.location.search.split('=')[1]).split('&')[0]})
         fetch('/api/ans',{
             method: 'post',
             body: JSON.stringify(Params),
@@ -176,7 +148,6 @@ export default class SubmitListQuestionnaire extends Component {
             },
         }).then(res => res.json())
             .then(res =>{
-            console.log("resdata",res.data);
             var newData = []
                 res.data.map(((item, index) => {
                     newData.push(Object.assign({}, item, {
@@ -186,102 +157,73 @@ export default class SubmitListQuestionnaire extends Component {
                 }))
                 this.setState({data: newData})
         });
-        // const { pagination } = this.state;
-        // this.fetch({ pagination });
     }
 
-    // handleTableChange = (pagination, filters, sorter) => {
-    //     this.fetch({
-    //         sortField: sorter.field,
-    //         sortOrder: sorter.order,
-    //         pagination,
-    //         ...filters,
-    //     });
-    // };
-
-    // fetch = (params = {}) => {
-    //     this.setState({ loading: true });
-    //     reqwest({
-    //         url: 'https://randomuser.me/api',
-    //         method: 'get',
-    //         type: 'json',
-    //         data: getRandomuserParams(params),
-    //     }).then(data => {
-    //         console.log(data);
-    //         this.setState({
-    //         loading: false,
-    //         // data: data.results,
-    //         data:data,
-    //         pagination: {
-    //             ...params.pagination,
-    //             total: 200,
-    //             // 200 is mock data, you should read it from server
-    //             // total: data.totalCount,
-    //         },
-    //         });
-    //     });
-    // };
-
     render() {
-        const {data,questionnnaireIndex} = this.state
-        // console.log(data)
-        const columns = [
-            {
-                title: '序号',
-                dataIndex: 'key',
-                // sorter: true,
-                sorter: (a, b) => a.key - b.key,
-                // render: name => `${key}`,
-                width: '20%',
-            },
-            {
-                title: '提交答卷时间',
-                dataIndex: 'ans_time',
-                // filters: [
-                // { text: 'Male', value: 'male' },
-                // { text: 'Female', value: 'female' },
-                // ],
-                width: '40%',
-            },
-            {
-                title: '操作',
-                dataIndex: 'action',
-                render: () => (
-                    <Space size="middle">
-                      <span onClick={()=> this.handleDelete()}><DeleteOutlined /></span>
-                      <span onClick={()=> this.handleOnClick()}><EyeOutlined /></span>
-                    </Space>
-                ),
-            },
-        ];
-
+      const {data,questionnnaireIndex} = this.state
+      const columns = [
+        {
+            title: '序号',
+            dataIndex: 'key',
+            sorter: (a, b) => a.key - b.key,
+            width: '20%',
+        },
+        {
+            title: '提交答卷时间',
+            dataIndex: 'ans_time',
+            width: '40%',
+        },
+        {
+            title: '操作',
+            dataIndex: 'action',
+            render: () => (
+                <Space size="middle">
+                  <span onClick={() => this.handleDelete()}><DeleteOutlined /></span>
+                  <span onClick={() => this.handleOnClick()}><EyeOutlined /></span>
+                </Space>
+            ),
+        },
+      ];
+      if (this.state.loading === true || this.state.questionnaire.title === "") {
         return (
-            <>
-            <SubmitDetailQuestionnaire
-                    questionnaire={this.state.questionnaire}
-                    answers={this.state.answers}
-                    questionnnaireIndex = {questionnnaireIndex}
-                    modalVisible={this.state.modalVisible}
-                    handleDelete = {this.handleDelete}
-                    handleCancel={this.handleCancel}/>
-            <Table style={{width:'80%',marginLeft: '10%'}}
-            columns={columns}
-            // rowKey={record => record.login.uuid}
-            dataSource={data}
-            // pagination={pagination}
-            // loading={loading}
-            onChange={this.handleTableChange}
-            onRow = {(record) => {
+          <div
+            style={{
+                height: document.documentElement.clientHeight,
+                width: document.documentElement.clientWidth
+            }}>
+            <Spin className={"dataAnalysis_spin"} tip="加载中..."/>
+          </div>
+        )
+      } else {
+        return (
+          <Layout className={"analysis_layout"}>
+            <Header className={"analysis_header"}>
+              <Title className={"analysis_header_title"}
+              level={2}>问卷《{this.state.title}》的具体答卷</Title>
+            </Header>
+            <Content className={"analysis_content"}>
+              <SubmitDetailQuestionnaire
+                xuhao={this.state.xuhao}
+                questionnaire={this.state.questionnaire}
+                answers={this.state.answers}
+                questionnnaireIndex = {questionnnaireIndex}
+                modalVisible={this.state.modalVisible}
+                handleDelete = {this.handleDelete}
+                handleCancel={this.handleCancel}/>
+              <Table
+              columns={columns}
+              dataSource={data}
+              onChange={this.handleTableChange}
+              onRow = {(record) => {
                 return {
                   onMouseEnter: () => {
-                    // console.log("record",record)
-                    this.settableRowId(record.qid,record.ans_qid)
-                    }
+                    this.settableRowId(record.qid,record.ans_qid,record.key)
                   }
                 }
-              }
-            />
-            </>
+              }}/>
+            </Content>
+          </Layout>
         )
+      }
     }
 }

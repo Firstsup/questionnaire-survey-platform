@@ -23,7 +23,7 @@ class DataAnalysis extends Component {
 
     handleViewClick = () => {
         this.state.qid = this.props.location.search.slice(5);
-        this.props.history.push('/submitlistquestionnaire?qid=' + this.state.qid)
+        this.props.history.push('/submitlistquestionnaire?qid=' + this.state.qid+"&title="+this.state.questionnaire.title)
     }
 
     handleBackClick = () => {

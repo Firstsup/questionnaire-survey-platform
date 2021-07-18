@@ -40,6 +40,7 @@ export default class PageList extends Component {
         top: 'none',
         bottom: 'bottomRight',
         data: [],
+        tempData: [],
         rowId: -1,
         selectedRowKeys: [],
         modalVisible: false,
@@ -64,8 +65,8 @@ export default class PageList extends Component {
         for (const d in this.state.data) {
             dataSearch.push(this.state.data[d])
         }
-        let oldData = dataSearch;
-        console.log(33,dataSearch);
+        // let oldData = dataSearch;
+        // console.log(33,dataSearch);
         for (let i = 0; i < dataSearch.length; i++) {
             if (dataSearch[i] == null || !dataSearch[i].title.includes(value)) {
                 dataSearch.splice(i, 1);
@@ -73,9 +74,9 @@ export default class PageList extends Component {
             }
         }
         this.setState({
-            data: dataSearch
+          tempData: dataSearch
         })
-        console.log('oldData',oldData);
+        // console.log('oldData',oldData);
     }
 
     //发送请求
@@ -96,7 +97,7 @@ export default class PageList extends Component {
                         time: timeConversion(item.time)
                     }))
                 }))
-                this.setState({data: newData})
+                this.setState({data: newData,tempData:newData})
             });
     }
 
@@ -231,47 +232,45 @@ export default class PageList extends Component {
             onChange: this.onSelectChange,
         };
         const menu = (
-            <Menu onClick={this.ItemonClick}>
-                <Menu.Item key="1">更改密码</Menu.Item>
-                <Menu.Item key="2">退出登录</Menu.Item>
-            </Menu>
+          <Menu onClick={this.ItemonClick}>
+            <Menu.Item key="1">更改密码</Menu.Item>
+            <Menu.Item key="2">退出登录</Menu.Item>
+          </Menu>
         )
         // const hasSelected = selectedRowKeys.length > 0;
         const columns = [
             {
-                title: '问卷名称',
-                dataIndex: 'title',
-                width: "10%"
+              title: '问卷名称',
+              dataIndex: 'title',
+              width: "10%"
             },
             {
-                title: '问卷id',
-                dataIndex: 'qid',
-                width: "10%"
+              title: '问卷id',
+              dataIndex: 'qid',
+              width: "10%"
             },
             {
-                title: '问卷状态',
-                dataIndex: 'status',
-                width: "10%"
+              title: '问卷状态',
+              dataIndex: 'status',
+              width: "10%"
             },
             {
-                sorter: (a, b) => a.age - b.age,
-                title: '创建时间',
-                dataIndex: 'time',
-                width: "35%"
+              sorter: (a, b) => a.age - b.age,
+              title: '创建时间',
+              dataIndex: 'time',
+              width: "35%"
             },
             {
-                title: '操作问卷',
-                key: 'action',
-                //   sorter: true,
-
-                render: () => (
-                    <Space size="middle">
-                        <a onClick={() => this.handleDelete()}>删除</a>
-                        <a onClick={() => this.handleEdit()}>编辑问卷</a>
-                        <a onClick={() => this.handleOnClick()}>查看问卷</a>
-                        <a onClick={() => this.handleResult()}>查看结果</a>
-                    </Space>
-                ),
+              title: '操作问卷',
+              key: 'action',
+              render: () => (
+                  <Space size="middle">
+                      <a onClick={() => this.handleDelete()}>删除</a>
+                      <a onClick={() => this.handleEdit()}>编辑问卷</a>
+                      <a onClick={() => this.handleOnClick()}>查看问卷</a>
+                      <a onClick={() => this.handleResult()}>查看结果</a>
+                  </Space>
+              ),
             },
         ];
         const tableColumns = columns
@@ -316,12 +315,11 @@ export default class PageList extends Component {
                         {...this.state}
                         pagination={{position: [this.state.top, this.state.bottom]}}
                         columns={tableColumns}
-                        dataSource={state.hasData ? data : null}
+                        dataSource={state.hasData ? this.state.tempData : null}
                         scroll={scroll} rowSelection={rowSelection}
                         onRow={(record) => {
                             return {
                                 onMouseEnter: () => {
-                                    // console.log("record",record)
                                     this.setRowId(record.qid)
                                 }
                             }
