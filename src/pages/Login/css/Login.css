@@ -17,7 +17,9 @@
 }
 
 .login_title {
+    position: relative;
+    left: 50%;
+    width: 300px;
+    margin-left: -150px;
     padding-top: 200px;
-    text-align: center;
-    color: #0050b3 !important;
 }

@@ -34,7 +34,7 @@ class Register extends React.Component {
     render() {
         return (
             <>
-                <Title className={"register_title"} level={1}>正&nbsp;版&nbsp;问卷星</Title>
+                <img className={"login_title"} src={"./qlogo.png"} alt={"logo"}/>
                 <Form
                     name="normal_register"
                     className="register-form"

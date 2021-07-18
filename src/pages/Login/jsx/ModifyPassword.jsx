@@ -37,7 +37,7 @@ class ModifyPassword extends Component {
     render() {
         return (
             <>
-                <Title className={"reset_title"} level={1}>正&nbsp;版&nbsp;问卷星</Title>
+                <img className={"login_title"} src={"./qlogo.png"} alt={"logo"}/>
                 <Form
                     name="normal_reset"
                     className="reset-form"
