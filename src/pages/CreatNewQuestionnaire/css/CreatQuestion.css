@@ -1,51 +1,48 @@
-.create_button {
-    display: block;
-    margin-top: 30px;
+.questionsConten{
+    width:1440px;
+    height: 4000px;
+    background:rgb(195, 206, 252)
 }
 
-.create_affix {
-    position: absolute;
-    margin-left: 30px;
-    width: 150px;
+.questionsSideBar1{
+    position: fixed;
+    top:100px;
+    width:400px;
+    height: 900px;
+    padding: 50px;
+    background:rgba(195, 206, 252,0)
 }
 
-.create_content {
-    float: top;
-    margin: auto;
-    width: 70%;
-}
-
-.create_title {
-    display: inline-block;
-    width: 300px;
-    margin-top: 80px;
-}
-
-.create_statistic {
-    margin-top: 50px;
-    margin-left: 25px;
-}
-
-.create_datePicker {
-    display: inline-block;
-}
-
-.create_title_div {
+.questionsHeadTitle{
     text-align: center;
-    margin: auto auto 30px;
+    background:rgb(255, 255, 255)
 }
 
-.create_divider {
-    margin-top: 100px;
+.questionsSideBar2{
+    position:absolute;
+    left:400px;
+    width:800px;
+    height: 500px;
+
+    background:rgba(195, 206, 252,1)
+}
+.questionsSideBar3{
+    position:absolute;
+    left:400px;
+    width:800px;
+    height: 500px;
+
+    background:rgba(195, 206, 252,1)
 }
 
-.create_submit_button {
-    float: right;
-    margin-left: 20px;
-    margin-right: 20px;
-    display: inline-block;
+.questionsdiv{
+    position:sticky;
+    left:400px;
+    width:800px;
+
+    background:rgba(195, 206, 252,1)
 }
 
-.create_buttons {
-    height: 100px;
+.asksoptions{
+    width: 500px;
 }

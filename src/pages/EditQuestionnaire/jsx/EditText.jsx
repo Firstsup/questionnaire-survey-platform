@@ -1,148 +1,96 @@
-import React from 'react';
-import {
-    CloseCircleOutlined,
-    UpCircleOutlined,
-    DownCircleOutlined, CheckCircleOutlined, InfoCircleOutlined
-} from '@ant-design/icons';
-import {Radio, Input, Button, Typography, message} from 'antd';
-import "../css/EditedQuestions.css"
+import React, {Component} from 'react';
+import ReactDom from 'react-dom';
+import {DeleteOutlined, PlusOutlined} from '@ant-design/icons';
+import {Radio, Input, Space, Button} from 'antd';
+import '../css/EditQuestionnaire.css'
 
-const {Title} = Typography;
+const {TextArea} = Input;
 
 class EditText extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             aid: this.props.aid,
-            question: this.props.question,
-            value: null,
-            isEditing: this.props.isNew[this.props.aid - 1]
-        }
-    }
-
-    handleTitleChange = (value) => {
-        const newSubject = value.target.value
-        const question = {
-            subject: newSubject,
+            subject: this.props.question.subject,
             type: this.props.question.type,
             isNecessary: this.props.question.isNecessary,
-            choiceList: this.props.question.choiceList
+            choicenum: this.props.question.options.length,
+            choiceList: this.props.question.options,
         }
-        this.props.chiefHandleChange(this.state.aid, question, this.props.isNew)
+        this.handleChange = this.handleChange.bind(this);
     }
 
-    handleNecessaryChange = (value) => {
-        setTimeout(() => {
-            this.setState({
-                question: {
-                    subject: this.state.question.subject,
-                    type: this.state.question.type,
-                    isNecessary: value.target.value,
-                    choiceList: this.state.question.choiceList
-                }
-            })
-            this.props.chiefHandleChange(this.state.aid, this.state.question, this.props.isNew)
+    handleChange = (event) => {
+        const target = event.target;
+        const name = target.name;
+        const value = target.value;
+
+        this.setState({
+            [name]: value
         })
-    }
 
+        this.props.handleChange(this.state.aid,name,value);
+    }
     handleDelete = () => {
-        this.props.chiefHandleDelete(this.state.aid);
+        this.props.handleDelete(this.state.aid - 1)
     }
 
     moveUp = () => {
-        this.props.chiefMoveUp(this.state.aid);
+        this.props.moveUp(this.state.aid - 1)
     }
 
     moveDown = () => {
-        this.props.chiefMoveDown(this.state.aid);
+        this.props.moveDown(this.state.aid - 1)
     }
 
-    save = () => {
-        let flag = 1
-        if (this.state.question.subject === "") {
-            flag = 0
-        }
-        if (flag === 1) {
-            this.setState({
-                isEditing: false
-            })
-            let isNew = this.props.isNew
-            for (let i = 0; i < isNew.length; i++) {
-                if (i === this.props.aid - 1) {
-                    isNew[i] = false
-                }
-            }
-            this.props.chiefHandleChange(this.state.aid, this.state.question, isNew)
-            return
-        }
-        message.warn("请将题目信息填写完整再保存")
-    }
-
-    edit = () => {
-        this.setState({
-            isEditing: true
-        })
-        let isNew = this.props.isNew
-        for (let i = 0; i < isNew.length; i++) {
-            if (i === this.props.aid - 1) {
-                isNew[i] = true
-            }
-        }
-        this.props.chiefHandleChange(this.state.aid, this.state.question, isNew)
-    }
-
-    componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+    componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps !== this.props) {
             this.setState({
                 aid: this.props.aid,
-                question: this.props.question,
-                isEditing: this.props.isNew[this.props.aid - 1]
+                subject: this.props.question.subject,
+                type: this.props.question.type,
+                isNecessary: this.props.question.isNecessary,
+                choicenum: this.props.question.options.length,
+                choiceList: this.props.question.options,
             })
         }
     }
 
     render() {
-        if (this.state.isEditing === true) {
-            return (
-                <div className={"add_div"}>
-                    <Title level={3}>{this.state.aid}.&nbsp;<Input className={"add_title_input"} placeholder={"请输入题目"}
-                                                                   value={this.props.question.subject}
-                                                                   onChange={this.handleTitleChange}/></Title>
-                    <div className={"add_isNecessary"}><span>该题为：&nbsp;&nbsp;</span>
-                        <Radio.Group value={this.state.question.isNecessary} onChange={this.handleNecessaryChange}>
+        return (
+
+            <div className="edit_questionsdiv">
+                <div>
+                    <div>
+                        <span name="aid" value=""/*题号 根据该题在题目数组中的索引号+1生成 */ >这是第{this.state.aid}题</span>
+                    </div>
+
+                    <div>
+                        <Input name="subject" onChange={this.handleChange} size="large" placeholder={this.state.subject}/>
+                    </div>
+
+                    <div>
+                        <Button type="primary" onClick={this.handleDelete} size="large" icon={<DeleteOutlined/>}/>
+                    </div>
+
+                    <div>
+                        <span>该题为：</span>
+                        <Radio.Group name="isNecessary"  onChange={this.handleChange}>
                             <Radio value={true}>必填</Radio>
-                            <Radio value={false}>非必填</Radio>
-                        </Radio.Group></div>
-                    <Button className={"add_button"} size={"small"} icon={<CloseCircleOutlined/>}
-                            onClick={this.handleDelete}>删除</Button>
-                    <Button className={"add_button"} size={"small"} icon={<DownCircleOutlined/>}
-                            onClick={this.moveDown}>下移</Button>
-                    <Button className={"add_button"} size={"small"} icon={<UpCircleOutlined/>}
-                            onClick={this.moveUp}>上移</Button>
-                    <Button className={"add_button"} type={"primary"} size={"small"} icon={<CheckCircleOutlined/>}
-                            onClick={this.save}>保存</Button>
+                            <Radio value={false}>选填</Radio>
+                        </Radio.Group>
+                    </div>
+                    <Button onClick={this.moveUp}>上移</Button>
+                    <Button onClick={this.moveDown}>下移</Button>
+
                 </div>
-            )
-        } else {
-            return (
-                <div className={"add_div"}>
-                    <Title className={"add_title"} level={3}>{this.state.aid}.&nbsp;</Title><Title
-                    className={"add_title"} level={4}>{this.props.question.subject}</Title>
-                    <div className={"add_isNecessary"}>该题为：&nbsp;&nbsp;{this.state.question.isNecessary === true ?
-                        <span>必填</span> :
-                        <span>非必填</span>}</div>
-                    <Button className={"add_button"} size={"small"} icon={<CloseCircleOutlined/>}
-                            onClick={this.handleDelete}>删除</Button>
-                    <Button className={"add_button"} size={"small"} icon={<DownCircleOutlined/>}
-                            onClick={this.moveDown}>下移</Button>
-                    <Button className={"add_button"} size={"small"} icon={<UpCircleOutlined/>}
-                            onClick={this.moveUp}>上移</Button>
-                    <Button className={"add_button"} size={"small"} icon={<InfoCircleOutlined/>}
-                            onClick={this.edit}>编辑</Button>
-                </div>
-            )
-        }
+            </div>
+
+
+        )
+
     }
+
 }
 
 export default EditText
