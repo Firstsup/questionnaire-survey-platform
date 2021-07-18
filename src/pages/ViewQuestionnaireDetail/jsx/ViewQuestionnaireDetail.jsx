@@ -37,33 +37,35 @@ class ViewQuestionnaireDetail extends Component {
                     },
                 }).then(res => res.json())
                     .then(res => {
-                        const get = res.data.data[0];
-                        console.log("get si :",get);
-                        this.setState({
-                            questionnaire: {
-                                title: get.title,
-                                publisher: get.author,
-                                fillerCount: get.total,
-                                qid: get.qid,
-                                releaseTime: get.start_time,
-                                deadline: get.time,
-                                status: get.status === 0 ? "未发布" : (get.status === 1 ? "发布中" : "已过期"),
-                                questions: get.ask_list.map((list) => {
-                                    return ({
-                                        subject: list.ask,
-                                        type: list.type === 1 ? "单选题" : (list.type === 2 ? "多选题" : "文本题"),
-                                        isNecessary: list.isNecessary,
-                                        options: list.choice_list.map((choice) => {
-                                            return (choice.content)
+                        console.log(res)
+                        if (res.code !== 0) {
+                            const get = res.data.data[0];
+                            this.setState({
+                                questionnaire: {
+                                    title: get.title,
+                                    publisher: get.author,
+                                    fillerCount: get.total,
+                                    qid: get.qid,
+                                    releaseTime: get.start_time,
+                                    deadline: get.time,
+                                    status: get.status === 0 ? "未发布" : (get.status === 1 ? "发布中" : "已过期"),
+                                    questions: get.ask_list.map((list) => {
+                                        return ({
+                                            subject: list.ask,
+                                            type: list.type === 1 ? "单选题" : (list.type === 2 ? "多选题" : "文本题"),
+                                            isNecessary: list.isNecessary,
+                                            options: list.choice_list.map((choice) => {
+                                                return (choice.content)
+                                            })
                                         })
                                     })
-                                })
-                            }
-                        })
+                                }
+                            })
+                        }
                     })
             }
         }
-        console.log("questions-",this.state.questionnaire.questions);
+        console.log("questions-", this.state.questionnaire.questions);
     }
 
     render() {
@@ -74,7 +76,7 @@ class ViewQuestionnaireDetail extends Component {
             return (
                 <Modal
                     visible={this.props.modalVisible}
-                    onOk={() => this.props.handleOk(questionnaire.status,questionnaire.qid)}
+                    onOk={() => this.props.handleOk(questionnaire.status, questionnaire.qid)}
                     onCancel={this.props.handleCancel}
                     okText={questionnaire.status === "未发布" ? "发布问卷" : (questionnaire.status === "发布中" ? "分享链接" : "确定")}
                     cancelText={"关闭"}

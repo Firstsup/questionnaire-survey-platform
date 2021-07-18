@@ -1,4 +1,4 @@
-import React, {Component, createContext} from 'react';
+import React, {Component} from 'react';
 import {Input, Button, Form, Typography, message} from 'antd';
 import '../css/ResetPassword.css';
 
@@ -45,6 +45,7 @@ class ModifyPassword extends Component {
                     <Form.Item
                         name="username"
                         label={"用户名"}
+                        initialValue={this.props.location.search.slice(10)}
                         rules={[
                             {
                                 required: true,

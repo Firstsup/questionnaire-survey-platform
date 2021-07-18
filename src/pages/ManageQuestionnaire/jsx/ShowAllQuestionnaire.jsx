@@ -169,7 +169,7 @@ export default class PageList extends Component {
 
     //创建新问卷
     createNew = () => {
-        // console.log("createNew")
+        this.props.history.push("/createpage");
     }
 
     handleOnClick = () => {
@@ -219,6 +219,10 @@ export default class PageList extends Component {
         this.props.history.push('/dataanalysis?qid=' + this.state.rowId)
     }
 
+    handleEdit = () => {
+        this.props.history.push('/editquestionnaire?qid=' + this.state.rowId)
+    }
+
     render() {
         const {selectedRowKeys, rowId, size, xScroll, yScroll, data, ...state} = this.state;
         const scroll = {};
@@ -262,11 +266,10 @@ export default class PageList extends Component {
 
                 render: () => (
                     <Space size="middle">
-                        <span onClick={() => this.handleDelete()}>删除</span>
-                        <a href='http://localhost:3000/'>分享</a>
-                        <a href='http://localhost:3000/'>编辑问卷</a>
-                        <span onClick={() => this.handleOnClick()}>查看问卷</span>
-                        <span onClick={() => this.handleResult()}>查看结果</span>
+                        <a onClick={() => this.handleDelete()}>删除</a>
+                        <a onClick={() => this.handleEdit()}>编辑问卷</a>
+                        <a onClick={() => this.handleOnClick()}>查看问卷</a>
+                        <a onClick={() => this.handleResult()}>查看结果</a>
                     </Space>
                 ),
             },

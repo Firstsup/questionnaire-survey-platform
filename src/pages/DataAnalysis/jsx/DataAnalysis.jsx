@@ -68,28 +68,28 @@ class DataAnalysis extends Component {
                     }
                 }
             })
-        fetch('/api/analysis', {
-            method: 'post',
-            body: JSON.stringify(params),
+        fetch('/api/analysis?qid=' + this.props.location.search.slice(5), {
+            method: 'get',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
         }).then(res => res.json())
-            .then(res => {      
+            .then(res => {
+                console.log(res)
                 const get = res.data.data;
-                console.log("get:",get);
-                console.log("get.count",get.count);
+                console.log("get:", get);
+                console.log("get.count", get.count);
                 let countAll = [];
                 for (const c in get.count) {
-                    console.log("c",c)
+                    console.log("c", c)
                     countAll.push(parseInt(get.count[c]))
                 }
-                console.log("countAll",countAll);
+                console.log("countAll", countAll);
                 let count = get.cnt;
                 if (count != "") {
-                    console.log("get.cnt",get.cnt);
-                    console.log("count[0]",count[0]);
+                    console.log("get.cnt", get.cnt);
+                    console.log("count[0]", count[0]);
                     count = count[0].map(function (col, i) {
                         return count.map(function (row) {
                             return row[i];

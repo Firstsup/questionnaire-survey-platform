@@ -23,11 +23,12 @@ class App extends Component {
                 <Route path={'/submitlistquestionnaire'} component={SubmitListQuestionnaire}/>
                 <Route path={'/showallquestionnaire'} component={ShowAllQuestionnaire}/>
                 <Route path={'/register'} component={Register}/>
-                <Route path={'/login'} component ={Login}/>
-                <Route path={'/createpage'} component ={CreatePage}/>
-                <Route path={'/editquestionnaire'} component ={EditQuestionnaire}/>
-                <Route path={'/resetpassword'} component ={ResetPassword}/>
-                <Route path={'/modifypassword'} component ={ModifyPassword}/>
+                <Route path={'/login'} component={Login}/>
+                <Route path={'/'} exact component={Login}/>
+                <Route path={'/createpage'} component={CreatePage}/>
+                <Route path={'/editquestionnaire'} component={EditQuestionnaire}/>
+                <Route path={'/resetpassword'} component={ResetPassword}/>
+                <Route path={'/modifypassword'} component={ModifyPassword}/>
             </BrowserRouter>
         )
     }
