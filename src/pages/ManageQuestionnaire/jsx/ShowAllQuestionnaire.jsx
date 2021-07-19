@@ -50,7 +50,7 @@ export default class PageList extends Component {
 
     ItemonClick = ({key}) => {
         if (`${key}` === '1') {
-            this.props.history.push('/modifypassword?username='+this.state.username
+            this.props.history.push('/modifypassword?username=' + this.state.username
             )
         }
         if (`${key}` === '2') {
@@ -60,7 +60,7 @@ export default class PageList extends Component {
 
     //搜索
     onSearch = (value) => {
-        console.log(369520,this.state.data)
+        console.log(369520, this.state.data)
         let dataSearch = []
         for (const d in this.state.data) {
             dataSearch.push(this.state.data[d])
@@ -74,7 +74,7 @@ export default class PageList extends Component {
             }
         }
         this.setState({
-          tempData: dataSearch
+            tempData: dataSearch
         })
         // console.log('oldData',oldData);
     }
@@ -82,13 +82,14 @@ export default class PageList extends Component {
     //发送请求
     componentDidMount() {
         this.state.username = this.props.location.search.slice(10);
-        fetch('/api/manage?user='+this.state.username, {
+        fetch('/api/manage?user=' + this.state.username, {
             method: 'get',
             headers: {
                 'Accept': 'application/json',
             },
         }).then(res => res.json())
             .then(res => {
+                console.log(res)
                 var newData = []
                 res.data.data.map(((item, index) => {
                     newData.push(Object.assign({}, item, {
@@ -97,7 +98,7 @@ export default class PageList extends Component {
                         time: timeConversion(item.time)
                     }))
                 }))
-                this.setState({data: newData,tempData:newData})
+                this.setState({data: newData, tempData: newData})
             });
     }
 
@@ -170,7 +171,7 @@ export default class PageList extends Component {
 
     //创建新问卷
     createNew = () => {
-        this.props.history.push("/createpage");
+        this.props.history.push("/createpage?username=" + this.state.username);
     }
 
     handleOnClick = () => {
@@ -232,45 +233,45 @@ export default class PageList extends Component {
             onChange: this.onSelectChange,
         };
         const menu = (
-          <Menu onClick={this.ItemonClick}>
-            <Menu.Item key="1">更改密码</Menu.Item>
-            <Menu.Item key="2">退出登录</Menu.Item>
-          </Menu>
+            <Menu onClick={this.ItemonClick}>
+                <Menu.Item key="1">更改密码</Menu.Item>
+                <Menu.Item key="2">退出登录</Menu.Item>
+            </Menu>
         )
         // const hasSelected = selectedRowKeys.length > 0;
         const columns = [
             {
-              title: '问卷名称',
-              dataIndex: 'title',
-              width: "10%"
+                title: '问卷名称',
+                dataIndex: 'title',
+                width: "10%"
             },
             {
-              title: '问卷id',
-              dataIndex: 'qid',
-              width: "10%"
+                title: '问卷id',
+                dataIndex: 'qid',
+                width: "10%"
             },
             {
-              title: '问卷状态',
-              dataIndex: 'status',
-              width: "10%"
+                title: '问卷状态',
+                dataIndex: 'status',
+                width: "10%"
             },
             {
-              sorter: (a, b) => a.age - b.age,
-              title: '创建时间',
-              dataIndex: 'time',
-              width: "35%"
+                sorter: (a, b) => a.age - b.age,
+                title: '截止时间',
+                dataIndex: 'time',
+                width: "35%"
             },
             {
-              title: '操作问卷',
-              key: 'action',
-              render: () => (
-                  <Space size="middle">
-                      <a onClick={() => this.handleDelete()}>删除</a>
-                      <a onClick={() => this.handleEdit()}>编辑问卷</a>
-                      <a onClick={() => this.handleOnClick()}>查看问卷</a>
-                      <a onClick={() => this.handleResult()}>查看结果</a>
-                  </Space>
-              ),
+                title: '操作问卷',
+                key: 'action',
+                render: () => (
+                    <Space size="middle">
+                        <a onClick={() => this.handleDelete()}>删除</a>
+                        <a onClick={() => this.handleEdit()}>编辑问卷</a>
+                        <a onClick={() => this.handleOnClick()}>查看问卷</a>
+                        <a onClick={() => this.handleResult()}>查看结果</a>
+                    </Space>
+                ),
             },
         ];
         const tableColumns = columns

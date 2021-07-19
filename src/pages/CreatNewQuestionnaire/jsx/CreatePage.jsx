@@ -9,7 +9,7 @@ class CreatePage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '123',
+            username: this.props.location.search.slice(10),
             questionnaire: {
                 title: "",
                 questions: [],
