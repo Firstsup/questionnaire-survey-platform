@@ -46,7 +46,7 @@ class ViewQuestionnaireDetail extends Component {
                                     publisher: get.author,
                                     fillerCount: get.total,
                                     qid: get.qid,
-                                    releaseTime: get.start_time,
+                                    releaseTime: get.status === 0 ? "未发布" : get.start_time,
                                     deadline: get.time,
                                     status: get.status === 0 ? "未发布" : (get.status === 1 ? "发布中" : "已过期"),
                                     questions: get.ask_list.map((list) => {
@@ -88,7 +88,7 @@ class ViewQuestionnaireDetail extends Component {
                         <Descriptions.Item label="答卷人次">{questionnaire.fillerCount}</Descriptions.Item>
                         <Descriptions.Item label="问卷ID">{questionnaire.qid}</Descriptions.Item>
                         <Descriptions.Item
-                            label="发布时间">{timeConversion(questionnaire.releaseTime)}</Descriptions.Item>
+                            label="发布时间">{questionnaire.releaseTime === "未发布" ? "未发布" : timeConversion(questionnaire.releaseTime)}</Descriptions.Item>
                         <Descriptions.Item
                             label="截止时间">{timeConversion(questionnaire.deadline)}</Descriptions.Item>
                         <Descriptions.Item label="问卷状态" span={2}>
