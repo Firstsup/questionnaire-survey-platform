@@ -204,7 +204,7 @@ export default class PageList extends Component {
                     })
             }
         } else if (status === "发布中") {
-            copy('http://localhost:3000/fillquestionnaire?qid=' + this.state.data[0].qid);
+            copy('http://localhost:3000/fillquestionnaire?qid=' + this.state.rowId);
             message.success("问卷链接已拷贝至粘贴板").then(() => null);
             this.setState({modalVisible: false})
         } else {
@@ -226,6 +226,7 @@ export default class PageList extends Component {
     }
 
     render() {
+        console.log(this.state.username)
         const {selectedRowKeys, rowId, size, xScroll, yScroll, data, ...state} = this.state;
         const scroll = {};
         const rowSelection = {

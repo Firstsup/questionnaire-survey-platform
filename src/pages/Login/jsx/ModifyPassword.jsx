@@ -24,7 +24,7 @@ class ModifyPassword extends Component {
                 if (res.code === 1) {
                     message.success("密码修改成功！")
                     setTimeout(() => {
-                        this.props.history.push('/showallquestionnaire')
+                        this.props.history.push('/login')
                     }, 1500)
                 } else if (res.code === 0) {
                     message.error("用户不存在，请重新输入！")
