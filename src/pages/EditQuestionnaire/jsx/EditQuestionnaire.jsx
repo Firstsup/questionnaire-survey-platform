@@ -107,7 +107,7 @@ class EditQuestionnaire extends React.Component {
         const params = {
             "qid": this.props.location.search.slice(5),
             "title": this.state.questionnaire.title,
-            "start_time": this.getCreatTime(),
+            "start_time": this.getCreatTime() / 1000,
             "ask_list": temp,
             "time": this.state.questionnaire.endTime
         };

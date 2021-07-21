@@ -106,7 +106,7 @@ class CreatePage extends React.Component {
         const params = {
             "author": this.state.username,
             "title": this.state.questionnaire.title,
-            "start_time": this.getCreatTime(),
+            "start_time": this.getCreatTime() / 1000,
             "ask_list": temp,
             "time": this.state.questionnaire.endTime
         };
@@ -351,7 +351,10 @@ class CreatePage extends React.Component {
                     <div className={"create_title_div"}>
                         <span><strong>发布者：</strong>{this.state.username}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span
                         className={"create_title_span"}><strong>问卷截止时间：</strong></span>
-                        <DatePicker className={"create_datePicker"} showTime showNow={false} disabledDate={(current) => {return current<moment().subtract(1,"second")}} onOk={this.onOk}/></div>
+                        <DatePicker className={"create_datePicker"} showTime showNow={false}
+                                    disabledDate={(current) => {
+                                        return current < moment().subtract(1, "second")
+                                    }} onOk={this.onOk}/></div>
                     <Divider>问卷内容</Divider>
                     <CreateQuestion questions={this.state.questionnaire.questions}
                                     chiefHandleDelete={this.chiefHandleDelete}
