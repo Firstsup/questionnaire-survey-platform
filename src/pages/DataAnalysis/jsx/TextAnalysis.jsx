@@ -71,8 +71,18 @@ class TextAnalysis extends Component {
                 .then(res => {
                     const get = res.data.data;
                     let temp = []
+                    let a = 0
                     for (let i = 0; i < res.data.length; i++) {
-                        temp.push({key: i, id: i, submitTime: timeConversion(get[i].ans_time), answer: get[i].ans})
+                        if (get[i].ans !== "") {
+                            temp.push({
+                                key: i,
+                                id: i - a + 1,
+                                submitTime: timeConversion(get[i].ans_time),
+                                answer: get[i].ans
+                            })
+                        } else {
+                            a++;
+                        }
                     }
                     this.setState({
                         data: temp,

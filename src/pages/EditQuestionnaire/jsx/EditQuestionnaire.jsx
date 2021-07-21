@@ -51,7 +51,7 @@ class EditQuestionnaire extends React.Component {
         if (params.title !== "" && params.time !== "") {
             let flag = 1;
             for (let i = 0; i < params.ask_list.length; i++) {
-                if (params.ask_list[i].subject === "") {
+                if (params.ask_list[i].ask === "") {
                     flag = 0;
                 }
                 for (let j = 0; j < params.ask_list[i].choice_list.length; j++) {
@@ -114,7 +114,7 @@ class EditQuestionnaire extends React.Component {
         if (params.title !== "" && params.time !== "") {
             let flag = 1;
             for (let i = 0; i < params.ask_list.length; i++) {
-                if (params.ask_list[i].subject === "") {
+                if (params.ask_list[i].ask === "") {
                     flag = 0;
                 }
                 for (let j = 0; j < params.ask_list[i].choice_list.length; j++) {

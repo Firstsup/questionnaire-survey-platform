@@ -50,7 +50,7 @@ class CreatePage extends React.Component {
             let flag = 1;
             console.log(params.ask_list)
             for (let i = 0; i < params.ask_list.length; i++) {
-                if (params.ask_list[i].subject === "") {
+                if (params.ask_list[i].ask === "") {
                     flag = 0;
                 }
                 for (let j = 0; j < params.ask_list[i].choice_list.length; j++) {
@@ -114,7 +114,7 @@ class CreatePage extends React.Component {
             let flag = 1;
             console.log(params.ask_list)
             for (let i = 0; i < params.ask_list.length; i++) {
-                if (params.ask_list[i].subject === "") {
+                if (params.ask_list[i].ask === "") {
                     flag = 0;
                 }
                 for (let j = 0; j < params.ask_list[i].choice_list.length; j++) {
@@ -325,6 +325,7 @@ class CreatePage extends React.Component {
     }
 
     render() {
+        console.log(this.state.questionnaire)
         return (
             <>
                 <Affix className={"create_affix"} offsetTop={200}>
@@ -350,7 +351,7 @@ class CreatePage extends React.Component {
                     <div className={"create_title_div"}>
                         <span><strong>发布者：</strong>{this.state.username}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span
                         className={"create_title_span"}><strong>问卷截止时间：</strong></span>
-                        <DatePicker className={"create_datePicker"} showTime showNow={false} onOk={this.onOk}/></div>
+                        <DatePicker className={"create_datePicker"} showTime showNow={false} disabledDate={(current) => {return current<moment().subtract(1,"second")}} onOk={this.onOk}/></div>
                     <Divider>问卷内容</Divider>
                     <CreateQuestion questions={this.state.questionnaire.questions}
                                     chiefHandleDelete={this.chiefHandleDelete}
