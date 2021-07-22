@@ -106,10 +106,11 @@ class CreatePage extends React.Component {
         const params = {
             "author": this.state.username,
             "title": this.state.questionnaire.title,
-            "start_time": this.getCreatTime() / 1000,
+            "start_time": this.getCreatTime(),
             "ask_list": temp,
             "time": this.state.questionnaire.endTime
         };
+        console.log(params)
         if (params.title !== "" && params.time !== "") {
             let flag = 1;
             console.log(params.ask_list)

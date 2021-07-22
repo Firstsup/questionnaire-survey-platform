@@ -107,7 +107,7 @@ class EditQuestionnaire extends React.Component {
         const params = {
             "qid": this.props.location.search.slice(5),
             "title": this.state.questionnaire.title,
-            "start_time": this.getCreatTime() / 1000,
+            "start_time": this.getCreatTime() + "",
             "ask_list": temp,
             "time": this.state.questionnaire.endTime
         };
@@ -123,6 +123,7 @@ class EditQuestionnaire extends React.Component {
                     }
                 }
             }
+            console.log(params)
             if (flag === 1) {
                 if (params.ask_list.length === 0) {
                     message.warn("问卷内容不能为空")
