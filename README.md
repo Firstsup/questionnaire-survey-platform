@@ -13,4 +13,4 @@
 
 ## 业务流程图
 
-![avatar](C:\Users\admin\Desktop\流程图.svg)
+![avatar](C:/Users/admin/Desktop/流程图.svg)
