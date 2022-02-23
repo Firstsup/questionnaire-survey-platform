@@ -26,7 +26,7 @@
 
 ### Run
 
-`npm install  
+`npm install<br />
 npm start`
 
 ## 部分截图
