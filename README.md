@@ -13,4 +13,4 @@
 
 ## 业务流程图
 
-![avatar](https://note.youdao.com/ynoteshare/index.html?id=478b36279f4a4b0c9961437a2f0db534&type=note&_time=1645584211735)
+![avatar](https://note.youdao.com/yws/api/personal/file/WEB6dc3231f41b9ca407801ff5d6530aec2?method=download&shareKey=478b36279f4a4b0c9961437a2f0db534)
