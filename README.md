@@ -15,9 +15,9 @@
 
 ![avatar](https://note.youdao.com/yws/api/personal/file/WEB6dc3231f41b9ca407801ff5d6530aec2?method=download&shareKey=478b36279f4a4b0c9961437a2f0db534)
 
-## Install
+## Install（前端）
 
-### 环境依赖（前端）
+### 环境依赖
 
 * antd
 * echarts
@@ -29,6 +29,27 @@
 ```
 npm install
 npm start
+```
+
+## Install（后端）
+
+### 项目地址
+
+[问卷调查平台-后端地址](https://github.com/ClaraShar/qsystem)
+
+### 环境依赖
+
+* node.js
+* express
+* mongoose
+* nodemon
+* md5
+
+### Run
+
+```
+npm install
+npm run debug-api
 ```
 
 ## 部分截图
