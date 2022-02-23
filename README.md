@@ -15,6 +15,20 @@
 
 ![avatar](https://note.youdao.com/yws/api/personal/file/WEB6dc3231f41b9ca407801ff5d6530aec2?method=download&shareKey=478b36279f4a4b0c9961437a2f0db534)
 
+## Install
+
+### 环境依赖（前端）
+
+* antd
+* echarts
+* moment
+* jquery
+
+### Run
+
+`npm install`
+`npm start`
+
 ## 部分截图
 
 * 新建问卷
