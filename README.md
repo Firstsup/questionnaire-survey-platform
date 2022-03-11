@@ -13,7 +13,7 @@
 
 ## 业务流程图
 
-![avatar](https://note.youdao.com/yws/api/personal/file/WEB6dc3231f41b9ca407801ff5d6530aec2?method=download&shareKey=478b36279f4a4b0c9961437a2f0db534)
+![流程图](https://user-images.githubusercontent.com/45390884/157791240-488a5f81-85a5-4947-a9da-8e6e5144b912.png)
 
 ## Install（前端）
 
@@ -55,15 +55,15 @@ npm run debug-api
 ## 部分截图
 
 * 新建问卷
-![avatar](https://note.youdao.com/yws/api/personal/file/WEBfd5c583ff903553b6b79be686cece8e2?method=download&shareKey=5161f17d08b833ea2215eab1ec36b124)
+![新建问卷](https://user-images.githubusercontent.com/45390884/157791263-8573bf53-351e-494d-a6ac-7049567d9338.png)
 * 问卷管理
-![avatar](https://note.youdao.com/yws/api/personal/file/WEB4d7047baebe4b6a7d6eb08c84f32e9bc?method=download&shareKey=a63edb4f3a4e4ec3af0be5a0458049b6)
+![问卷管理](https://user-images.githubusercontent.com/45390884/157791278-db1449f4-a150-4e14-b37a-b189437bf274.png)
 * 填写问卷
-![avatar](https://note.youdao.com/yws/api/personal/file/WEB2422ac2f3c81e9864b29ce7e05049f9d?method=download&shareKey=b5977e280d04d2ddabbab8a306c217a9)
+![填写问卷](https://user-images.githubusercontent.com/45390884/157791296-1553c7cf-5907-45b2-b5cd-25e6af733196.png)
 * 结果分析
-![avatar](https://note.youdao.com/yws/api/personal/file/WEB34d7f17f3e178bac2daa7d87821fbe07?method=download&shareKey=4d4220bb3773f159fffbb345fa48fbc9)
+![结果分析](https://user-images.githubusercontent.com/45390884/157791310-9700488e-1f95-441d-a510-7231985cc301.png)
 * 问卷详情
-![avatar](https://note.youdao.com/yws/api/personal/file/WEBc50b5170623f3855fe88b3a57d7ead4a?method=download&shareKey=f11afa542d2bb0e98bd5e78a404291ac)
+![问卷详情](https://user-images.githubusercontent.com/45390884/157791326-18e9978b-0650-4d84-b2d5-146b08bcbbf9.png)
 
 ## 项目文档地址（飞书）
 
